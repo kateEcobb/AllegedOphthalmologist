@@ -29,10 +29,7 @@ var MainView = React.createClass({
     return (
       <div>This is the MainView
       <div>Power is Currently {this.state.data.energy_state}</div>
-      {(this.state.data.at_peak) ? <div>At Peak Use!</div> : null}
-
-
-      
+      {(this.state.data.at_peak) ? <div>At Peak Use!</div> : null}      
       </div>
       
     );
