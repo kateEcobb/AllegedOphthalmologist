@@ -1,0 +1,25 @@
+{
+  "name": "AllegedOphthalmologist",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server/server.js",
+  "scripts": {
+    "start": "node server/server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/AllegedOphthalmologist/AllegedOphthalmologist.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/AllegedOphthalmologist/AllegedOphthalmologist/issues"
+  },
+  "homepage": "https://github.com/AllegedOphthalmologist/AllegedOphthalmologist#readme",
+  "dependencies": {
+    "body-parser": "^1.13.3",
+    "express": "^4.13.3",
+    "mongoose": "^4.1.3",
+    "morgan": "^1.6.1"
+  }
+}
