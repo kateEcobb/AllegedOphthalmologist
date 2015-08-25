@@ -6,5 +6,5 @@ module.exports = function(app){
   app.use(bodyParser.json());
   app.use(morgan('combined'));
 
-  app.use(express.static(__dirname + '/../../client/'));
+  app.use(express.static(__dirname + '/../../app/'));
 };

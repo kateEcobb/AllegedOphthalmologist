@@ -1,6 +1,6 @@
 var mongoose = require('mongoose');
 
-var mongoURI = process.env.MONGOLAB_URI || process.env.TESTING_DB || 'mongodb://localhost/powerBulb';
+var mongoURI = process.env.MONGOLAB_URI || process.env.TESTING_DB || 'mongodb://localhost/powerDB';
 console.log("CONNECTED TO:", mongoURI);
 
 mongoose.connect(mongoURI);
