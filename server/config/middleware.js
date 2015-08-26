@@ -4,7 +4,7 @@ var bodyParser = require('body-parser');
 
 module.exports = function(app){ 
   app.use(bodyParser.json());
-  app.use(morgan('combined'));
+  app.use(morgan('dev'));
 
-  app.use(express.static(__dirname + '/../../app/'));
+  app.use(express.static(__dirname + '/../../build'));
 };
