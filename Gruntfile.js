@@ -3,12 +3,19 @@ module.exports = function(grunt) {
   grunt.initConfig({
     pkg: grunt.file.readJSON('package.json'),
 
+    uglify: {
+      production: {
+        src: './build/production.js',
+        dest: './build/production.js'
+      }
+    },
+
     webpack: {
       app: {
         entry: "./app/js/app.jsx",
         output: {
           path: __dirname + '/build',
-          filename: 'app.js'
+          filename: 'production.js'
         },
         module: {
           loaders: [
@@ -84,10 +91,11 @@ module.exports = function(grunt) {
 
   // Load in Grunt dependencies
   grunt.loadNpmTasks('grunt-contrib-watch');
-  grunt.loadNpmTasks('grunt-jsxhint');
   grunt.loadNpmTasks('grunt-contrib-cssmin');
   grunt.loadNpmTasks('grunt-contrib-copy');
   grunt.loadNpmTasks('grunt-contrib-clean');
+  grunt.loadNpmTasks('grunt-contrib-uglify');
+  grunt.loadNpmTasks('grunt-jsxhint');
   grunt.loadNpmTasks('grunt-nodemon');
   grunt.loadNpmTasks('grunt-webpack');
 
@@ -112,7 +120,9 @@ module.exports = function(grunt) {
     grunt.task.run(['webpack']);
     grunt.task.run(['cssmin']);
     grunt.task.run(['copy']);
-
+    if (grunt.option('prod')) {
+      grunt.task.run(['uglify']);
+    }
   });
 
   grunt.registerTask('test', [
