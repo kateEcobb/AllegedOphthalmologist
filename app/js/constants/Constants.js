@@ -8,5 +8,9 @@ module.exports = {
 
   PayloadSources: keyMirror({
     VIEW_ACTION: null
-  })
+  }), 
+
+  ServerRoutes: {
+    DATA_SOURCE: '/api/data',
+  }
 };
