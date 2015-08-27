@@ -58,11 +58,5 @@ module.exports = {
     }
 
     makeRequest(options,cb)
-  }, 
-
-  getUserServices: function(cb){ 
-    
-
-
   }
 };

@@ -1,17 +1,23 @@
-var bcrypt = require('bcrypt');
+var bcrypt = require('bcrypt-nodejs');
 var User = require('./userModel');
-var UtilityAPI = require('./UtilityAPI');
+var UtilityAPI = require('../utilityAPI/UtilityAPI');
 
 
-var getUserUID = function(){ 
-
-
+var getUserUID = function(req, res, next){ 
+  User.findOne({ 
+    username: req.body.username
+  }).exec(function(err, data){ 
+    if(err) console.log('Error in getting user UID '+ err)
+    else { 
+      res.send(data.uid)
+    }
+  })
 };
 
 var checkUsernameAvail = function(req, res, cb){ 
   User.findOne({
     username: req.body.username
-  }.exec(function(err,data){ 
+  }).exec(function(err,data){ 
     if(err) console.log('Error in user database query ' + err);
     if(data){ 
       console.log('Username already exists.');
@@ -22,9 +28,8 @@ var checkUsernameAvail = function(req, res, cb){
   });
 };
 
-
 var signup = function(req, res, cb){ 
-  checkUsernameAvail(req, res, function({ 
+  checkUsernameAvail(req, res, function(){ 
     
     var requestObj = { 
       utility: 'PG&E', 
@@ -37,12 +42,12 @@ var signup = function(req, res, cb){
     UtilityAPI.postNewUser(JSON.stringify(requestObj), function(status){ 
       console.log("Successfully added account.")
       console.log(status)
+    });
 
-      UtilityAPI.getUserServices(function(response){ 
-
+      UtilityAPI.getActiveUsers(function(accounts){ 
+        accounts[0].
 
       })
-    })
 
 
   })
@@ -70,4 +75,11 @@ var signup = function(req, res, cb){
   })
 
 
+};
+
+module.exports = { 
+  testfn: testfn, 
+  signup: signup, 
+  getUserUID: getUserUID
 }
+
