@@ -10,8 +10,8 @@ var MainView = React.createClass({
   getInitialState: function(){
     return {
       data: {
-        energy_state: null,
-        at_peak: null
+        "Watt": [{}],
+        "Utility": [{}]
       }
     }
   },
@@ -20,7 +20,11 @@ var MainView = React.createClass({
   },
   componentDidMount: function (){
     DataStore.addChangeListener(this.loadData);
-    ViewActions.loadData();
+    ViewActions.loadWatt()
+    .then(ViewActions.loadUtility)
+    .catch(function(err) {
+      console.log("ERROR: ", err);
+    });
   },
   componentWillUnmount: function (){
     DataStore.removeChangeListener(this.loadData);
@@ -28,8 +32,7 @@ var MainView = React.createClass({
   render: function() {
     return (
       <div>This is the MainView
-      <div>Power is Currently {this.state.data.energy_state}</div>
-      {(this.state.data.at_peak) ? <div>At Peak Use!</div> : null}      
+      <div>Watt is Currently {this.state.data}</div>     
       </div>
       
     );
