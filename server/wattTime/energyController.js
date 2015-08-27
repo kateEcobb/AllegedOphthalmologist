@@ -1,5 +1,6 @@
 var WattEnergy = require('./energyModel')
 var request = require('request');
+var wattTimeToken = require('../../.tokens.js').wattTimeAPIToken;
 
 /* update queries the WattTime API and continually updates the database with new information 
 * from the last 24 hours.
@@ -11,7 +12,7 @@ var update = function(dateStart, dateEnd){
   var options = { 
     url: 'http://api.watttime.org:80/api/v1/datapoints/?ba=CAISO&start_at='+dateStart+'&end_at='+dateEnd+'&page_size=1000&market=RT5M',
     headers: { 
-      'Authorization' : '26fded1eead70b9fb946204aa7d7352b137c56d5'
+      'Authorization' : wattTimeToken
     }
   };
 
