@@ -20,6 +20,7 @@ var RegistrationView = React.createClass({
 
   submitForm: function(){
     //TODO: POST this.state to server
+    ViewActions.registerUser(this.state);
   },
 
   render: function() {
