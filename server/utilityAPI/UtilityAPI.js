@@ -1,5 +1,5 @@
 var request = require('request');
-var TOKENS = require('./../../TOKENS');
+var TOKENS = require('./../../.tokens');
 
 // API Authorization Token provided by UtilityAPI:
 var authHeader = TOKENS.utilityAPIToken;
@@ -26,6 +26,9 @@ module.exports = {
         'Authorization': authHeader
       }
     };
+
+    // console.log(url);
+    
     makeRequest(options, cb);
   },
   getActiveUsers: function(cb){

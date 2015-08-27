@@ -1,7 +1,9 @@
-var loadIntervalData = require('./loadIntervalData');
+var utilityAPIController = require('./utilityAPIController');
 
 module.exports = function(app){ 
   app.get('/api/meterreadings', function(req, res){
-    res.send('hey!');
+    utilityAPIController.getAllReadings(function(readings){
+      res.send(readings);
+    })
   });
 };
