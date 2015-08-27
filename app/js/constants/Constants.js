@@ -3,14 +3,16 @@ var keyMirror = require('../../../node_modules/react/lib/keyMirror');
 module.exports = {
 
   ActionTypes: keyMirror({
-    DATA_LOADED: null
+    WATT_LOADED: null,
+    UTILITY_LOADED: null,
   }),
 
-  PayloadSources: keyMirror({
+  ActionSources: keyMirror({
     VIEW_ACTION: null
   }), 
 
   ServerRoutes: {
-    DATA_SOURCE: '/api/getWattTotal',
+    WATT_TOTAL: '/api/getWattTotal',
+    UTILITY_TOTAL: '/api/meterreadings'
   }
 };

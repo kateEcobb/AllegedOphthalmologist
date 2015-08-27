@@ -52,7 +52,7 @@ var getAllReadings = function(cb){
   });
 }
 
-debounce(loadNewReadings, 60000)();
+debounce(loadNewReadings, 180000)();
 // // Run once an hour
 setInterval(loadNewReadings, 3600000);
 

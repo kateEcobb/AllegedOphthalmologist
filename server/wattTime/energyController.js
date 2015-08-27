@@ -63,13 +63,13 @@ var getAllWattData = function(req, res, next){
 };
 
 var updateWattData = function() {
-  console.log('Updating');
+  console.log('Updating Watt Data');
   var today = new Date().toISOString().slice(0,-5).replace(/:/g, '%3A');
   var yesterday = new Date(new Date().setDate(new Date().getDate()-1)).toISOString().slice(0,-5).replace(/:/g, '%3A');
   update(yesterday, today);
 }
 
-debounce(updateWattData, 60000)();
+debounce(updateWattData, 180000)();
 setInterval(updateWattData, 900000);
 
 module.exports = { 
