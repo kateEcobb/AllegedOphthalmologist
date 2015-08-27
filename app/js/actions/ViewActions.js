@@ -21,7 +21,7 @@ var ViewActions = {
     })
     .catch(function(err) {
       throw err;
-    })
+    });
 
   },
 
@@ -36,10 +36,20 @@ var ViewActions = {
     })
     .catch(function(err) {
       throw err;
-    })
+    });
+  },
 
+  registerUser: function (user_data) {
+    util.registerNewUser(user_data)
+      .then(function(res){
+
+        // TODO: Send the response to the dispatcher
+        //       Create a User Store
+        //       Set returned username + uid state props in the 
+        //       user store and redirect user to homepage
+        console.log('response', res);
+      });
   }
-}
-
+};
 
 module.exports = ViewActions;

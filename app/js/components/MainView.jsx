@@ -13,7 +13,7 @@ var MainView = React.createClass({
         "Watt": [{}],
         "Utility": [{}]
       }
-    }
+    };
   },
   loadData: function (data) {
     this.setState({data: DataStore.getData()});

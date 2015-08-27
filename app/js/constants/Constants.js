@@ -13,6 +13,7 @@ module.exports = {
 
   ServerRoutes: {
     WATT_TOTAL: '/api/getWattTotal',
-    UTILITY_TOTAL: '/api/meterreadings'
+    UTILITY_TOTAL: '/api/meterreadings',
+    USER_REGISTRATION: '/signup'
   }
 };
