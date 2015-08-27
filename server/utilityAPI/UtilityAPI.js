@@ -5,7 +5,7 @@ var TOKENS = require('./../../.tokens');
 var authHeader = TOKENS.utilityAPIToken;
 
 var makeRequest = function(options, cb){
-  request.get(options, function(err, response, body){
+  request(options, function(err, response, body){
     if(err){
       throw err;
     }
@@ -22,6 +22,7 @@ module.exports = {
                 '/intervals.json?start=' + startDate + '&end=' + endDate;
     var options = {
       url: url,
+      method: 'GET',
       headers: {
         'Authorization': authHeader
       }
@@ -31,14 +32,37 @@ module.exports = {
     
     makeRequest(options, cb);
   },
+
   getActiveUsers: function(cb){
     var url = 'https://utilityapi.com/api/services.json';
     var options = {
       url: url,
+      method: 'GET',
       headers: {
         'Authorization': authHeader
       }
     };
     makeRequest(options, cb);
+  }, 
+
+  postNewUser: function(data, cb){ 
+    var url = 'https://utilityapi.com/api/accounts/add.json'
+    var options = { 
+      url: url, 
+      method: 'POST', 
+      json: true, 
+      body: data,
+      headers: { 
+        'Authorization': authHeader
+      }
+    }
+
+    makeRequest(options,cb)
+  }, 
+
+  getUserServices: function(cb){ 
+    
+
+
   }
 };
