@@ -11,6 +11,6 @@ module.exports = {
   }), 
 
   ServerRoutes: {
-    DATA_SOURCE: '/api/data',
+    DATA_SOURCE: '/api/getWattTotal',
   }
 };

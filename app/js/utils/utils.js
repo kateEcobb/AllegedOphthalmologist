@@ -1,6 +1,6 @@
 var routes = require('../constants/Constants.js').ServerRoutes;
 
-modules.exports = {
+module.exports = {
   getDataPoints : function() {
     return new Promise(function(resolve, reject) {
 

@@ -1,5 +1,6 @@
 var Dispatcher = require('../dispatcher/Dispatcher');
 var ActionTypes = require('../constants/Constants').ActionTypes;
+var util = require('../utils/utils.js');
 
 var ViewActions = {
   loadData: function () {
@@ -9,6 +10,10 @@ var ViewActions = {
       energy_state: "dirty",
       at_peak: true
     };
+    util.getDataPoints()
+    .then(function(res) {
+      console.log(res[0]);
+    });
 
     Dispatcher.dispatch({
       type: ActionTypes.DATA_LOADED,

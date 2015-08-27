@@ -1,6 +1,7 @@
 var WattEnergy = require('./energyModel')
 var request = require('request');
 var wattTimeToken = require('../../.tokens.js').wattTimeAPIToken;
+var debounce = require('debounce');
 
 /* update queries the WattTime API and continually updates the database with new information 
 * from the last 24 hours.
@@ -61,12 +62,15 @@ var getAllWattData = function(req, res, next){
   })
 };
 
-setInterval(function(){ 
-  console.log('Updated.')
-var today = new Date().toISOString().slice(0,-5).replace(/:/g, '%3A')
-var yesterday = new Date(new Date().setDate(new Date().getDate()-1)).toISOString().slice(0,-5).replace(/:/g, '%3A')
-  update(yesterday, today)
-}, 900000);
+var updateWattData = function() {
+  console.log('Updating');
+  var today = new Date().toISOString().slice(0,-5).replace(/:/g, '%3A');
+  var yesterday = new Date(new Date().setDate(new Date().getDate()-1)).toISOString().slice(0,-5).replace(/:/g, '%3A');
+  update(yesterday, today);
+}
+
+debounce(updateWattData, 60000)();
+setInterval(updateWattData, 900000);
 
 module.exports = { 
   getAllWattData: getAllWattData
