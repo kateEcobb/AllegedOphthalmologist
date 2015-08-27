@@ -37,9 +37,12 @@ var ViewActions = {
     .catch(function(err) {
       throw err;
     })
+  },
+  
+  registerUser: function () {
 
   }
-}
+};
 
 
 module.exports = ViewActions;

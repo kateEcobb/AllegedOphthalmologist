@@ -32,7 +32,7 @@ module.exports = function(grunt) {
       },
       target: {
         files: {
-          './build/main.min.css': ['./app/js/main.css']
+          './build/main.min.css': ['./app/main.css']
         }
       }
     },
