@@ -1,12 +1,11 @@
-var React = require('react');
-var addons = require('react-addons');
+var React = require('react/addons');
 
 // Actions
 var ViewActions = require('./../actions/ViewActions');
 
 var RegistrationView = React.createClass({
   // Use a bit of two way data binding because forms are a pain otherwise.
-  mixins: [addons.LinkedStateMixin],
+  mixins: [React.addons.LinkedStateMixin],
 
   getInitialState: function() {
     return {
