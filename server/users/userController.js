@@ -4,8 +4,9 @@ var UtilityAPI = require('../utilityAPI/UtilityAPI');
 
 
 var getUserUID = function(req, res, next){ 
+  var username = req.cookies.username
   User.findOne({ 
-    username: req.body.username
+    username: username
   }).exec(function(err, data){ 
     if(err) console.log('Error in getting user UID '+ err)
     else { 
@@ -28,9 +29,33 @@ var checkUsernameAvail = function(req, res, cb){
   });
 };
 
+var saveUser = function(obj, cb){ 
+  bcrypt.hash(obj.password, 8, function(err, hash){ 
+    var newUser = new User({ 
+      username: obj.username, 
+      password: hash,
+      utilityAPIData: { 
+        account_auth: obj.account_auth,
+        uid: obj.uid, 
+        bill_count: obj.bill_count, 
+        utility: obj.utility, 
+        utility_service_address: obj.utility_service_address
+      }
+    })
+
+    newUser.save(function(err, result){ 
+      if(err) console.log("Error saving user to database "+ err);
+      else { 
+        cb(true)
+      }
+    })
+  })
+};
+
 var signup = function(req, res, cb){ 
   checkUsernameAvail(req, res, function(){ 
-    
+    console.log(req.body)
+
     var requestObj = { 
       utility: 'PG&E', 
       auth_type: 'owner',
@@ -40,41 +65,28 @@ var signup = function(req, res, cb){
     }
 
     UtilityAPI.postNewUser(JSON.stringify(requestObj), function(status){ 
-      console.log("Successfully added account.")
+      console.log("Successfully added account to UtilityAPI.")
       console.log(status)
-    });
 
       UtilityAPI.getActiveUsers(function(accounts){ 
-        accounts[0].
-
-      })
-
-
-  })
-
-      bcrypt.hash(req.body.password, 8, function(err, hash){ 
-        var newUser = new User({ 
+        var newUserObj = { 
           username: req.body.username, 
-          password: hash,
+          password: req.body.password,
           utilityAPIData: { 
-            account_auth: String,
-            uid: String, 
-            bill_count: Number, 
-            utility: String, 
-            utility_service_address: String
-          }
+            account_auth: accounts[0].account_auth,
+            uid: accounts[0].uid, 
+            bill_count: accounts[0].bill_count, 
+            utility: accounts[0].utility, 
+            utility_service_address: accounts[0].utility_service_address
+          }        
+        } 
+
+        saveUser(newUserObj, function(){ 
+          console.log("User saved to database.")
         })
-
-
-
-      })
-
-    }
-
-
-  })
-
-
+      });
+    });
+  });
 };
 
 module.exports = { 
