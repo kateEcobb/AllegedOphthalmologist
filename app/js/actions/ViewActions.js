@@ -52,5 +52,4 @@ var ViewActions = {
   }
 };
 
-
 module.exports = ViewActions;
