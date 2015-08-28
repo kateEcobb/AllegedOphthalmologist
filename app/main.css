@@ -1,3 +1,11 @@
 div.login {
   width: 500px;
 }
+.spinner-container {
+  text-align: center;
+  visibility: hidden;
+}
+.login-failure {
+  text-align: center;
+  visibility: hidden;
+}

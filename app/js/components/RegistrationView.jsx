@@ -1,11 +1,19 @@
 var React = require('react/addons');
+var Router = require('react-router');
 
 // Actions
 var ViewActions = require('./../actions/ViewActions');
+var ActionTypes = require('./../constants/Constants').ActionTypes;
+
+// Stores
+var UserStore = require('./../stores/UserStore');
+
+//Dispatcher
+var Dispatcher = require('./../dispatcher/Dispatcher');
 
 var RegistrationView = React.createClass({
   // Use a bit of two way data binding because forms are a pain otherwise.
-  mixins: [React.addons.LinkedStateMixin],
+  mixins: [React.addons.LinkedStateMixin, Router.Navigation],
 
   getInitialState: function() {
     return {
@@ -16,12 +24,37 @@ var RegistrationView = React.createClass({
       pgeFullName: null
     };
   },
-
+  componentDidMount: function(){
+    var context = this;
+    this.token = Dispatcher.register(function (dispatch) {
+      var action = dispatch.action;
+      if (action.type === ActionTypes.USER_LOGIN_FAILURE) {
+        // console.log('registration failure');
+        context.failedRegistration();
+      } 
+      else if (action.type === ActionTypes.USER_LOGIN) {
+        // console.log('registration success');
+        context.redirectHome();
+      } 
+    });
+  },
+  failedRegistration: function(){
+    console.log('registration failure');
+    $('.login-failure').css('visibility', 'visible');
+    $('.spinner-container').css('visibility', 'hidden');
+    $('.btn-submit').prop('disabled', false);
+  },
+  componentDidUnmount: function(){
+    Dispatcher.unregister(this.token);
+  },
+  redirectHome: function(){
+    this.transitionTo("/");
+  },
   submitForm: function(){
-    //TODO: POST this.state to server
+    $('.spinner-container').css('visibility', 'visible');
+    $('.btn-submit').prop('disabled', true);
     ViewActions.registerUser(this.state);
   },
-
   render: function() {
     return (
       <div className="container">
@@ -50,6 +83,19 @@ var RegistrationView = React.createClass({
             </div>
           <button className="btn btn-submit" type="button" onClick={this.submitForm}>Register</button>
           </form>
+          <div className="spinner-container">
+            <div className="spinner-loader">
+              Loading…
+            </div>
+          </div>
+          <div className="login-failure">
+            <p>
+              Failed to Register.
+            </p>
+            <p>
+              Is your PG&E Login Information Correct? 
+            </p>
+          </div>
         </div>
       </div>
     );

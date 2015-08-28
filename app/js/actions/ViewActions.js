@@ -1,6 +1,6 @@
 var Dispatcher = require('../dispatcher/Dispatcher');
 var ActionTypes = require('../constants/Constants').ActionTypes;
-console.log(ActionTypes);
+// console.log(ActionTypes);
 var util = require('../utils/utils.js');
 
 var ViewActions = {
@@ -41,14 +41,19 @@ var ViewActions = {
 
   registerUser: function (user_data) {
     util.registerNewUser(user_data)
-      .then(function(res){
-
-        // TODO: Send the response to the dispatcher
-        //       Create a User Store
-        //       Set returned username + uid state props in the 
-        //       user store and redirect user to homepage
-        console.log('response', res);
+    .then(function(user){
+      Dispatcher.handleViewAction({
+        type: ActionTypes.USER_LOGIN,
+        payload: user
       });
+    })
+    .catch(function(err){
+      // Registration not successful
+      Dispatcher.handleViewAction({
+        type: ActionTypes.USER_LOGIN_FAILURE,
+        payload: err
+      });
+    });
   }
 };
 

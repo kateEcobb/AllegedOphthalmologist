@@ -38,12 +38,13 @@ module.exports = {
   },
 
   registerNewUser: function(data) {
+    
+    console.log("Sending POST with:", data);
     return new Promise(function(resolve, reject) {
-
       $.ajax({
         url: routes.USER_REGISTRATION,
         method: 'POST',
-        data: data,
+        data: JSON.stringify(data),
         contentType: "application/json",
         success: function(data) {
           resolve(data);
@@ -55,8 +56,12 @@ module.exports = {
 
     });
     // FOR DEBUGGING WITHOUT BACKEND:
+    // var response = {
+    //   username: "johndoe",
+    //   uid: 14591
+    // };
     // return new Promise(function(resolve, reject) {
-    //   if(true) resolve(data);
+    //   if(true) resolve(response);
     //   if(false) reject('err');
     // });
   }
