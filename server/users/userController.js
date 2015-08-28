@@ -81,7 +81,7 @@ var signup = function(req, res){
     // Change utility to DEMO for testing
     // PG&E for deploy
     var requestObj = { 
-      utility: 'DEMO', 
+      utility: 'PG&E', 
       auth_type: 'owner',
       real_name: req.body.pgeFullName, 
       utility_username: req.body.pgeUsername,
