@@ -1,6 +1,5 @@
 var Dispatcher = require('../dispatcher/Dispatcher');
 var ActionTypes = require('../constants/Constants').ActionTypes;
-// console.log(ActionTypes);
 var util = require('../utils/utils.js');
 
 var ViewActions = {
@@ -13,7 +12,6 @@ var ViewActions = {
     };
     return util.getWattTotal()
     .then(function(data) {
-      console.log(data[0]);
       Dispatcher.handleViewAction({
         type: ActionTypes.WATT_LOADED,
         payload: data
