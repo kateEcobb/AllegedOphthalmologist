@@ -35,10 +35,6 @@ DataStore.dispatchToken = Dispatcher.register(function (dispatch) {
   //   DataStore.emitChange();
   // }
   var action = dispatch.action;
-<<<<<<< Updated upstream
-  // console.log(action);
-=======
->>>>>>> Stashed changes
   if (action.type === ActionTypes.WATT_LOADED) {
     DataStore.setData(action.payload, 'Watt');
     DataStore.emitChange();
