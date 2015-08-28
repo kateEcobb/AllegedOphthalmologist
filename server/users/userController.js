@@ -77,9 +77,6 @@ var signup = function(req, res){
   checkUsernameAvail(req, res, function(){ 
     console.log(req.body)
 
-
-    // Change utility to DEMO for testing
-    // PG&E for deploy
     var requestObj = { 
       utility: 'PG&E', 
       auth_type: 'owner',
