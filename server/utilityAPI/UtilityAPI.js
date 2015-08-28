@@ -49,11 +49,11 @@ module.exports = {
     var url = 'https://utilityapi.com/api/accounts/add.json'
     var options = { 
       url: url, 
-      method: 'POST', 
-      json: true, 
+      method: 'POST',
       body: data,
       headers: { 
-        'Authorization': authHeader
+        'Authorization': authHeader,
+        'Content-Type': 'application/json'
       }
     }
 

@@ -30,29 +30,50 @@ var checkUsernameAvail = function(req, res, cb){
 };
 
 var saveUser = function(obj, cb){ 
-  bcrypt.hash(obj.password, 8, function(err, hash){ 
+  bcrypt.hash(obj.password, 8, null, function(err, hash){ 
     var newUser = new User({ 
       username: obj.username, 
       password: hash,
       utilityAPIData: { 
-        account_auth: obj.account_auth,
-        uid: obj.uid, 
-        bill_count: obj.bill_count, 
-        utility: obj.utility, 
-        utility_service_address: obj.utility_service_address
+        account_auth: obj.utilityAPIData.account_auth,
+        uid: obj.utilityAPIData.uid, 
+        bill_count: obj.utilityAPIData.bill_count, 
+        utility: obj.utilityAPIData.utility, 
+        utility_service_address: obj.utilityAPIData.utility_service_address
       }
     })
 
     newUser.save(function(err, result){ 
       if(err) console.log("Error saving user to database "+ err);
       else { 
-        cb(true)
+        cb(true);
       }
     })
   })
 };
 
-var signup = function(req, res, cb){ 
+var signin = function(req, res){ 
+  User.findOne({ 
+    username: req.body.username
+  }).exec(function(err, data){ 
+    if(err) { 
+      console.log('Username does not exist.' + err);
+      res.status(418).send();
+    } else { 
+      bcrypt.compare(req.body.password, data.password, function(err, match){ 
+        if(err) res.status(500).send();
+        else if(!match){ 
+          console.log("Incorrect password.");
+          res.status(404).send();
+        } else { 
+          res.status(200).send(data);
+        }
+      })
+    }
+  })
+};
+
+var signup = function(req, res){ 
   checkUsernameAvail(req, res, function(){ 
     console.log(req.body)
 
@@ -64,25 +85,30 @@ var signup = function(req, res, cb){
       utility_password: req.body.pgePassword,
     }
 
-    UtilityAPI.postNewUser(JSON.stringify(requestObj), function(status){ 
+    UtilityAPI.postNewUser(JSON.stringify(requestObj), function(user){ 
       console.log("Successfully added account to UtilityAPI.")
-      console.log(status)
+      console.log(user.user_uid)
 
+      //db query meterreadings.findOne({user_uid = })
       UtilityAPI.getActiveUsers(function(accounts){ 
-        var newUserObj = { 
-          username: req.body.username, 
-          password: req.body.password,
-          utilityAPIData: { 
-            account_auth: accounts[0].account_auth,
-            uid: accounts[0].uid, 
-            bill_count: accounts[0].bill_count, 
-            utility: accounts[0].utility, 
-            utility_service_address: accounts[0].utility_service_address
-          }        
-        } 
-
-        saveUser(newUserObj, function(){ 
-          console.log("User saved to database.")
+        accounts.forEach(function(account){ 
+          if(account.user_uid === user.user_uid){ 
+            var newUserObj = { 
+            username: req.body.username, 
+            password: req.body.password,
+            utilityAPIData: { 
+              account_auth: account.account_auth,
+              uid: account.uid, 
+              bill_count: account.bill_count, 
+              utility: account.utility, 
+              utility_service_address: account.utility_service_address
+            }        
+          } 
+          saveUser(newUserObj, function(){ 
+            console.log("User saved to database.")
+            res.send({username: newUserObj.username, uid: newUserObj.utilityAPIData.uid});
+          })
+          }
         })
       });
     });
@@ -90,8 +116,8 @@ var signup = function(req, res, cb){
 };
 
 module.exports = { 
-  testfn: testfn, 
   signup: signup, 
-  getUserUID: getUserUID
+  getUserUID: getUserUID, 
+  signin: signin
 }
 
