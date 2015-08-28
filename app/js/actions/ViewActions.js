@@ -48,7 +48,11 @@ var ViewActions = {
       });
     })
     .catch(function(err){
-      throw err;
+      // Registration not successful
+      Dispatcher.handleViewAction({
+        type: ActionTypes.USER_LOGIN_FAILURE,
+        payload: err
+      });
     });
   }
 };

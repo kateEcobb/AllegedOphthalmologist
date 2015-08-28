@@ -38,30 +38,31 @@ module.exports = {
   },
 
   registerNewUser: function(data) {
-    // return new Promise(function(resolve, reject) {
-
-    //   $.ajax({
-    //     url: routes.USER_REGISTRATION,
-    //     method: 'POST',
-    //     data: data,
-    //     contentType: "application/json",
-    //     success: function(data) {
-    //       resolve(data);
-    //     },
-    //     error: function(xhr, status, err) {
-    //       reject(err);
-    //     }
-    //   });
-
-    // });
-    // FOR DEBUGGING WITHOUT BACKEND:
-    var response = {
-      username: "johndoe",
-      uid: 14591
-    };
+    
+    console.log("Sending POST with:", data);
     return new Promise(function(resolve, reject) {
-      if(true) resolve(response);
-      if(false) reject('err');
+      $.ajax({
+        url: routes.USER_REGISTRATION,
+        method: 'POST',
+        data: JSON.stringify(data),
+        contentType: "application/json",
+        success: function(data) {
+          resolve(data);
+        },
+        error: function(xhr, status, err) {
+          reject(err);
+        }
+      });
+
     });
+    // FOR DEBUGGING WITHOUT BACKEND:
+    // var response = {
+    //   username: "johndoe",
+    //   uid: 14591
+    // };
+    // return new Promise(function(resolve, reject) {
+    //   if(true) resolve(response);
+    //   if(false) reject('err');
+    // });
   }
 };

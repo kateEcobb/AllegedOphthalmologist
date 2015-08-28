@@ -22,6 +22,7 @@ var UserStore = assign({}, EventEmitter.prototype, {
     this.removeListener(CHANGE_EVENT, callback);
   },
   setUser: function(user_data) {
+    console.log("setting user data in store:", user_data)
     user.username = user_data.username;
     user.uid = user_data.uid;
   },
