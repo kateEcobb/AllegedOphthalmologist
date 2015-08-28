@@ -2,6 +2,9 @@ var React = require('react/addons');
 var Router = require('react-router');
 var Link = Router.Link;
 
+// Form validation
+var Formsy = require('formsy-react');
+
 // Actions
 var ViewActions = require('./../actions/ViewActions');
 var ActionTypes = require('./../constants/Constants').ActionTypes;
@@ -57,17 +60,17 @@ var LoginView = React.createClass({
       <div className="container">
         <div className="login jumbotron center-block">
         <h2>Login</h2>
-          <form id="login" role="form">
+          <Formsy.Form id="login" role="form">
             <div className="form-group">
               <label htmlFor="username">Username: </label><br />
-              <input className="form-control" id="username" type="text" valueLink={this.linkState('username')}/>
+              <MyOwnInput className="form-control" id="username" type="text" valueLink={this.linkState('username')} validations="isEmail" validationError="This is not a valid email" required/>
             </div>
             <div className="form-group">
               <label htmlFor="password">Password: </label><br />
               <input className="form-control" id="password" type="password" valueLink={this.linkState('password')} />
             </div>
           <button className="btn btn-submit" type="button" onClick={this.submitForm}>Login</button>
-          </form>
+          </Formsy.Form>
           <div className="spinner-container">
             <div className="spinner-loader">
               Loading…
