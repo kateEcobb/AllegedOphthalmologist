@@ -141,7 +141,7 @@ var signUp = function(req, res){
              }
             saveUser(newUserObj, function(){ 
               console.log("User saved to database.");
-              res.sendStatus(201).send({username: newUserObj.username, uid: newUserObj.utilityAPIData.uid});
+              res.status(201).send({username: newUserObj.username, uid: newUserObj.utilityAPIData.uid});
             });
           }
         } //end for loop
