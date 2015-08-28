@@ -54,6 +54,23 @@ var ViewActions = {
         payload: err
       });
     });
+  },
+
+  loginUser: function (user_data) {
+    util.loginUser(user_data)
+    .then(function(user){
+      Dispatcher.handleViewAction({
+        type: ActionTypes.USER_LOGIN,
+        payload: user
+      });
+    })
+    .catch(function(err){
+      // Login not successful
+      Dispatcher.handleViewAction({
+        type: ActionTypes.USER_LOGIN_FAILURE,
+        payload: err
+      });
+    });
   }
 };
 

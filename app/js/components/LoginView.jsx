@@ -1,5 +1,6 @@
 var React = require('react/addons');
 var Router = require('react-router');
+var Link = Router.Link;
 
 // Actions
 var ViewActions = require('./../actions/ViewActions');
@@ -11,17 +12,14 @@ var UserStore = require('./../stores/UserStore');
 //Dispatcher
 var Dispatcher = require('./../dispatcher/Dispatcher');
 
-var RegistrationView = React.createClass({
+var LoginView = React.createClass({
   // Use a bit of two way data binding because forms are a pain otherwise.
   mixins: [React.addons.LinkedStateMixin, Router.Navigation],
 
   getInitialState: function() {
     return {
       username: null,
-      password: null,
-      pgeUsername: null,
-      pgePassword: null,
-      pgeFullName: null
+      password: null
     };
   },
   componentDidMount: function(){
@@ -29,16 +27,16 @@ var RegistrationView = React.createClass({
     this.token = Dispatcher.register(function (dispatch) {
       var action = dispatch.action;
       if (action.type === ActionTypes.USER_LOGIN_FAILURE) {
-        // console.log('registration failure');
-        context.failedRegistration();
+        // console.log('login failure');
+        context.failedLogin();
       } 
       else if (action.type === ActionTypes.USER_LOGIN) {
-        // console.log('registration success');
+        // console.log('login success');
         context.redirectHome();
       } 
     });
   },
-  failedRegistration: function(){
+  failedLogin: function(){
     $('.login-failure').css('visibility', 'visible');
     $('.spinner-container').css('visibility', 'hidden');
     $('.btn-submit').prop('disabled', false);
@@ -52,18 +50,14 @@ var RegistrationView = React.createClass({
   submitForm: function(){
     $('.spinner-container').css('visibility', 'visible');
     $('.btn-submit').prop('disabled', true);
-    ViewActions.registerUser(this.state);
+    ViewActions.loginUser(this.state);
   },
   render: function() {
     return (
       <div className="container">
         <div className="login jumbotron center-block">
-        <h2>Register</h2>
-          <form id="register" role="form">
-            <div className="form-group">
-              <label htmlFor="pgeFullName">Full Name: </label><br />
-              <input className="form-control" id="pgeFullName" type="text" valueLink={this.linkState('pgeFullName')} />
-            </div>
+        <h2>Login</h2>
+          <form id="login" role="form">
             <div className="form-group">
               <label htmlFor="username">Username: </label><br />
               <input className="form-control" id="username" type="text" valueLink={this.linkState('username')}/>
@@ -72,15 +66,7 @@ var RegistrationView = React.createClass({
               <label htmlFor="password">Password: </label><br />
               <input className="form-control" id="password" type="password" valueLink={this.linkState('password')} />
             </div>
-            <div className="form-group">
-              <label htmlFor="pgeUsername">PG&E Username: </label><br />
-              <input className="form-control" id="pgeUsername" type="text" valueLink={this.linkState('pgeUsername')} />
-            </div>
-            <div className="form-group">
-              <label htmlFor="pgePassword">PG&E Password: </label><br />
-              <input className="form-control" id="pgePassword" type="password" valueLink={this.linkState('pgePassword')} />
-            </div>
-          <button className="btn btn-submit" type="button" onClick={this.submitForm}>Register</button>
+          <button className="btn btn-submit" type="button" onClick={this.submitForm}>Login</button>
           </form>
           <div className="spinner-container">
             <div className="spinner-loader">
@@ -89,10 +75,10 @@ var RegistrationView = React.createClass({
           </div>
           <div className="login-failure">
             <p>
-              Failed to Register.
+              Login Failure.
             </p>
             <p>
-              Is your PG&E Login Information Correct? 
+              Have you <Link to="/register">Registered</Link>?
             </p>
           </div>
         </div>
@@ -101,4 +87,4 @@ var RegistrationView = React.createClass({
   }
 });
 
-module.exports = RegistrationView;
+module.exports = LoginView;

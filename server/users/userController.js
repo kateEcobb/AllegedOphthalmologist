@@ -56,9 +56,10 @@ var signin = function(req, res){
   User.findOne({ 
     username: req.body.username
   }).exec(function(err, data){ 
-    if(err) { 
-      console.log('Username does not exist.' + err);
-      res.status(418).send();
+    if(err) console.log("Error in querying User database.")
+    else if(data === null){ 
+       console.log('Username does not exist.' + err);
+       res.sendStatus(418);
     } else { 
       bcrypt.compare(req.body.password, data.password, function(err, match){ 
         if(err) res.status(500).send();
