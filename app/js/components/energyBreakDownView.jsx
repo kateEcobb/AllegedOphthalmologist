@@ -12,17 +12,6 @@ var ModalI = React.createClass({
     return {showModal: false};
   },
 
-  propTypes: {
-    data: [
-      {id: '5fbmzmtc', x: 7, y: 41, z: 6},
-      {id: 's4f8phwm', x: 11, y: 45, z: 9},
-    ],
-    domain: {x: [0, 30], y: [0, 100]}
-  },
-
-  // componentDidMount: function(){
-  // },
-
   getChartState: function(){
     return {
       data: this.props.data,
@@ -31,10 +20,7 @@ var ModalI = React.createClass({
   },
 
   componentDidUpdate: function(){
-    // var el = this.getDOMNode();
-    // console.log(el, '===============================================================');
     chart.create('.modal-body');
-    // chart.create();
   },
 
   open: function(){
@@ -55,7 +41,7 @@ var ModalI = React.createClass({
             <Modal.Title>This is a modal</Modal.Title>
           </Modal.Header>
           <Modal.Body>  
-            <div>this is a test of pop over modal</div>
+            <div>this is a break down of where the electricity is coming from</div>
           </Modal.Body>
           <Modal.Footer>
             <Button onClick={this.close}>Close</Button>
@@ -68,9 +54,3 @@ var ModalI = React.createClass({
 
 
 module.exports = ModalI;
-  
-// <script>
-//   console.log('===============================================================')
-//   var el = this.getDOMNode();
-//   chart.create(el)
-// </script>

@@ -7,15 +7,14 @@ d3Chart.create = function(el){
   var modal = d3.select(el)
   
   specs = {
-    w: 300,
-    h: 300,
-    r: 100,
-    color: d3.scale.category20c(),
-    data: [
-      {"label" : 'one', "value" : 20},
-      {"label" : 'two', "value" : 50},
-      {"label" : 'three', "value" : 30}
-    ]
+    w: 400,
+    h: 400,
+    r: 200,
+    innerR: 150,
+    color: d3.scale.ordinal().range(['#A60F2B', '#648C85', '#B3F2C9', '#528C18']),
+    data: processData(testData),
+    legendRectSize: 18,
+    legendSpacing: 4,
   };
 
   var vis = modal.append("svg:svg")
@@ -27,10 +26,11 @@ d3Chart.create = function(el){
 
 
   var arc = d3.svg.arc()
+    .innerRadius(specs.innerR)
     .outerRadius(specs.r);
 
   var pie = d3.layout.pie()
-    .value(function(d){return d.value});
+    .value(function(d){return d.percentage});
 
 
   var arcs = vis.selectAll('g.slice')
@@ -41,77 +41,99 @@ d3Chart.create = function(el){
 
   arcs.append('svg:path')
     .attr('fill', function(d, i){return specs.color(i)})
-    .attr('d', arc);
+    .attr('d', arc)
+    .style('stroke', 'white')
+    .style('stroke-width', '5')
 
-  arcs.append('svg:text')
-    .attr("transform", function(d){
-      d.innerRadius = 0;
-      d.outerRadius = specs.r;
-      return "translate(" + arc.centroid(d) + ")";
-    })
-    .attr('text-anchor', 'middle')
-    .text(function(d, i){ return specs.data[i].label; });
+  // arcs.append('svg:text')
+  //   .attr("transform", function(d){
+  //     d.innerRadius = 0;
+  //     d.outerRadius = specs.r;
+  //     return "translate(" + arc.centroid(d) + ")";
+  //   })
+  //   .attr('text-anchor', 'middle')
+  //   .text(function(d, i){ return specs.data[i].type; });
+
+  arcs.on('mouseover', function(d){
+    console.log(d);
+  });
+
+  legend('svg', specs.legendRectSize, specs.legendSpacing, specs.color, specs.data);
 
 }
 
+var legend = function(el, RectSize, Spacing, color, data){
+  console.log(d3.select(el).node().getBoundingClientRect());
 
-// d3Chart.create = function(el, props, state){
-//   // console.log(props);
-//   var svg = d3.select('.modal-content').append('svg')
-//     .attr('class', 'd3')
-//     .attr('width', props.width)
-//     .attr('height', props.height)
+  var elSpecs = d3.select(el).node().getBoundingClientRect();
 
-//   svg.append('g')
-//     .attr('class', 'd3-points');
+  var legend = d3.select(el).selectAll('.legend')
+    .data(color.domain())
+    .enter()
+    .append('g')
+    .attr('class', 'legend')
+    .attr('transform', function(d, i){
+      var height = RectSize + Spacing;
+      var offset = height * color.domain().length / 2;
+      var horz = (elSpecs.width / 2);
+      var vert = (elSpecs.height/2) - i * height + offset;
+      return "translate(" + horz + "," + vert + ")";
+    });
 
-//   this.update(el, state);
-// }
+  legend.append('rect')
+    .attr('width', RectSize)
+    .attr('height', RectSize)
+    .style('fill', color)
+    .style('stroke', color)
 
-d3Chart._scales = function(el, domain) {
-  if (!domain) {
-    return null;
+  legend.append('text')
+    .attr('x', RectSize + Spacing)
+    .attr('y', RectSize - Spacing)
+    .text(function(d){return data[d].type; })
+
+  // return legend;
+}
+
+
+var processData = function(data){
+  var totalMW = 0, breakDown = [];
+  data.forEach(function(element){
+    totalMW += element.gen_MW;
+  });
+
+  data.forEach(function(element){
+    var type= element.fuel;
+    var percentage = Math.round((element.gen_MW / totalMW)*100, 2);
+    breakDown.push({type: type, percentage: percentage});
+  })
+  console.log(breakDown);
+  return breakDown;
+}
+
+
+var testData = [
+  
+  {
+    _id: "55df874cda7c5d2c59ec6e08",
+    fuel: "wind",
+    gen_MW: 606,
+  },
+  {
+    _id: "55df874cda7c5d2c59ec6e07",
+    fuel: "solar",
+    gen_MW: 5891,
+  },
+  {
+    _id: "55df874cda7c5d2c59ec6e06",
+    fuel: "renewable",
+    gen_MW: 1708,
   }
-
-  var width = el.offsetWidth;
-  var height = el.offsetHeight;
-
-  var x = d3.scale.linear()
-    .range([0, width])
-    .domain(domain.x);
-
-  var y = d3.scale.linear()
-    .range([height, 0])
-    .domain(domain.y);
-
-  var z = d3.scale.linear()
-    .range([5, 20])
-    .domain([1, 10]);
-
-  return {x: x, y: y, z: z};
-};
-
-
-d3Chart.update = function(el, state){
-  var scales = this._scales(el, state.domain);
-  this._drawPoints(el, scales, state.domain);
-}
-
-d3Chart._drawPoints = function(el, scales, data){
-  var g = d3.select(el).selectAll('.d3-points');
-
-  var points = g.selectAll('.d3-point')
-    .data(data, function(d){return d.id; });
-
-  point.enter().append('circle')
-    .attr('class', 'd3-point');
-
-  point.attr('cx', function(d) { return scales.x(d.x); })
-      .attr('cy', function(d) { return scales.y(d.y); })
-      .attr('r', function(d) { return scales.z(d.z); });
-
-  point.exit()
-      .remove();
-}
+]
 
 module.exports = d3Chart;
+
+var unclean = {
+  _id: "55df874cda7c5d2c59ec6e09",
+  fuel: "other",
+  gen_MW: 36103.55,
+};
