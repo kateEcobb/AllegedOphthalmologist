@@ -9,6 +9,7 @@ var DefaultRoute = Router.DefaultRoute;
 // Components
 var MainView = require('./components/MainView.jsx');
 var RegistrationView = require('./components/RegistrationView.jsx');
+var engergyBreakDown = require('./components/energyBreakDownView.jsx');
 
 var App = React.createClass({
 
