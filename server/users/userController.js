@@ -97,13 +97,18 @@ var signIn = function(req, res){
   });
 };
 
-/* saveUser saves the user to the database with both UtilityAPI data
- * and their custom username + password. If the save is successful, 
- * the callback executes. 
+/* signUp uses checkUsernameAvail, saveUser, and several UtilityAPI helpers
+ * to successfully save a user to the database. This route will return 400s (and won't save
+ * user to database) if a user tries to sign up with a non-unique username or the user's 
+ * PG&E data is wrong. In addition, it will delete accounts from UtilityAPI that have incorrect
+ * PG&E auth information. Once everyting has been correctly saved to the database, the function 
+ * responds with the user's username and unique UID.
+ *
+ * Utility.getActiveUsers is wrapped in a setTimeout function because of a delay in UtilityAPI's
+ * server-side account creation.
  */
 var signUp = function(req, res){ 
   checkUsernameAvail(req, res, function(){ 
-    console.log(req.body)
 
     var requestObj = { 
       utility: 'PG&E', 
@@ -114,8 +119,7 @@ var signUp = function(req, res){
     }
 
     UtilityAPI.postNewUser(JSON.stringify(requestObj), function(user){ 
-      console.log("Successfully added account to UtilityAPI.")
-      console.log(user)
+      console.log("Successfully added account to UtilityAPI.");
 
     setTimeout(function(){
       UtilityAPI.getActiveUsers(function(accounts){ 
@@ -125,32 +129,31 @@ var signUp = function(req, res){
           if(account.account_uid === user.uid){ 
             foundAccount = true;
             var newUserObj = { 
-            username: req.body.username.toLowerCase(), 
-            password: req.body.password,
-            utilityAPIData: { 
-              account_auth: account.account_auth,
-              uid: account.uid, 
-              bill_count: account.bill_count, 
-              utility: account.utility, 
-              utility_service_address: account.utility_service_address
-             }        
-            }
+              username: req.body.username.toLowerCase(), 
+              password: req.body.password,
+              utilityAPIData: { 
+                account_auth: account.account_auth,
+                uid: account.uid, 
+                bill_count: account.bill_count, 
+                utility: account.utility, 
+                utility_service_address: account.utility_service_address
+              }        
+             }
             saveUser(newUserObj, function(){ 
-              console.log("User saved to database.")
+              console.log("User saved to database.");
               res.sendStatus(201).send({username: newUserObj.username, uid: newUserObj.utilityAPIData.uid});
-            })
+            });
           }
-        }
+        } //end for loop
         
         if(!foundAccount){
-          console.log("Registration failed")
+          console.log("PG&E registration failed.");
           UtilityAPI.getDeleteCode(user.uid,function(code){ 
-            UtilityAPI.postDeleteCode(user.uid, JSON.stringify(code), function(status){ 
+            UtilityAPI.postDeleteCode(user.uid, JSON.stringify(code), function(APIresp){ 
               console.log("Successfully deleted account from UtilityAPI.")
-              console.log(status)
-              res.sendStatus(418)
-            })
-          })
+              res.status(418).send(APIresp)
+            });
+          });
         }
       });
 
