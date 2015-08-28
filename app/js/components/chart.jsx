@@ -1,18 +1,20 @@
 var d3Chart = {};
 
 
-d3Chart.create = function(el){
-  console.log('you made it');
+d3Chart.create = function(el, data){
+  // console.log('you made it');
 
   var modal = d3.select(el)
   
+  // console.log(data.Watt[0].genmix.slice(1.4), '========================d3======================================');
+
   specs = {
     w: 400,
     h: 400,
     r: 200,
     innerR: 150,
     color: d3.scale.ordinal().range(['#A60F2B', '#648C85', '#B3F2C9', '#528C18']),
-    data: processData(testData),
+    data: processData(data.Watt[0].genmix.slice(1, 4)),
     legendRectSize: 18,
     legendSpacing: 4,
   };
@@ -63,7 +65,7 @@ d3Chart.create = function(el){
 }
 
 var legend = function(el, RectSize, Spacing, color, data){
-  console.log(d3.select(el).node().getBoundingClientRect());
+  // console.log(d3.select(el).node().getBoundingClientRect());
 
   var elSpecs = d3.select(el).node().getBoundingClientRect();
 
@@ -106,7 +108,7 @@ var processData = function(data){
     var percentage = Math.round((element.gen_MW / totalMW)*100, 2);
     breakDown.push({type: type, percentage: percentage});
   })
-  console.log(breakDown);
+  // console.log(breakDown);
   return breakDown;
 }
 
@@ -129,11 +131,10 @@ var testData = [
     gen_MW: 1708,
   }
 ]
-
-module.exports = d3Chart;
-
 var unclean = {
   _id: "55df874cda7c5d2c59ec6e09",
   fuel: "other",
   gen_MW: 36103.55,
 };
+
+module.exports = d3Chart;

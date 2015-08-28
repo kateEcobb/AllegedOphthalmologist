@@ -5,22 +5,35 @@ var chart = require('./chart.jsx');
 var Button = require('react-bootstrap').Button;
 var Modal = require('react-bootstrap').Modal;
 
+var DataStore = require('./../stores/DataStore');
+
 
 var ModalI = React.createClass({
 
   getInitialState: function(){
-    return {showModal: false};
+    return {
+      data: {
+        "Watt": [{}],
+        "Utility": [{}]
+      },
+      showModal: false,
+    };
   },
 
-  getChartState: function(){
-    return {
-      data: this.props.data,
-      domain: this.props.domain
-    }
+  // getChartState: function(){
+  //   return {
+  //     data: this.props.data,
+  //     domain: this.props.domain
+  //   }
+  // },
+
+  componentDidMount: function(){
+    this.setState({ data: DataStore.getData() });
   },
 
   componentDidUpdate: function(){
-    chart.create('.modal-body');
+    console.log(this.state.data, '==================hello===============================')
+    chart.create('.modal-body', this.state.data);
   },
 
   open: function(){
