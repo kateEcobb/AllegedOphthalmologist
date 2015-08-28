@@ -79,7 +79,7 @@ var signIn = function(req, res){
       console.log("Error in username database query " + err);
       res.status(500).send("Error in username database query");
     } else if (!data){ 
-      console.log('Username does not exist. ' + err);
+      console.log('Username does not exist. ');
       res.status(418).send("Username does not exist.");
     } else { 
       bcrypt.compare(req.body.password, data.password, function(err, match){ 
