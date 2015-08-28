@@ -30,7 +30,7 @@ var checkUsernameAvail = function(req, res, cb){
 };
 
 var saveUser = function(obj, cb){ 
-  bcrypt.hash(obj.password, 8, null, function(err, hash){ 
+  bcrypt.hash(obj.password, null, null, function(err, hash){ 
     var newUser = new User({ 
       username: obj.username, 
       password: hash,
@@ -87,12 +87,13 @@ var signup = function(req, res){
 
     UtilityAPI.postNewUser(JSON.stringify(requestObj), function(user){ 
       console.log("Successfully added account to UtilityAPI.")
-      console.log(user.user_uid)
 
       //db query meterreadings.findOne({user_uid = })
+    setTimeout(function(){
       UtilityAPI.getActiveUsers(function(accounts){ 
         accounts.forEach(function(account){ 
-          if(account.user_uid === user.user_uid){ 
+
+          if(account.account_uid === user.uid){ 
             var newUserObj = { 
             username: req.body.username, 
             password: req.body.password,
@@ -102,15 +103,17 @@ var signup = function(req, res){
               bill_count: account.bill_count, 
               utility: account.utility, 
               utility_service_address: account.utility_service_address
-            }        
-          } 
+             }        
+            }
           saveUser(newUserObj, function(){ 
             console.log("User saved to database.")
             res.send({username: newUserObj.username, uid: newUserObj.utilityAPIData.uid});
           })
-          }
-        })
+             
+           }
+         })
       });
+    },5000); //ask HIR about this
     });
   });
 };
