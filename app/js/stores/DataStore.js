@@ -2,7 +2,7 @@ var assign = require('react/lib/Object.assign');
 var EventEmitter = require('events').EventEmitter;
 var Dispatcher = require('../dispatcher/Dispatcher');
 var ActionTypes = require('../constants/Constants').ActionTypes;
-console.log(Dispatcher);
+// console.log(Dispatcher);
 
 var CHANGE_EVENT = 'change';
 
@@ -37,7 +37,7 @@ DataStore.dispatchToken = Dispatcher.register(function (dispatch) {
   //   DataStore.emitChange();
   // }
   var action = dispatch.action;
-  console.log(action);
+  // console.log(action);
   if (action.type === ActionTypes.WATT_LOADED) {
     DataStore.setData(action.payload, 'Watt');
     DataStore.emitChange();

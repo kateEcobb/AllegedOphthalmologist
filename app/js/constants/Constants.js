@@ -5,6 +5,7 @@ module.exports = {
   ActionTypes: keyMirror({
     WATT_LOADED: null,
     UTILITY_LOADED: null,
+    USER_LOGIN: null
   }),
 
   ActionSources: keyMirror({

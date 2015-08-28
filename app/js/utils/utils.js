@@ -38,26 +38,30 @@ module.exports = {
   },
 
   registerNewUser: function(data) {
-    return new Promise(function(resolve, reject) {
-
-      $.ajax({
-        url: routes.USER_REGISTRATION,
-        method: 'POST',
-        data: data,
-        contentType: "application/json",
-        success: function(data) {
-          resolve(data);
-        },
-        error: function(xhr, status, err) {
-          reject(err);
-        }
-      });
-
-    });
-    // FOR DEBUGGING WITHOUT BACKEND:
     // return new Promise(function(resolve, reject) {
-    //   if(true) resolve(data);
-    //   if(false) reject('err');
+
+    //   $.ajax({
+    //     url: routes.USER_REGISTRATION,
+    //     method: 'POST',
+    //     data: data,
+    //     contentType: "application/json",
+    //     success: function(data) {
+    //       resolve(data);
+    //     },
+    //     error: function(xhr, status, err) {
+    //       reject(err);
+    //     }
+    //   });
+
     // });
+    // FOR DEBUGGING WITHOUT BACKEND:
+    var response = {
+      username: "johndoe",
+      uid: 14591
+    };
+    return new Promise(function(resolve, reject) {
+      if(true) resolve(response);
+      if(false) reject('err');
+    });
   }
 };

@@ -11,6 +11,10 @@ var MainView = require('./components/MainView.jsx');
 var RegistrationView = require('./components/RegistrationView.jsx');
 var engergyBreakDown = require('./components/energyBreakDownView.jsx');
 
+// Stores -- Load here so Stores can begin listening to Events
+var UserStore = require('./stores/UserStore');
+var DataStore = require('./stores/DataStore');
+
 var App = React.createClass({
 
   mixins: [Router.Navigation, Router.State],
