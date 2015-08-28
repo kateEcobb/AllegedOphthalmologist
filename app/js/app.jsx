@@ -8,6 +8,7 @@ var DefaultRoute = Router.DefaultRoute;
 
 // Components
 var MainView = require('./components/MainView.jsx');
+var LoginView = require('./components/LoginView.jsx');
 var RegistrationView = require('./components/RegistrationView.jsx');
 var engergyBreakDown = require('./components/energyBreakDownView.jsx');
 
@@ -29,6 +30,7 @@ var App = React.createClass({
 var routes = (
   <Route name="app" path="/" handler={App}>
   <Route name="register" path="/register" handler={RegistrationView} />
+  <Route name="login" path="/login" handler={LoginView} />
   <DefaultRoute name="default" handler={MainView} />
   </Route>
 );

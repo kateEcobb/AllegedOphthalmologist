@@ -39,7 +39,7 @@ module.exports = {
 
   registerNewUser: function(data) {
     
-    console.log("Sending POST with:", data);
+    //console.log("Sending POST with:", data);
     return new Promise(function(resolve, reject) {
       $.ajax({
         url: routes.USER_REGISTRATION,
@@ -63,6 +63,34 @@ module.exports = {
     // return new Promise(function(resolve, reject) {
     //   if(true) resolve(response);
     //   if(false) reject('err');
+    // });
+  },
+
+  loginUser: function(data) {
+    console.log("Sending Login POST with:", data);
+    return new Promise(function(resolve, reject) {
+      $.ajax({
+        url: routes.USER_LOGIN,
+        method: 'POST',
+        data: JSON.stringify(data),
+        contentType: "application/json",
+        success: function(data) {
+          resolve(data);
+        },
+        error: function(xhr, status, err) {
+          reject(err);
+        }
+      });
+
+    });
+    // FOR DEBUGGING WITHOUT BACKEND:
+    // var response = {
+    //   username: "johndoe",
+    //   uid: 14591
+    // };
+    // return new Promise(function(resolve, reject) {
+    //   if(false) resolve(response);
+    //   if(true) reject('err');
     // });
   }
 };
