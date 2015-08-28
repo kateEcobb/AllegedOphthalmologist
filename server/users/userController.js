@@ -17,12 +17,12 @@ var getUserUID = function(req, res, next){
 
 var checkUsernameAvail = function(req, res, cb){ 
   User.findOne({
-    username: req.body.username
+    username: req.body.username.toLowerCase()
   }).exec(function(err,data){ 
-    if(err) console.log('Error in user database query ' + err);
+    if(err) console.log('Error in username database query ' + err);
     if(data){ 
       console.log('Username already exists.');
-      res.status(418).send();
+      res.sendStatus(418);
     } else {
       cb(true)
     }
@@ -54,7 +54,7 @@ var saveUser = function(obj, cb){
 
 var signin = function(req, res){ 
   User.findOne({ 
-    username: req.body.username
+    username: req.body.username.toLowerCase()
   }).exec(function(err, data){ 
     if(err) console.log("Error in querying User database.")
     else if(data === null){ 
@@ -65,9 +65,9 @@ var signin = function(req, res){
         if(err) res.status(500).send();
         else if(!match){ 
           console.log("Incorrect password.");
-          res.status(404).send();
+          res.status(403).send();
         } else { 
-          res.status(200).send(data);
+          res.status(200).send({username: data.username, uid: data.utilityAPIData.uid});
         }
       })
     }
@@ -88,15 +88,15 @@ var signup = function(req, res){
 
     UtilityAPI.postNewUser(JSON.stringify(requestObj), function(user){ 
       console.log("Successfully added account to UtilityAPI.")
+      console.log(user)
 
-      //db query meterreadings.findOne({user_uid = })
     setTimeout(function(){
       UtilityAPI.getActiveUsers(function(accounts){ 
-        accounts.forEach(function(account){ 
-
+        for(var i=0; i<accounts.length; i++){
+          var account = accounts[i]
           if(account.account_uid === user.uid){ 
             var newUserObj = { 
-            username: req.body.username, 
+            username: req.body.username.toLowerCase(), 
             password: req.body.password,
             utilityAPIData: { 
               account_auth: account.account_auth,
@@ -106,13 +106,22 @@ var signup = function(req, res){
               utility_service_address: account.utility_service_address
              }        
             }
-          saveUser(newUserObj, function(){ 
-            console.log("User saved to database.")
-            res.send({username: newUserObj.username, uid: newUserObj.utilityAPIData.uid});
-          })
-             
-           }
-         })
+            saveUser(newUserObj, function(){ 
+              console.log("User saved to database.")
+              res.send({username: newUserObj.username, uid: newUserObj.utilityAPIData.uid});
+            })
+          } else { 
+            console.log("Registration failed")
+            UtilityAPI.getDeleteCode(user.uid,function(code){ 
+              UtilityAPI.postDeleteCode(user.uid, JSON.stringify(code), function(status){ 
+                console.log("Successfully deleted account from UtilityAPI.")
+                console.log(status)
+                res.sendStatus(418)
+              })
+            })
+            break;
+          }
+         }
       });
     },5000); //ask HIR about this
     });

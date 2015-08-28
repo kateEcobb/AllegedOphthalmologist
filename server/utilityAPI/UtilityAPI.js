@@ -58,5 +58,32 @@ module.exports = {
     }
 
     makeRequest(options,cb)
+  }, 
+
+  getDeleteCode: function(uid, cb){ 
+    var url = 'https://utilityapi.com/api/accounts/'+uid+'/delete.json';
+    var options = {
+      url: url,
+      method: 'GET',
+      headers: {
+        'Authorization': authHeader
+      }
+    };
+    makeRequest(options, cb);
+
+  },
+
+  postDeleteCode: function(uid,code,cb){ 
+    var url = 'https://utilityapi.com/api/accounts/'+uid+'/delete.json';
+    var options = { 
+      url: url, 
+      method: 'POST',
+      body: code,
+      headers: { 
+        'Authorization': authHeader,
+        'Content-Type': 'application/json'
+      }
+    }
+    makeRequest(options,cb)
   }
 };
