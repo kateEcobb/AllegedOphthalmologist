@@ -1,5 +1,4 @@
 var Dispatcher = require('../../../node_modules/flux').Dispatcher;
-var assign = require('react/lib/Object.assign');
 var ActionSources = require('../constants/Constants').ActionSources;
 
 // var AppDispatcher = assign({}, Dispatcher.prototype, {
