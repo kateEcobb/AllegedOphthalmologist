@@ -9,11 +9,7 @@ var createChart = function(el, props, state) {
 };
 ///////////////////////////////////////////////////////////////////////////////////
 
-<<<<<<< HEAD
 // Helper Functions /////////////////////
-=======
-// Helper Functions
->>>>>>> 3ca1b15bf078427ed4ae673ddec1bc3983f97a39
 
 // Sets up the graph options object that will be passed to the other helper functions
 // returns Object{graph, scale, data}
@@ -35,11 +31,7 @@ var initGraph = function(el, props, state) {
     return a.time - b.time;
   });
 
-<<<<<<< HEAD
   // SCALE /////////////////////////////////////////////
-=======
-  // SCALE //////////////
->>>>>>> 3ca1b15bf078427ed4ae673ddec1bc3983f97a39
   // Initial parameters
   var scale = options.scale = {
     height: parseInt(props.height, 10),
@@ -61,11 +53,7 @@ var initGraph = function(el, props, state) {
   scale.xRange = d3.time.scale.utc().domain([data[0].time, data[data.length - 1].time])
   .range([0, scale.width - scale.axisOffset - scale.axisOffset]);
 
-<<<<<<< HEAD
   // GRAPH ///////////////////////////////////////////////
-=======
-  // GRAPH //////////////
->>>>>>> 3ca1b15bf078427ed4ae673ddec1bc3983f97a39
   var graph = options.graph = d3.select(el).append('svg:svg')
                               .attr('class', 'lineGraph')
                               .attr('width', scale.width + scale.margin + scale.margin)
@@ -101,10 +89,7 @@ var drawLine = function(options) {
   var scale = options.scale;
   var data = options.data;
 
-<<<<<<< HEAD
   // Define the line that the path will take
-=======
->>>>>>> 3ca1b15bf078427ed4ae673ddec1bc3983f97a39
   var lineFunc = d3.svg.line()
                   .x(function(datum, i) {
                     return scale.xRange( datum.time );
@@ -114,10 +99,7 @@ var drawLine = function(options) {
                   })
                   .interpolate('linear');
 
-<<<<<<< HEAD
   // Draw the path
-=======
->>>>>>> 3ca1b15bf078427ed4ae673ddec1bc3983f97a39
   graph.append('svg:path')
   .attr('d', lineFunc(data))
   .attr('class', 'linePath')
@@ -131,15 +113,11 @@ var drawPoints = function(options) {
   var scale = options.scale;
   var data = options.data;
 
-<<<<<<< HEAD
   // Define the graph the points will sit in
-=======
->>>>>>> 3ca1b15bf078427ed4ae673ddec1bc3983f97a39
   var pointGraph = graph.append('svg:g')
                     .attr('class', 'pointGraph')
                     .attr('transform', 'translate(' + (scale.axisOffset) + ',' + (0) + ')');
 
-<<<<<<< HEAD
   // DATA JOIN //
   var points = pointGraph.selectAll('circle')
                 .data(data, function(datum) {return datum.id;});
@@ -147,15 +125,6 @@ var drawPoints = function(options) {
   // UPDATE //
 
   // ENTER //
-=======
-  // DATA JOIN
-  var points = pointGraph.selectAll('circle')
-                .data(data, function(datum) {return datum.id;});
-
-  // DATA UPDATE
-
-  // ENTER
->>>>>>> 3ca1b15bf078427ed4ae673ddec1bc3983f97a39
   points.enter().append('circle')
   .attr('class', 'linePoint')
   .attr('cx', function(datum) {
@@ -165,13 +134,9 @@ var drawPoints = function(options) {
     return scale.yRange( datum.carbon ); 
   });
 
-<<<<<<< HEAD
   // UPDATE + ENTER //
 
   // EXIT //
-=======
-  // EXIT
->>>>>>> 3ca1b15bf078427ed4ae673ddec1bc3983f97a39
   points.exit().remove();
 
   return;
