@@ -44,7 +44,7 @@ var MainView = React.createClass({
         <div>Power is Currently</div>
 
         <ModalI> </ModalI>      
-      
+
         <LineGraphView />     
 
       </div>
@@ -54,3 +54,6 @@ var MainView = React.createClass({
 });
 
 module.exports = MainView;
+
+/*{this.state.data}*/
+/*{this.state.data.energy_state}*/

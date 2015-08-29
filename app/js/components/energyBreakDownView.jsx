@@ -20,20 +20,14 @@ var ModalI = React.createClass({
     };
   },
 
-  // getChartState: function(){
-  //   return {
-  //     data: this.props.data,
-  //     domain: this.props.domain
-  //   }
-  // },
-
   componentDidMount: function(){
     this.setState({ data: DataStore.getData() });
   },
 
   componentDidUpdate: function(){
-    console.log(this.state.data, '==================hello===============================')
-    chart.create('.modal-body', this.state.data);
+    // console.log(this.state.data.Watt[0].genmix, '==================hello===============================')
+    chart.create('.modal-body', this.state.data.Watt[0].genmix.slice(1, 4), 'test1');
+    chart.create('.modal-body', this.state.data.Watt[0].genmix, 'test2');
   },
 
   open: function(){
@@ -45,9 +39,13 @@ var ModalI = React.createClass({
   },
 
   render: function(){
+    // button can be used with any conent that the <ModalInstance> tag is wrapped around
+    // or the div can be used to wrap around other things like images
+    // <div onClick={this.open}>{this.props.children}</div> 
     return (
       <div>
-        <Button onClick={this.open}>Launch</Button>
+
+        <Button onClick={this.open}>{this.props.children}</Button>
 
         <Modal show={this.state.showModal} onHide={this.close}>
           <Modal.Header>

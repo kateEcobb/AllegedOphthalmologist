@@ -1,20 +1,18 @@
 var d3Chart = {};
 
 
-d3Chart.create = function(el, data){
+d3Chart.create = function(el, data, className){
   // console.log('you made it');
 
   var modal = d3.select(el)
   
-  // console.log(data.Watt[0].genmix.slice(1.4), '========================d3======================================');
-
   specs = {
-    w: 400,
-    h: 400,
-    r: 200,
-    innerR: 150,
+    w: 310,
+    h: 310,
+    r: 150,
+    innerR: 100,
     color: d3.scale.ordinal().range(['#A60F2B', '#648C85', '#B3F2C9', '#528C18']),
-    data: processData(data.Watt[0].genmix.slice(1, 4)),
+    data: processData(data),
     legendRectSize: 18,
     legendSpacing: 4,
   };
@@ -23,6 +21,7 @@ d3Chart.create = function(el, data){
     .data([specs.data])
     .attr("width", specs.w)
     .attr("height", specs.h)
+    .attr("class", className)
     .append('svg:g')
     .attr("transform", "translate("+specs.r+","+specs.r+")")
 
@@ -60,16 +59,16 @@ d3Chart.create = function(el, data){
     console.log(d);
   });
 
-  legend('svg', specs.legendRectSize, specs.legendSpacing, specs.color, specs.data);
+  legend(className, specs.legendRectSize, specs.legendSpacing, specs.color, specs.data);
 
 }
 
 var legend = function(el, RectSize, Spacing, color, data){
   // console.log(d3.select(el).node().getBoundingClientRect());
 
-  var elSpecs = d3.select(el).node().getBoundingClientRect();
+  var elSpecs = d3.select("."+el).node().getBoundingClientRect();
 
-  var legend = d3.select(el).selectAll('.legend')
+  var legend = d3.select("."+el).selectAll('.legend')
     .data(color.domain())
     .enter()
     .append('g')
@@ -114,6 +113,11 @@ var processData = function(data){
 
 
 var testData = [
+  {
+    _id: "55df874cda7c5d2c59ec6e09",
+    fuel: "other",
+    gen_MW: 36103.55,
+  },
   
   {
     _id: "55df874cda7c5d2c59ec6e08",
@@ -131,10 +135,5 @@ var testData = [
     gen_MW: 1708,
   }
 ]
-var unclean = {
-  _id: "55df874cda7c5d2c59ec6e09",
-  fuel: "other",
-  gen_MW: 36103.55,
-};
 
 module.exports = d3Chart;
