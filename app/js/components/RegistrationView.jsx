@@ -21,11 +21,7 @@ var RegistrationView = React.createClass({
 
   getInitialState: function() {
     return {
-      username: null,
-      password: null,
-      pgeUsername: null,
-      pgePassword: null,
-      pgeFullName: null
+      canSubmit: false
     };
   },
   componentDidMount: function(){
@@ -64,9 +60,9 @@ var RegistrationView = React.createClass({
       <div className="container">
         <div className="login jumbotron center-block">
         <h2>Register</h2>
-          <Formsy.Form onSubmit={this.submitForm} className="login">
+          <Formsy.Form onSubmit={this.submitForm} className="registration" onValid={this.enableButton} onInvalid={this.disableButton}>
             <FormInput name="pgeFullName" title="Full Name" type="text" 
-              validations="isAlpha" validationError="Please enter your name"/>
+              validations="isWords" validationError="Please enter your name"/>
             <FormInput name="username" title="Email" type="text" 
               validations="isEmail" validationError="Please enter a valid email."/>
             <FormInput name="password" title="Password" type="password" 
@@ -74,7 +70,7 @@ var RegistrationView = React.createClass({
               validationError="Password must be between 6 and 20 characters"/>
             <FormInput name="pgeUsername" title="PG&E Username" type="text"/>
             <FormInput name="pgePassword" title="PG&E Password" type="password"/>
-          <button className="btn btn-submit" type="submit">Register</button>
+          <button className="btn btn-submit" type="submit" disabled={!this.state.canSubmit}>Register</button>
           </Formsy.Form>
           
           <div className="spinner-container">
