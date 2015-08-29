@@ -28,6 +28,12 @@ div.login {
   stroke: steelblue;
 }
 
+.userLinePath {
+  fill: none;
+  stroke-width: 2;
+  stroke: #C1CDC1;
+}
+
 .linePoint {
   r: 6;
 }

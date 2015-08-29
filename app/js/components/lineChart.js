@@ -6,6 +6,7 @@ var createChart = function(el, props, state) {
   drawAxes(options);
   drawLine(options);
   drawPoints(options);
+  return options.graph;
 };
 ///////////////////////////////////////////////////////////////////////////////////
 
@@ -31,6 +32,8 @@ var initGraph = function(el, props, state) {
     return a.time - b.time;
   });
 
+  console.log("Watt is", data);
+
   // SCALE /////////////////////////////////////////////
   // Initial parameters
   var scale = options.scale = {
@@ -38,12 +41,13 @@ var initGraph = function(el, props, state) {
     width: parseInt(props.width, 10),
     margin: parseInt(props.margin, 10),
     axisOffset: 50,
-    yMaxRatio: 1.05,
+    yMinRatio: 0.98,
+    yMaxRatio: 1.02,
   };
 
   // Set up the scale yRange
   scale.yRange = d3.scale.linear().domain([d3.min(data, function(datum) {
-    return datum.carbon;
+    return datum.carbon * scale.yMinRatio;
   }), d3.max(data, function(datum) {
     return datum.carbon * scale.yMaxRatio;  
   })])
@@ -103,7 +107,7 @@ var drawLine = function(options) {
   graph.append('svg:path')
   .attr('d', lineFunc(data))
   .attr('class', 'linePath')
-  .attr('transform', 'translate(' + (scale.axisOffset) + ', 0)' );
+  .attr('transform', 'translate(' + (scale.axisOffset) + ',' + (scale.axisOffset) + ')' );
 
   return;
 };
@@ -116,7 +120,7 @@ var drawPoints = function(options) {
   // Define the graph the points will sit in
   var pointGraph = graph.append('svg:g')
                     .attr('class', 'pointGraph')
-                    .attr('transform', 'translate(' + (scale.axisOffset) + ',' + (0) + ')');
+                    .attr('transform', 'translate(' + (scale.axisOffset) + ',' + (scale.axisOffset) + ')');
 
   // DATA JOIN //
   var points = pointGraph.selectAll('circle')
