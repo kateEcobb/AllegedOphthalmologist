@@ -49,6 +49,16 @@ var RegistrationView = React.createClass({
   redirectHome: function(){
     this.transitionTo("/");
   },
+  enableButton: function () {
+    this.setState({
+      canSubmit: true
+    });
+  },
+  disableButton: function () {
+    this.setState({
+      canSubmit: false
+    });
+  },
   submitForm: function(data){
     // console.log(data);
     $('.spinner-container').css('visibility', 'visible');
