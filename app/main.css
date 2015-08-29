@@ -22,6 +22,12 @@ div.login {
   stroke: black;
 }
 
+.linePath {
+  fill: none;
+  stroke-width: 2;
+  stroke: steelblue;
+}
+
 .linePoint {
   r: 6;
 }
