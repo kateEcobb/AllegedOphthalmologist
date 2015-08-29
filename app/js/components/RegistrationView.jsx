@@ -5,6 +5,10 @@ var Router = require('react-router');
 var ViewActions = require('./../actions/ViewActions');
 var ActionTypes = require('./../constants/Constants').ActionTypes;
 
+// Form validation
+var Formsy = require('formsy-react');
+var FormInput = require('./FormInput.jsx');
+
 // Stores
 var UserStore = require('./../stores/UserStore');
 
@@ -17,11 +21,7 @@ var RegistrationView = React.createClass({
 
   getInitialState: function() {
     return {
-      username: null,
-      password: null,
-      pgeUsername: null,
-      pgePassword: null,
-      pgeFullName: null
+      canSubmit: false
     };
   },
   componentDidMount: function(){
@@ -49,51 +49,38 @@ var RegistrationView = React.createClass({
   redirectHome: function(){
     this.transitionTo("/");
   },
-  submitForm: function(){
+  submitForm: function(data){
+    // console.log(data);
     $('.spinner-container').css('visibility', 'visible');
     $('.btn-submit').prop('disabled', true);
-    ViewActions.registerUser(this.state);
+    ViewActions.registerUser(data);
   },
   render: function() {
     return (
       <div className="container">
         <div className="login jumbotron center-block">
         <h2>Register</h2>
-          <form id="register" role="form">
-            <div className="form-group">
-              <label htmlFor="pgeFullName">Full Name: </label><br />
-              <input className="form-control" id="pgeFullName" type="text" valueLink={this.linkState('pgeFullName')} />
-            </div>
-            <div className="form-group">
-              <label htmlFor="username">Username: </label><br />
-              <input className="form-control" id="username" type="text" valueLink={this.linkState('username')}/>
-            </div>
-            <div className="form-group">
-              <label htmlFor="password">Password: </label><br />
-              <input className="form-control" id="password" type="password" valueLink={this.linkState('password')} />
-            </div>
-            <div className="form-group">
-              <label htmlFor="pgeUsername">PG&E Username: </label><br />
-              <input className="form-control" id="pgeUsername" type="text" valueLink={this.linkState('pgeUsername')} />
-            </div>
-            <div className="form-group">
-              <label htmlFor="pgePassword">PG&E Password: </label><br />
-              <input className="form-control" id="pgePassword" type="password" valueLink={this.linkState('pgePassword')} />
-            </div>
-          <button className="btn btn-submit" type="button" onClick={this.submitForm}>Register</button>
-          </form>
+          <Formsy.Form onSubmit={this.submitForm} className="registration" onValid={this.enableButton} onInvalid={this.disableButton}>
+            <FormInput name="pgeFullName" title="Full Name" type="text" 
+              validations="isWords" validationError="Please enter your name"/>
+            <FormInput name="username" title="Email" type="text" 
+              validations="isEmail" validationError="Please enter a valid email."/>
+            <FormInput name="password" title="Password" type="password" 
+              validations={{minLength:6, maxLength: 20}} 
+              validationError="Password must be between 6 and 20 characters"/>
+            <FormInput name="pgeUsername" title="PG&E Username" type="text"/>
+            <FormInput name="pgePassword" title="PG&E Password" type="password"/>
+          <button className="btn btn-submit" type="submit" disabled={!this.state.canSubmit}>Register</button>
+          </Formsy.Form>
+          
           <div className="spinner-container">
             <div className="spinner-loader">
               Loading…
             </div>
           </div>
           <div className="login-failure">
-            <p>
-              Failed to Register.
-            </p>
-            <p>
-              Is your PG&E Login Information Correct? 
-            </p>
+            <p>Failed to Register.</p>
+            <p>Is your PG&E Login Information Correct?</p>
           </div>
         </div>
       </div>
