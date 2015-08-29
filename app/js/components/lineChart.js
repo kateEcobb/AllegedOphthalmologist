@@ -9,7 +9,7 @@ var createChart = function(el, props, state) {
 };
 ///////////////////////////////////////////////////////////////////////////////////
 
-// Helper Functions
+// Helper Functions /////////////////////
 
 // Sets up the graph options object that will be passed to the other helper functions
 // returns Object{graph, scale, data}
@@ -31,7 +31,7 @@ var initGraph = function(el, props, state) {
     return a.time - b.time;
   });
 
-  // SCALE //////////////
+  // SCALE /////////////////////////////////////////////
   // Initial parameters
   var scale = options.scale = {
     height: parseInt(props.height, 10),
@@ -53,7 +53,7 @@ var initGraph = function(el, props, state) {
   scale.xRange = d3.time.scale.utc().domain([data[0].time, data[data.length - 1].time])
   .range([0, scale.width - scale.axisOffset - scale.axisOffset]);
 
-  // GRAPH //////////////
+  // GRAPH ///////////////////////////////////////////////
   var graph = options.graph = d3.select(el).append('svg:svg')
                               .attr('class', 'lineGraph')
                               .attr('width', scale.width + scale.margin + scale.margin)
@@ -89,6 +89,7 @@ var drawLine = function(options) {
   var scale = options.scale;
   var data = options.data;
 
+  // Define the line that the path will take
   var lineFunc = d3.svg.line()
                   .x(function(datum, i) {
                     return scale.xRange( datum.time );
@@ -98,6 +99,7 @@ var drawLine = function(options) {
                   })
                   .interpolate('linear');
 
+  // Draw the path
   graph.append('svg:path')
   .attr('d', lineFunc(data))
   .attr('class', 'linePath')
@@ -111,17 +113,18 @@ var drawPoints = function(options) {
   var scale = options.scale;
   var data = options.data;
 
+  // Define the graph the points will sit in
   var pointGraph = graph.append('svg:g')
                     .attr('class', 'pointGraph')
                     .attr('transform', 'translate(' + (scale.axisOffset) + ',' + (0) + ')');
 
-  // DATA JOIN
+  // DATA JOIN //
   var points = pointGraph.selectAll('circle')
                 .data(data, function(datum) {return datum.id;});
 
-  // DATA UPDATE
+  // UPDATE //
 
-  // ENTER
+  // ENTER //
   points.enter().append('circle')
   .attr('class', 'linePoint')
   .attr('cx', function(datum) {
@@ -131,7 +134,9 @@ var drawPoints = function(options) {
     return scale.yRange( datum.carbon ); 
   });
 
-  // EXIT
+  // UPDATE + ENTER //
+
+  // EXIT //
   points.exit().remove();
 
   return;

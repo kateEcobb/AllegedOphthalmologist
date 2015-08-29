@@ -45,7 +45,7 @@ var MainView = React.createClass({
 
         <ModalI> </ModalI>      
       
-        <LineGraphView test="a;slkdfjas;ldkjf" />     
+        <LineGraphView />     
 
       </div>
       

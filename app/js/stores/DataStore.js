@@ -30,10 +30,7 @@ var DataStore = assign({}, EventEmitter.prototype, {
   }
 });
 DataStore.dispatchToken = Dispatcher.register(function (dispatch) {
-  // if (action.type === 'DATA_LOADED') {
-  //   DataStore.setData(action.dispatch);
-  //   DataStore.emitChange();
-  // }
+  
   var action = dispatch.action;
   if (action.type === ActionTypes.WATT_LOADED) {
     DataStore.setData(action.payload, 'Watt');
