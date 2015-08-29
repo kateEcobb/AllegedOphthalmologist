@@ -72,8 +72,10 @@ var LoginView = React.createClass({
         <h2>Login</h2>
           
           <Formsy.Form onSubmit={this.submitForm} className="login" onValid={this.enableButton} onInvalid={this.disableButton}>
-            <FormInput name="username" title="Username" type="text"/>
-            <FormInput name="password" title="Password" type="password" />
+            <FormInput name="username" title="Email" type="text" 
+              validations="isEmail" validationError="Please enter a valid email" required/>
+            <FormInput name="password" title="Password" type="password" 
+              validations="minLength:6" validationError="Password must be at least 6 characters in length"/>
           <button className="btn btn-submit" type="submit" disabled={!this.state.canSubmit}>Login</button>
           </Formsy.Form>
           

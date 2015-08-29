@@ -111,7 +111,8 @@ var signUp = function(req, res){
   checkUsernameAvail(req, res, function(){ 
 
     var requestObj = { 
-      utility: 'PG&E', 
+      // utility: 'PG&E', 
+      utility: 'DEMO',
       auth_type: 'owner',
       real_name: req.body.pgeFullName, 
       utility_username: req.body.pgeUsername,
