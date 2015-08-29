@@ -9,3 +9,19 @@ div.login {
   text-align: center;
   visibility: hidden;
 }
+
+.axis { 
+  fill: none
+}
+
+.x.axis {
+  stroke: black; 
+}
+
+.y.axis {
+  stroke: black;
+}
+
+.linePoint {
+  r: 6;
+}
