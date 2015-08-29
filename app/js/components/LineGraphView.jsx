@@ -1,5 +1,6 @@
 var React = require('react');
 var d3 = require('d3');
+var lineChart = require('./lineChart.js');
 
 // Actions
 var ViewActions = require('./../actions/ViewActions');
@@ -37,7 +38,7 @@ var LineGraphView = React.createClass({
   componentDidUpdate: function() {
     var el = React.findDOMNode(this);
     console.log(this.state.data.Watt[0]);
-    this.createGraph(el, {
+    lineChart.createChart(el, {
       width: '1000',
       height: '500',
       margin: '10'
@@ -59,11 +60,10 @@ var LineGraphView = React.createClass({
 
   // Class Functions ////////////////////////////////////
 
-  createGraph: function(el, props, state) {
+  createChart: function(el, props, state) {
 
     // Parse out the required data from the state
     var data = [];
-    var dataTime = [];
     for (var i = 0; i < state.data.Watt.length; i++) {
       data.push({
         carbon: parseInt(state.data.Watt[i].carbon),
@@ -72,21 +72,10 @@ var LineGraphView = React.createClass({
       });
     }
 
-    for (var i = 0; i < state.data.Watt.length; i++) {
-      dataTime.push({
-        carbon: parseInt(state.data.Watt[i].carbon),
-        time: state.data.Watt[i].timestamp
-      });
-    }
-
     // Sort the data by time
     data.sort(function(a, b) {
       return a.time - b.time;
     });
-
-    dataTime.sort(function(a, b) {
-      return new Date(a.time) - new Date(b.time);
-    })
 
     // Set up the graph dimensions
     var scale = {
@@ -97,16 +86,16 @@ var LineGraphView = React.createClass({
 
     // Set up the graph
     var graph = d3.select(el).append('svg:svg')
-              .attr('class', 'svg')
+              .attr('class', 'lineGraph')
               .attr('width', scale.width + scale.margin + scale.margin)
               .attr('height', scale.height + scale.margin + scale.margin)
               .append('svg:g')
                 .attr('transform', 'translate(' + (scale.margin) + ',' + (scale.margin) + ')');
 
-    this.createScale(graph, scale, data, dataTime);
+    this.createScale(graph, scale, data);
   },
 
-  createScale: function(graph, scale, data, dataTime) {
+  createScale: function(graph, scale, data) {
 
     // Additional parameters we need to calculate to create the x and y axis and pass to draw the line
     scale.axisOffset = 50;   // Inner offset used as margins on either side in order to give the axis space to show
@@ -120,41 +109,33 @@ var LineGraphView = React.createClass({
     })])
     .range([scale.height - scale.axisOffset - scale.axisOffset, 0]);
 
-    scale.xRange = d3.scale.linear().domain([d3.min(data, function(datum) {
-      return datum.time;
-    }), d3.max(data, function(datum) {
-      return datum.time;
-    })])
+    scale.xRange = d3.time.scale.utc().domain([data[0].time, data[data.length - 1].time])
     .range([0, scale.width - scale.axisOffset - scale.axisOffset]);
 
-    scale.xTimeRange = d3.time.scale.utc().domain([data[0].time, data[data.length - 1].time])
-    .range([0, scale.width - scale.axisOffset - scale.axisOffset]);
-
+    // Configure the x and y axis
     var xAxis = d3.svg.axis().scale(scale.xRange);
-
-    var xTimeAxis = d3.svg.axis().scale(scale.xTimeRange);
-
     var yAxis = d3.svg.axis().scale(scale.yRange).orient('left');
 
+    // Draw the x and y axis
     graph.append('svg:g')
     .attr('class', 'x axis')
     .attr('transform', 'translate(' + (scale.axisOffset) + ',' + (scale.height - scale.axisOffset) + ')')
-    .call(xTimeAxis);
+    .call(xAxis);
 
     graph.append('svg:g')
     .attr('class', 'y axis')
     .attr('transform', 'translate(' + (scale.axisOffset) + ',' + (scale.axisOffset) + ')')
     .call(yAxis);
 
+    this.drawGraph(graph, scale, data);
     this.drawPoints(graph, scale, data);
-    this.drawGraph(graph, scale, data, dataTime);
   },
 
-  drawGraph: function(graph, scale, data, dataTime) {
+  drawGraph: function(graph, scale, data) {
 
     var lineFunc = d3.svg.line()
                     .x(function(datum, i) {
-                      return scale.xTimeRange( datum.time );
+                      return scale.xRange( datum.time );
                     })
                     .y(function(datum) {
                       return scale.yRange( datum.carbon );
@@ -163,9 +144,10 @@ var LineGraphView = React.createClass({
 
     graph.append('svg:path')
     .attr('d', lineFunc(data))
-    .attr('stroke', 'blue')
-    .attr('stroke-width', 2)
-    .attr('fill', 'none')
+    .attr('class', 'linePath')
+    // .attr('stroke', 'blue')
+    // .attr('stroke-width', 2)
+    // .attr('fill', 'none')
     .attr('transform', 'translate(' + (scale.axisOffset) + ', 0)' );
   },
 
@@ -184,7 +166,7 @@ var LineGraphView = React.createClass({
     points.enter().append('circle')
     .attr('class', 'linePoint')
     .attr('cx', function(datum) {
-      return scale.xTimeRange( datum.time ); 
+      return scale.xRange( datum.time ); 
     })
     .attr('cy', function(datum) {
       return scale.yRange( datum.carbon ); 
