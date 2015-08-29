@@ -5,14 +5,16 @@ var UtilityAPI = require('../utilityAPI/UtilityAPI');
 var uuid = require('node-uuid');
 
 var getUserMeterReadings = function(req, res, next){ 
-  //add token check
+  console.log('in getUserMeterReadings', req.uid);
   MeterReadings.find({ 
-    'utilityAPIData.uid': req.params.uid
+    'utilityAPIData.uid': req.uid
   }).exec(function(err, data){ 
-    if(err || !data){ 
+    console.log(data)
+    if(err || data === []){ 
       console.log('Error in meterreading database query ' + err);
       res.status(500).send("Error in meterreading database query");
     } else { 
+      console.log('Made it to controller')
       res.status(200).send(data)
     }
   });
@@ -189,6 +191,6 @@ module.exports = {
   signUp: signUp, 
   getUserUID: getUserUID, 
   signIn: signIn, 
-  getUserMeterReadings: getUserMeterReadings
+  getUserMeterReadings: getUserMeterReadings 
 }
 
