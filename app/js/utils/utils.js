@@ -1,9 +1,17 @@
 var routes = require('../constants/Constants.js').ServerRoutes;
+var UserStore = require('./../stores/UserStore');
 
 // Helper functions
-var PostReq = function(route, data){
-  
+
+var setAuthHeader = function(){
+  $.ajaxSetup({
+      headers: { 'Authorization': "Bearer "+UserStore.getToken() }
+  });
+}
+
+var PostReq = function(route, data){ 
   // console.log("Sending POST to " + route + " with " + data);
+  setAuthHeader();
   return new Promise(function(resolve, reject) {
     $.ajax({
       url: route,
@@ -30,7 +38,8 @@ var PostReq = function(route, data){
   });
 };
 var GetReq = function(route){
-  // console.log("Sending GET to " + route);
+  //console.log("Sending GET to " + route);
+  setAuthHeader();  
   return new Promise(function(resolve, reject) {
     $.ajax({
       url: route,
@@ -66,6 +75,15 @@ module.exports = {
 
   registerNewUser: function(data) {
     return PostReq(routes.USER_REGISTRATION, data);
+  },
+
+  updateSettings: function(data){
+    //TODO: Send object with
+    // {
+    //   uid: USERS_UID,
+    //   pgeUsername: UPDATED PGE USERNAME,
+    //   pgePassword: UPDATED PGE Password
+    // }
   },
 
   loginUser: function(data) {

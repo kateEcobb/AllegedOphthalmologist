@@ -8,7 +8,8 @@ var CHANGE_EVENT = 'change';
 
 var user = {
   username: null,
-  uid: null
+  uid: null,
+  token: null
 };
 
 var UserStore = assign({}, EventEmitter.prototype, {
@@ -25,12 +26,16 @@ var UserStore = assign({}, EventEmitter.prototype, {
     console.log("setting user data in store:", user_data)
     user.username = user_data.username;
     user.uid = user_data.uid;
+    user.token = user_data.token;
   },
   getUsername: function(){
     return user.username;
   },
   getUid: function(){
     return user.uid;
+  },  
+  getToken: function(){
+    return user.token;
   }
 
 });

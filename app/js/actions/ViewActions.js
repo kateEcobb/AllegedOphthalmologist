@@ -57,6 +57,8 @@ var ViewActions = {
   loginUser: function (user_data) {
     util.loginUser(user_data)
     .then(function(user){
+      
+      //console.log("Got User: ", user);
       Dispatcher.handleViewAction({
         type: ActionTypes.USER_LOGIN,
         payload: user
