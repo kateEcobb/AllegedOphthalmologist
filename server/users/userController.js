@@ -4,10 +4,50 @@ var MeterReadings = require('../utilityAPI/MeterReadingModel');
 var UtilityAPI = require('../utilityAPI/UtilityAPI');
 var uuid = require('node-uuid');
 
+var changePGEData = function(req, res){
+  var reqObj = { 
+    auth_type: null,
+    real_name: req.body.pgeFullName, 
+    utility_username: req.body.pgeUsername,
+    utility_password: req.body.pgePassword,
+  }
+
+  if(!!reqObj.real_name){ 
+    reqObj.auth_type = "owner"
+    //need to update DB here
+  }
+
+  UtilityAPI.getActiveUsers(function(users){ 
+    users.forEach(function(user){ 
+      if(user.uid === req.uid){}
+    
+    })
+
+
+
+  })
+
+
+  UtilityAPI.postPGEMod(req.uid, JSON.stringify(reqObj), function(response){ 
+    console.log("User successfully updated on Utility API");
+      UtilityAPI.getActiveUsers(function(users){ //services
+        users.forEach(function(user){ 
+      
+
+
+        })        
+
+
+
+      })
+
+  });
+};
+
 //getUserMeterReadings gets all interval data by user UID.
 var getUserMeterReadings = function(req, res, next){ 
   MeterReadings.find({ 
-    'utilityAPIData.uid': req.uid
+    service_uid: req.service_uid
   }).exec(function(err, data){ 
     if(err){ 
       console.log('Error in meterreading database query ' + err);
@@ -51,7 +91,8 @@ var saveUser = function(obj, cb){
       token: newtoken,
       utilityAPIData: { 
         account_auth: obj.utilityAPIData.account_auth,
-        uid: obj.utilityAPIData.uid, 
+        account_uid: obj.utilityAPIData.account_uid, 
+        service_uid: obj.utilityAPIData.service_uid, 
         bill_count: obj.utilityAPIData.bill_count, 
         utility: obj.utilityAPIData.utility, 
         utility_service_address: obj.utilityAPIData.utility_service_address
@@ -94,7 +135,7 @@ var signIn = function(req, res){
           var newtoken = uuid.v4();
           data.token = newtoken;
           data.save(function(err, rawRes){ 
-            res.status(200).send({username: rawRes.username, uid: rawRes.utilityAPIData.uid, token: rawRes.token});
+            res.status(200).send({username: rawRes.username, account_uid: rawRes.utilityAPIData.account_uid,service_uid: rawRes.utilityAPIData.service_uid, token: rawRes.token});
           });
         }
       });
@@ -126,29 +167,34 @@ var signUp = function(req, res){
 
     UtilityAPI.postNewUser(JSON.stringify(requestObj), function(user){ 
       console.log("Successfully added account to UtilityAPI.");
-
+      console.log(user)
     setTimeout(function(){
       UtilityAPI.getActiveUsers(function(accounts){ 
         var foundAccount = false;
         for(var i=0; i<accounts.length; i++){
           var account = accounts[i];
+          
           if(account.account_uid === user.uid){ 
             foundAccount = true;
+            
             var newUserObj = { 
               username: req.body.username.toLowerCase(), 
               password: req.body.password,
               utilityAPIData: { 
                 account_auth: account.account_auth,
-                uid: account.uid, 
+                account_uid: user.uid,
+                service_uid: account.uid, 
                 bill_count: account.bill_count, 
                 utility: account.utility, 
                 utility_service_address: account.utility_service_address
               }        
              }
+            
             saveUser(newUserObj, function(saveRes){ 
               console.log("User saved to database.");
-              res.status(201).send({username: saveRes.username, uid: saveRes.utilityAPIData.uid, token: saveRes.token});
+              res.status(201).send({username: saveRes.username, account_uid: saveRes.utilityAPIData.account_uid, service_uid: saveRes.utilityAPIData.service_uid, token: saveRes.token});
             });
+
           }
         } //end for loop
         
@@ -163,7 +209,7 @@ var signUp = function(req, res){
         }
       });
 
-    }, 4000);
+    }, 5000);
     });
   });
 };
@@ -171,6 +217,7 @@ var signUp = function(req, res){
 module.exports = { 
   signUp: signUp, 
   signIn: signIn, 
-  getUserMeterReadings: getUserMeterReadings 
+  getUserMeterReadings: getUserMeterReadings, 
+  changePGEData: changePGEData 
 }
 
