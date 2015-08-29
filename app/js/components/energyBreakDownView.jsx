@@ -1,5 +1,5 @@
 var React = require('react');
-var chart = require('./chart.jsx');
+var chart = require('./donutChart.js');
 
 
 var Button = require('react-bootstrap').Button;

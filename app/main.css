@@ -9,3 +9,25 @@ div.login {
   text-align: center;
   visibility: hidden;
 }
+
+.axis { 
+  fill: none
+}
+
+.x.axis {
+  stroke: black; 
+}
+
+.y.axis {
+  stroke: black;
+}
+
+.linePath {
+  fill: none;
+  stroke-width: 2;
+  stroke: steelblue;
+}
+
+.linePoint {
+  r: 6;
+}
