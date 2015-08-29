@@ -13,15 +13,12 @@ var authenticate = function(req, res, next){
       res.status(401).send("Token is incorrect, redirect to signin.")
     } else { 
       req.uid = data.utilityAPIData.uid
-      console.log("in middleware")
       next();
     }
-  })
-
+  });
 };
 
 module.exports = function(app){ 
-  app.get('/users', userController.getUserUID);
   app.post('/signup', userController.signUp);
   app.post('/signin', userController.signIn);
   app.get('/api/user/meterreadings/', authenticate, userController.getUserMeterReadings); 

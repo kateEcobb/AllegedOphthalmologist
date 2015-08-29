@@ -4,35 +4,16 @@ var MeterReadings = require('../utilityAPI/MeterReadingModel');
 var UtilityAPI = require('../utilityAPI/UtilityAPI');
 var uuid = require('node-uuid');
 
+//getUserMeterReadings gets all interval data by user UID.
 var getUserMeterReadings = function(req, res, next){ 
-  console.log('in getUserMeterReadings', req.uid);
   MeterReadings.find({ 
     'utilityAPIData.uid': req.uid
   }).exec(function(err, data){ 
-    console.log(data)
-    if(err || data === []){ 
+    if(err){ 
       console.log('Error in meterreading database query ' + err);
       res.status(500).send("Error in meterreading database query");
     } else { 
-      console.log('Made it to controller')
       res.status(200).send(data)
-    }
-  });
-};
-
-// getUserUID returns a user's unique UID from the database. 
-var getUserUID = function(req, res, next){ 
-  User.findOne({ 
-    username: req.body.username.toLowerCase()
-  }).exec(function(err, data){ 
-    if (err) { 
-      console.log('Error in getting user UID '+ err);
-      res.status(500).send("Error in getting user UID from database.");
-    } else if (!data){ 
-      console.log("Error in username database query");
-      res.status(500).send("Error in username database query");
-    } else { 
-      res.status(200).send(data.uid);
     }
   });
 };
@@ -189,7 +170,6 @@ var signUp = function(req, res){
 
 module.exports = { 
   signUp: signUp, 
-  getUserUID: getUserUID, 
   signIn: signIn, 
   getUserMeterReadings: getUserMeterReadings 
 }
