@@ -6,6 +6,7 @@ var userSchema = new mongoose.Schema({
     unique: true
   }, 
   password: String,
+  token: String,
   utilityAPIData: { 
     account_auth: String,
     uid: String, 

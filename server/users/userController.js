@@ -1,20 +1,19 @@
 var bcrypt = require('bcrypt-nodejs');
 var User = require('./userModel');
+var MeterReadings = require('../utilityAPI/MeterReadingModel');
 var UtilityAPI = require('../utilityAPI/UtilityAPI');
+var uuid = require('node-uuid');
 
-// getUserUID returns a user's unique UID from the database. 
-var getUserUID = function(req, res, next){ 
-  User.findOne({ 
-    username: req.body.username.toLowerCase()
+//getUserMeterReadings gets all interval data by user UID.
+var getUserMeterReadings = function(req, res, next){ 
+  MeterReadings.find({ 
+    'utilityAPIData.uid': req.uid
   }).exec(function(err, data){ 
-    if (err) { 
-      console.log('Error in getting user UID '+ err);
-      res.status(500).send("Error in getting user UID from database.");
-    } else if (!data){ 
-      console.log("Error in username database query");
-      res.status(500).send("Error in username database query");
+    if(err){ 
+      console.log('Error in meterreading database query ' + err);
+      res.status(500).send("Error in meterreading database query");
     } else { 
-      res.status(200).send(data.uid);
+      res.status(200).send(data)
     }
   });
 };
@@ -40,14 +39,16 @@ var checkUsernameAvail = function(req, res, cb){
 };
 
 /* saveUser saves the user to the database with both UtilityAPI data
- * and their custom username + password. If the save is successful, 
+ * and their custom username + password, including a randomized token. If the save is successful, 
  * the callback executes. 
  */
 var saveUser = function(obj, cb){ 
+  var newtoken = uuid.v4();
   bcrypt.hash(obj.password, null, null, function(err, hash){ 
     var newUser = new User({ 
       username: obj.username, 
       password: hash,
+      token: newtoken,
       utilityAPIData: { 
         account_auth: obj.utilityAPIData.account_auth,
         uid: obj.utilityAPIData.uid, 
@@ -62,7 +63,7 @@ var saveUser = function(obj, cb){
         console.log("Error saving user to database "+ err);
         res.status(500).send("Error saving user to database.")
       } else { 
-        cb(true);
+        cb(result);
       }
     });
   });
@@ -90,7 +91,11 @@ var signIn = function(req, res){
           console.log("Incorrect password.");
           res.status(403).send("Incorrect password.");
         } else { 
-          res.status(200).send({username: data.username, uid: data.utilityAPIData.uid});
+          var newtoken = uuid.v4();
+          data.token = newtoken;
+          data.save(function(err, rawRes){ 
+            res.status(200).send({username: rawRes.username, uid: rawRes.utilityAPIData.uid, token: rawRes.token});
+          });
         }
       });
     }
@@ -140,9 +145,9 @@ var signUp = function(req, res){
                 utility_service_address: account.utility_service_address
               }        
              }
-            saveUser(newUserObj, function(){ 
+            saveUser(newUserObj, function(saveRes){ 
               console.log("User saved to database.");
-              res.status(201).send({username: newUserObj.username, uid: newUserObj.utilityAPIData.uid});
+              res.status(201).send({username: saveRes.username, uid: saveRes.utilityAPIData.uid, token: saveRes.token});
             });
           }
         } //end for loop
@@ -165,7 +170,7 @@ var signUp = function(req, res){
 
 module.exports = { 
   signUp: signUp, 
-  getUserUID: getUserUID, 
-  signIn: signIn
+  signIn: signIn, 
+  getUserMeterReadings: getUserMeterReadings 
 }
 
