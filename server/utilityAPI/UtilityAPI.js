@@ -45,6 +45,18 @@ module.exports = {
     makeRequest(options, cb);
   }, 
 
+  getUserAccounts: function(cb){ 
+    var url = 'https://utilityapi.com/api/accounts.json'
+    var options = {
+      url: url,
+      method: 'GET',
+      headers: {
+        'Authorization': authHeader
+      }
+    };
+    makeRequest(options, cb);
+  },
+
   postNewUser: function(data, cb){ 
     var url = 'https://utilityapi.com/api/accounts/add.json'
     var options = { 
@@ -79,6 +91,20 @@ module.exports = {
       url: url, 
       method: 'POST',
       body: code,
+      headers: { 
+        'Authorization': authHeader,
+        'Content-Type': 'application/json'
+      }
+    }
+    makeRequest(options,cb)
+  }, 
+
+  postPGEMod: function(uid, change, cb){ 
+    var url = 'https://utilityapi.com/api/accounts/'+uid+'/modify.json';
+    var options = { 
+      url: url, 
+      method: 'POST',
+      body: change,
       headers: { 
         'Authorization': authHeader,
         'Content-Type': 'application/json'

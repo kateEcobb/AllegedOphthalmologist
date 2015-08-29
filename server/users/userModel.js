@@ -9,7 +9,8 @@ var userSchema = new mongoose.Schema({
   token: String,
   utilityAPIData: { 
     account_auth: String,
-    uid: String, 
+    account_uid: String,
+    service_uid: String, 
     bill_count: Number, 
     utility: String, 
     utility_service_address: String
