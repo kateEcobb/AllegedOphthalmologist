@@ -36,6 +36,7 @@ var loadNewReadings = function() {
 // findOneAndUpdate will also update an existing record if it changed for some reason
 var populateDB = function(intervals){
   intervals.forEach(function(reading){
+    // console.log(reading);
     MeterReading.findOneAndUpdate({interval_end: reading['interval_end']}, reading, {upsert: true}, function(err, result){
       if(err){
         throw err;

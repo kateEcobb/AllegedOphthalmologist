@@ -9,7 +9,7 @@ var meterReadingSchema = new mongoose.Schema({
   source: String,
   updated: Date,
   utility: String,
-  utility_meter_number: Number,
+  utility_meter_number: String,
   utility_service_address: String,
   utility_service_id: String,
   utility_tariff_name: String 

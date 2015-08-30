@@ -33,8 +33,11 @@ var UserStore = assign({}, EventEmitter.prototype, {
   getUsername: function(){
     return user.username;
   },
-  getUid: function(){
-    return user.uid;
+  getServiceUid: function(){
+    return user.service_uid;
+  },  
+  getAccountUid: function(){
+    return user.account_uid;
   },  
   getToken: function(){
     return user.token;
