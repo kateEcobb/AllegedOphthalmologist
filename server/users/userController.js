@@ -14,33 +14,17 @@ var changePGEData = function(req, res){
 
   if(!!reqObj.real_name){ 
     reqObj.auth_type = "owner"
-    //need to update DB here
   }
 
-  UtilityAPI.getActiveUsers(function(users){ 
-    users.forEach(function(user){ 
-      if(user.uid === req.uid){}
-    
+  UtilityAPI.postPGEMod(req.account_uid, JSON.stringify(reqObj), function(response){ 
+    console.log(response)
+    console.log("User successfully updated on Utility API");      
+    User.findOneAndUpdate({
+      'utilityAPIData.account_uid': req.account_uid
+    }, {'utilityAPIData.account_auth': reqObj.real_name}, function(success){ 
+      console.log("User database updated.")
+      res.status(200).send()
     })
-
-
-
-  })
-
-
-  UtilityAPI.postPGEMod(req.uid, JSON.stringify(reqObj), function(response){ 
-    console.log("User successfully updated on Utility API");
-      UtilityAPI.getActiveUsers(function(users){ //services
-        users.forEach(function(user){ 
-      
-
-
-        })        
-
-
-
-      })
-
   });
 };
 
