@@ -1,8 +1,10 @@
 var d3 = require('d3');
+var dataUtil = require('../utils/dataUtils.js');
 
 // MAIN ///////////////////////////////////////////////////
 var createChart = function(el, props, state) {
-  var options = initGraph(el, props, state);
+  var data = dataUtil.parseData(state);
+  var options = initGraph(el, props, data);
   drawAxes(options);
   drawLine(options);
   //drawPoints(options);
@@ -12,48 +14,11 @@ var createChart = function(el, props, state) {
 
 // Sets up the graph options object that will be passed along
 // returns Object{ graph, scale, data}
-var initGraph = function(el, props, state) {
+var initGraph = function(el, props, data) {
   var options = {};
 
-  // Need to find the range based off of the Watt data
-  var wattMin = d3.min(state.data.Watt, function(datum) {
-    return new Date(datum.timestamp);
-  });
-  var wattMax = d3.max(state.data.Watt, function(datum) {
-    return new Date(datum.timestamp);
-  });
-
-  // DATA /////////////////////
-  var data = options.data = [];
-  var temp = [];
-
-  // Parse state to obtain required data
-  for (var i = 0; i < state.data.Utility.length; i++) {
-    data.push({
-      power: parseFloat(state.data.Utility[i].interval_kWh),
-      time: new Date(state.data.Utility[i].interval_start),
-      id: state.data.Utility[i]._id
-    });
-  }
-
-  // Sort data by timestamp
-  data.sort(function(a, b) {
-    return a.time - b.time;
-  });
-
-  // Filter out only the data that fits into watt data
-  data = options.data = data.filter(function(datum) {
-    // console.log('Compare', [datum.time, wattMin, wattMax]);
-    if (datum.time >= wattMin && datum.time <= wattMax) {
-      // console.log('true');
-      return true;
-    }
-    else {
-      return false;
-    }
-  });
-
-  console.log('Utility is', data);
+  // DATA ///////////////////////////
+  options.data = data.Utility;
 
   // SCALE //////////
   var scale = options.scale = {
@@ -61,18 +26,18 @@ var initGraph = function(el, props, state) {
     width: parseInt(props.width, 10),
     margin: parseInt(props.margin, 10),
     axisOffset: 50,
-    yMinRatio: 0.98,
+    yMinRatio: 0.95,
     yMaxRatio: 1.02,
   };
 
-  scale.yRange = d3.scale.linear().domain([d3.min(data, function(datum) {
-    return datum.power * scale.yMinRatio;
-  }), d3.max(data, function(datum) {
-    return datum.power * scale.yMaxRatio;
+  scale.yRange = d3.scale.linear().domain([d3.min(data.Utility, function(datum) {
+    return datum.power * datum.ratio * scale.yMinRatio;
+  }), d3.max(data.Utility, function(datum) {
+    return datum.power * datum.ratio * scale.yMaxRatio;
   })])
   .range([scale.height - scale.axisOffset - scale.axisOffset, 0]);
 
-  scale.xRange = d3.time.scale.utc().domain([wattMin, wattMax])
+  scale.xRange = d3.time.scale.utc().domain([data.Watt[0].time, data.Watt[data.Watt.length - 1].time])
   .range([0, scale.width - scale.axisOffset - scale.axisOffset]);
 
   // GRAPH //////////
@@ -110,7 +75,7 @@ var drawLine = function(options) {
                     return scale.xRange( datum.time );
                   })
                   .y(function(datum) {
-                    return scale.yRange( datum.power );
+                    return scale.yRange( datum.power * datum.ratio );
                   })
                   .interpolate('linear');
 
