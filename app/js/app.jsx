@@ -14,7 +14,7 @@ var Link = Router.Link;
 //mui theme
 var mui = require('material-ui');
 var ThemeManager = new mui.Styles.ThemeManager();
-var FlatButton = mui.FlatButton;
+var RaisedButton = mui.RaisedButton;
 var Dialog = mui.Dialog;
 var LeftNav = mui.LeftNav;
 var MenuItem = mui.MenuItem;
@@ -67,7 +67,7 @@ var App = React.createClass({
     var context = this;
     return (
       <div className="nav">
-        <FlatButton type="button" onClick={this.toggleNav}>MENU</FlatButton>
+        <RaisedButton type="button" onClick={this.toggleNav}>MENU</RaisedButton>
         <LeftNav ref="leftNav" docked={false} menuItems={menuItems} onChange={this.handleMenuSelect}/>
       <RouteHandler />
       </div>
