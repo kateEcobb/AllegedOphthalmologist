@@ -213,10 +213,32 @@ var signUp = function(req, res){
   });
 };
 
+var logOut = function(req, res){ 
+  User.findOne({ 
+    token: req.headers.authorization.split(' ')[1]
+  }).exec(function(err, user){ 
+    if (err) { 
+      console.log('Error in getting user '+ err);
+      res.status(500).send("Error in getting user from database.");
+    } else { 
+      user.token = null;
+      user.save(function(err, response){ 
+        if (err) { 
+          console.log('Error in destroying token '+ err);
+          res.status(500).send("Error in destroying token.");
+        } else { 
+          res.status(301).send("Redirect to homepage.")
+        }
+      });
+    }
+  });
+}
+
 module.exports = { 
   signUp: signUp, 
   signIn: signIn, 
   getUserMeterReadings: getUserMeterReadings, 
-  changePGEData: changePGEData 
+  changePGEData: changePGEData, 
+  logOut: logOut 
 }
 
