@@ -42,20 +42,22 @@ var ProfileView = React.createClass({
 
   render: function (){
     return(
-      <Card initiallyExpanded={true}>
-        <CardHeader
-          title={this.state.user.username}
-          subtitle="Subtitle"
-          avatar={<Avatar style={{color:'red'}}>{this.state.user.username ? this.state.user.username[0] : null}</Avatar>}
-          showExpandableButton={false}>
-        </CardHeader>
-        <CardText>
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-          Donec mattis pretium massa. Aliquam erat volutpat. Nulla facilisi.
-          Donec vulputate interdum sollicitudin. Nunc lacinia auctor quam sed pellentesque.
-          Aliquam dui mauris, mattis quis lacus id, pellentesque lobortis odio.
-        </CardText>
-      </Card>
+      <div className="container">
+        <Card initiallyExpanded={true}>
+          <CardHeader
+            title={this.state.user.username}
+            subtitle="Subtitle"
+            avatar={<Avatar style={{color:'red'}}>{this.state.user.username ? this.state.user.username[0] : null}</Avatar>}
+            showExpandableButton={false}>
+          </CardHeader>
+          <CardText>
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+            Donec mattis pretium massa. Aliquam erat volutpat. Nulla facilisi.
+            Donec vulputate interdum sollicitudin. Nunc lacinia auctor quam sed pellentesque.
+            Aliquam dui mauris, mattis quis lacus id, pellentesque lobortis odio.
+          </CardText>
+        </Card>
+      </div>
     );
   }
 });

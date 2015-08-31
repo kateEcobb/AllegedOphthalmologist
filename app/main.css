@@ -5,6 +5,11 @@
   left: 1em;
 }
 
+.app-title {
+  text-align: center;
+  margin-bottom: 2em;
+}
+
 div.login {
   width: 500px;
 }

@@ -66,12 +66,18 @@ var App = React.createClass({
     ];
     var context = this;
     return (
-      <div className="app">
+      <div className="app-container">
+      <div className="app-title">
+        <h1>EZ Energy Tracker</h1>
+        Compare your Energy Use to Current Grid Conditions
+      </div>
         <span className="nav-btn">
           <RaisedButton onClick={this.toggleNav}>Menu</RaisedButton>
         </span>
         <LeftNav ref="leftNav" docked={false} menuItems={menuItems} onChange={this.handleMenuSelect}/>
-      <RouteHandler />
+      <div className="content-container">
+        <RouteHandler />
+      </div>
       </div>
     );
   }
