@@ -29,4 +29,5 @@ module.exports = function(app){
   app.post('/signin', userController.signIn);
   app.get('/api/user/meterreadings/', authenticate, userController.getUserMeterReadings); 
   app.post('/api/user/changePGE', authenticate, userController.changePGEData);
+  app.get('/logout', authenticate, userController.logOut);
 }

@@ -14,33 +14,27 @@ var changePGEData = function(req, res){
 
   if(!!reqObj.real_name){ 
     reqObj.auth_type = "owner"
-    //need to update DB here
   }
 
-  UtilityAPI.getActiveUsers(function(users){ 
-    users.forEach(function(user){ 
-      if(user.uid === req.uid){}
-    
-    })
+  UtilityAPI.postPGEMod(req.account_uid, JSON.stringify(reqObj), function(response){ 
+    console.log(response)
+    console.log("User successfully updated on Utility API"); 
 
-
-
-  })
-
-
-  UtilityAPI.postPGEMod(req.uid, JSON.stringify(reqObj), function(response){ 
-    console.log("User successfully updated on Utility API");
-      UtilityAPI.getActiveUsers(function(users){ //services
-        users.forEach(function(user){ 
-      
-
-
-        })        
-
-
-
-      })
-
+    User.findOneAndUpdate({ 
+      'utilityAPIData.account_uid': req.account_uid
+    }, {'utilityAPIData.PGE_username': reqObj.utility_username}, function(success){ 
+      console.log('PGE Username updated in user database.')
+      if(reqObj.real_name !== null){     
+        User.findOneAndUpdate({
+          'utilityAPIData.account_uid': req.account_uid
+        }, {'utilityAPIData.account_auth': reqObj.real_name}, function(again){ 
+          console.log("Account auth updated in user database.")
+          res.status(200).send(response)
+        });
+      } else { 
+        res.status(200).send(response)
+      }
+    });
   });
 };
 
@@ -93,6 +87,7 @@ var saveUser = function(obj, cb){
         account_auth: obj.utilityAPIData.account_auth,
         account_uid: obj.utilityAPIData.account_uid, 
         service_uid: obj.utilityAPIData.service_uid, 
+        PGE_username: obj.utilityAPIData.PGE_username,
         bill_count: obj.utilityAPIData.bill_count, 
         utility: obj.utilityAPIData.utility, 
         utility_service_address: obj.utilityAPIData.utility_service_address
@@ -135,7 +130,14 @@ var signIn = function(req, res){
           var newtoken = uuid.v4();
           data.token = newtoken;
           data.save(function(err, rawRes){ 
-            res.status(200).send({username: rawRes.username, account_uid: rawRes.utilityAPIData.account_uid,service_uid: rawRes.utilityAPIData.service_uid, token: rawRes.token});
+            res.status(200).send({
+              username: rawRes.username, 
+              account_auth: rawRes.utilityAPIData.account_auth,
+              account_uid: rawRes.utilityAPIData.account_uid, 
+              service_uid: rawRes.utilityAPIData.service_uid, 
+              PGE_username: rawRes.utilityAPIData.PGE_username,
+              token: rawRes.token
+            });
           });
         }
       });
@@ -184,6 +186,7 @@ var signUp = function(req, res){
                 account_auth: account.account_auth,
                 account_uid: user.uid,
                 service_uid: account.uid, 
+                PGE_username: req.body.pgeUsername,
                 bill_count: account.bill_count, 
                 utility: account.utility, 
                 utility_service_address: account.utility_service_address
@@ -192,7 +195,13 @@ var signUp = function(req, res){
             
             saveUser(newUserObj, function(saveRes){ 
               console.log("User saved to database.");
-              res.status(201).send({username: saveRes.username, account_uid: saveRes.utilityAPIData.account_uid, service_uid: saveRes.utilityAPIData.service_uid, token: saveRes.token});
+              res.status(201).send({
+                username: saveRes.username, 
+                account_auth: saveRes.utilityAPIData.account_auth,
+                account_uid: saveRes.utilityAPIData.account_uid, 
+                service_uid: saveRes.utilityAPIData.service_uid, 
+                PGE_username: saveRes.utilityAPIData.PGE_username,
+                token: saveRes.token});
             });
 
           }
@@ -214,10 +223,32 @@ var signUp = function(req, res){
   });
 };
 
+var logOut = function(req, res){ 
+  User.findOne({ 
+    token: req.headers.authorization.split(' ')[1]
+  }).exec(function(err, user){ 
+    if (err) { 
+      console.log('Error in getting user '+ err);
+      res.status(500).send("Error in getting user from database.");
+    } else { 
+      user.token = null;
+      user.save(function(err, response){ 
+        if (err) { 
+          console.log('Error in destroying token '+ err);
+          res.status(500).send("Error in destroying token.");
+        } else { 
+          res.status(301).send("Redirect to homepage.")
+        }
+      });
+    }
+  });
+}
+
 module.exports = { 
   signUp: signUp, 
   signIn: signIn, 
   getUserMeterReadings: getUserMeterReadings, 
-  changePGEData: changePGEData 
+  changePGEData: changePGEData, 
+  logOut: logOut 
 }
 
