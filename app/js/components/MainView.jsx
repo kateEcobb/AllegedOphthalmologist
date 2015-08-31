@@ -51,11 +51,10 @@ var MainView = React.createClass({
 
   render: function() {
     return (
-      <div>This is the MainView
-        <div>Watt is Currently </div>     
-        <div>Power is Currently</div>
-
-        <ModalI>Launch Modal</ModalI>      
+      <div>
+        <div className="bulb">
+          <ModalI>Launch Modal</ModalI>   
+        </div>   
 
         <LineGraphView />     
 

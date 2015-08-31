@@ -1,3 +1,10 @@
+/*Nav Button*/
+.nav-btn {
+  position: absolute;
+  top: 1em;
+  left: 1em;
+}
+
 div.login {
   width: 500px;
 }
@@ -36,4 +43,11 @@ div.login {
 
 .linePoint {
   r: 6;
+}
+
+/*Light Bulb*/
+.bulb {
+  position: absolute;
+  left: 75%;
+  top: 15%;
 }

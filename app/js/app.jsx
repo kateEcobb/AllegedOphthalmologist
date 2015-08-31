@@ -9,14 +9,15 @@ var Router = require('react-router');
 var Route = Router.Route;
 var RouteHandler = Router.RouteHandler;
 var DefaultRoute = Router.DefaultRoute;
+var Link = Router.Link;
 
 //mui theme
 var mui = require('material-ui');
 var ThemeManager = new mui.Styles.ThemeManager();
-var Dialog = mui.Dialog,
-  flatButton = mui.FlatButton,
-  RaisedButton = mui.RaisedButton;
-
+var RaisedButton = mui.RaisedButton;
+var Dialog = mui.Dialog;
+var LeftNav = mui.LeftNav;
+var MenuItem = mui.MenuItem;
 
 // Components
 var MainView = require('./components/MainView.jsx');
@@ -44,9 +45,34 @@ var App = React.createClass({
     }
   },
 
+  toggleNav: function(){
+    this.refs.leftNav.toggle();
+  },
+
+  handleMenuSelect: function(e, selectedIndex, menuItem){
+    // console.log(e, selectedIndex, menuItem);
+    if(menuItem.route){
+      this.transitionTo(menuItem.route);
+    }
+    this.toggleNav();
+  },
+
   render: function(){
+    var context = this;
+    var menuItems = [
+      { route: 'default', text: 'Home' },
+      { route: 'register', text: 'Register' },
+      { route: 'login', text: 'Login' }
+    ];
+    var context = this;
     return (
+      <div className="app">
+        <span className="nav-btn">
+          <RaisedButton onClick={this.toggleNav}>Menu</RaisedButton>
+        </span>
+        <LeftNav ref="leftNav" docked={false} menuItems={menuItems} onChange={this.handleMenuSelect}/>
       <RouteHandler />
+      </div>
     );
   }
 });
