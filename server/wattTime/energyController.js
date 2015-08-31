@@ -52,14 +52,24 @@ var update = function(dateStart, dateEnd){
 
 };
 
-var getAllWattData = function(req, res, next){ 
-  WattEnergy.find().exec(function(err, data){ 
+
+var get24HourAhead= function(req,res){ 
+  
+
+  return res.json(dataHolder)
+}
+
+var get24HourBehind = function(req, res, next){ 
+  var yesterday = new Date(new Date().setDate(new Date().getDate()-1)).toISOString().slice(0,-5);
+  WattEnergy.find({ 
+    timestamp: {$lt: new Date(), $gt: yesterday}
+  }).exec(function(err, data){ 
     if(err){ 
       res.status(500).send("Error in querying Watt database.");
     } else { 
       res.json(data);
     }
-  })
+  });
 };
 
 var updateWattData = function() {
@@ -75,6 +85,6 @@ debounce(updateWattData, 180000)();
 setInterval(updateWattData, 900000);
 
 module.exports = { 
-  getAllWattData: getAllWattData
+  get24HourBehind: get24HourBehind
 };
 
