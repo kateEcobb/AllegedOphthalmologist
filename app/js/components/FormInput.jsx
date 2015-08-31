@@ -1,10 +1,27 @@
 var React = require('react/addons');
 var Formsy = require('formsy-react');
 
+//MUI
+var mui = require('material-ui');
+var ThemeManager = new mui.Styles.ThemeManager();
+var TextField = mui.TextField;
+var FlatButton = mui.FlatButton;
+
+
 var FormInput = React.createClass({
 
   // Add the Formsy Mixin
   mixins: [React.addons.LinkedStateMixin, Formsy.Mixin],
+
+  childContextTypes: {
+    muiTheme: React.PropTypes.object
+  },
+
+  getChildContext() {
+    return {
+      muiTheme: ThemeManager.getCurrentTheme()
+    };
+  },
   
   changeValue: function (event) {
     this.setValue(event.currentTarget.value);
@@ -17,9 +34,8 @@ var FormInput = React.createClass({
     
     return (
       <div className='form-group'>
-        <label htmlFor={this.props.name}>{this.props.title}</label>
-        <input className="form-control "type={this.props.type || 'text'} name={this.props.name} onChange={this.changeValue} value={this.getValue()}/>
-        <span className='validation-error'>{errorMessage}</span>
+        <TextField hintText={this.props.title} type={this.props.type || 'text'} name={this.props.name} 
+        errorText={errorMessage} onChange={this.changeValue} value={this.getValue()}/>
       </div>
     );
   }
