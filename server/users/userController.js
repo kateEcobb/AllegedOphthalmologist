@@ -77,6 +77,7 @@ var saveUser = function(obj, cb){
         account_auth: obj.utilityAPIData.account_auth,
         account_uid: obj.utilityAPIData.account_uid, 
         service_uid: obj.utilityAPIData.service_uid, 
+        PGE_username: obj.utilityAPIData.PGE_username,
         bill_count: obj.utilityAPIData.bill_count, 
         utility: obj.utilityAPIData.utility, 
         utility_service_address: obj.utilityAPIData.utility_service_address
@@ -119,7 +120,14 @@ var signIn = function(req, res){
           var newtoken = uuid.v4();
           data.token = newtoken;
           data.save(function(err, rawRes){ 
-            res.status(200).send({username: rawRes.username, account_uid: rawRes.utilityAPIData.account_uid,service_uid: rawRes.utilityAPIData.service_uid, token: rawRes.token});
+            res.status(200).send({
+              username: rawRes.username, 
+              account_auth: rawRes.utilityAPIData.account_auth,
+              account_uid: rawRes.utilityAPIData.account_uid, 
+              service_uid: rawRes.utilityAPIData.service_uid, 
+              PGE_username: rawRes.utilityAPIData.PGE_username,
+              token: rawRes.token
+            });
           });
         }
       });
@@ -168,6 +176,7 @@ var signUp = function(req, res){
                 account_auth: account.account_auth,
                 account_uid: user.uid,
                 service_uid: account.uid, 
+                PGE_username: req.body.pgeUsername,
                 bill_count: account.bill_count, 
                 utility: account.utility, 
                 utility_service_address: account.utility_service_address
@@ -176,7 +185,13 @@ var signUp = function(req, res){
             
             saveUser(newUserObj, function(saveRes){ 
               console.log("User saved to database.");
-              res.status(201).send({username: saveRes.username, account_uid: saveRes.utilityAPIData.account_uid, service_uid: saveRes.utilityAPIData.service_uid, token: saveRes.token});
+              res.status(201).send({
+                username: saveRes.username, 
+                account_auth: saveRes.utilityAPIData.account_auth,
+                account_uid: saveRes.utilityAPIData.account_uid, 
+                service_uid: saveRes.utilityAPIData.service_uid, 
+                PGE_username: saveRes.utilityAPIData.PGE_username,
+                token: saveRes.token});
             });
 
           }
