@@ -18,8 +18,10 @@ module.exports = {
   // Provide a UtilityAPI user id for uID
   // Start & End Dates in the form YYYY-MM-DD
   getIntervalData: function(uId, startDate, endDate, cb){
-    var url = 'https://utilityapi.com/api/services/'+ uId +
-                '/intervals.json?start=' + startDate + '&end=' + endDate;
+    // var url = 'https://utilityapi.com/api/services/'+ uId +
+    //             '/intervals.json?start=' + startDate + '&end=' + endDate;
+    // Get all intervals for now
+    var url = 'https://utilityapi.com/api/services/'+ uId +'/intervals.json';
     var options = {
       url: url,
       method: 'GET',
