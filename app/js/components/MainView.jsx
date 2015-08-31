@@ -1,7 +1,9 @@
 var React = require('react');
 
-var Button = require('react-bootstrap').Button;
-var Modal = require('react-bootstrap').Modal;
+//material ui
+var mui = require('material-ui');
+var ThemeManager = require('material-ui/lib/styles/theme-manager')();
+var ThemeManager = new mui.Styles.ThemeManager();
 
 var ModalI = require('./energyBreakDownView.jsx')
 
@@ -19,6 +21,16 @@ var MainView = React.createClass({
     return {};
   },
 
+  childContextTypes: {
+    // console.log(this.context)
+    muiTheme: React.PropTypes.object,
+  },
+  
+  getChildContext: function(){
+    return {
+      muiTheme: ThemeManager.getCurrentTheme()
+    }
+  },
   
   loadData: function (data) {
     // this.setState({data: DataStore.getData()});
@@ -43,7 +55,7 @@ var MainView = React.createClass({
         <div>Watt is Currently </div>     
         <div>Power is Currently</div>
 
-        <ModalI> </ModalI>      
+        <ModalI>Launch Modal</ModalI>      
 
         <LineGraphView />     
 
@@ -52,6 +64,8 @@ var MainView = React.createClass({
     );
   }
 });
+
+
 
 module.exports = MainView;
 
