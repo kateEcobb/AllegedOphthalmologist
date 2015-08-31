@@ -1,6 +1,7 @@
 var React = require('react');
 var d3 = require('d3');
 var lineChart = require('./lineChart.js');
+var userLineChart = require('./userLineChart.js');
 
 // Actions
 var ViewActions = require('./../actions/ViewActions');
@@ -14,12 +15,7 @@ var LineGraphView = React.createClass({
   // React Functions /////////////////////////////////
 
   getInitialState: function() {
-    return {
-      data: {
-        'Watt': [{}],
-        'Utility': [{}]
-      }
-    };
+    return {};
   },
 
   loadData: function() {
@@ -37,12 +33,20 @@ var LineGraphView = React.createClass({
 
   componentDidUpdate: function() {
     var el = React.findDOMNode(this);
+    el.innerHTML = '';
     console.log(this.state.data.Watt[0]);
     lineChart.createChart(el, {
       width: '1000',
       height: '500',
       margin: '10'
     }, this.state);
+    if (this.state.data.Utility.length > 1) {
+      userLineChart.createChart(el.children[0], {
+        width: '1000',
+        height: '500',
+        margin: '10'
+      }, this.state);
+    }
   },
 
   componentWillUnmount: function() {
