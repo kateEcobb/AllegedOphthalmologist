@@ -18,13 +18,23 @@ var changePGEData = function(req, res){
 
   UtilityAPI.postPGEMod(req.account_uid, JSON.stringify(reqObj), function(response){ 
     console.log(response)
-    console.log("User successfully updated on Utility API");      
-    User.findOneAndUpdate({
+    console.log("User successfully updated on Utility API"); 
+
+    User.findOneAndUpdate({ 
       'utilityAPIData.account_uid': req.account_uid
-    }, {'utilityAPIData.account_auth': reqObj.real_name}, function(success){ 
-      console.log("User database updated.")
-      res.status(200).send()
-    })
+    }, {'utilityAPIData.PGE_username': reqObj.utility_username}, function(success){ 
+      console.log('PGE Username updated in database.')
+      if(reqObj.real_name !== null){     
+        User.findOneAndUpdate({
+          'utilityAPIData.account_uid': req.account_uid
+        }, {'utilityAPIData.account_auth': reqObj.real_name}, function(again){ 
+          console.log("Account auth updated in user database.")
+          res.status(200).send("User database updated.")
+        });
+      } else { 
+        res.status(200).send(response)
+      }
+    });
   });
 };
 
