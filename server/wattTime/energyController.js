@@ -55,7 +55,7 @@ var update = function(dateStart, dateEnd){
 var getAllWattData = function(req, res, next){ 
   WattEnergy.find().exec(function(err, data){ 
     if(err){ 
-      res.send(500,err);
+      res.status(500).send("Error in querying Watt database.");
     } else { 
       res.json(data);
     }
@@ -64,6 +64,8 @@ var getAllWattData = function(req, res, next){
 
 var updateWattData = function() {
   console.log('Updating Watt Data');
+
+  //formatting dates for 24 hour period to be used with WattTime
   var today = new Date().toISOString().slice(0,-5).replace(/:/g, '%3A');
   var yesterday = new Date(new Date().setDate(new Date().getDate()-1)).toISOString().slice(0,-5).replace(/:/g, '%3A');
   update(yesterday, today);

@@ -23,13 +23,13 @@ var changePGEData = function(req, res){
     User.findOneAndUpdate({ 
       'utilityAPIData.account_uid': req.account_uid
     }, {'utilityAPIData.PGE_username': reqObj.utility_username}, function(success){ 
-      console.log('PGE Username updated in database.')
+      console.log('PGE Username updated in user database.')
       if(reqObj.real_name !== null){     
         User.findOneAndUpdate({
           'utilityAPIData.account_uid': req.account_uid
         }, {'utilityAPIData.account_auth': reqObj.real_name}, function(again){ 
           console.log("Account auth updated in user database.")
-          res.status(200).send("User database updated.")
+          res.status(200).send(response)
         });
       } else { 
         res.status(200).send(response)
