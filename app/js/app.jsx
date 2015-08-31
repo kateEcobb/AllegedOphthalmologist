@@ -10,6 +10,14 @@ var Route = Router.Route;
 var RouteHandler = Router.RouteHandler;
 var DefaultRoute = Router.DefaultRoute;
 
+//mui theme
+var mui = require('material-ui');
+var ThemeManager = new mui.Styles.ThemeManager();
+var Dialog = mui.Dialog,
+  flatButton = mui.FlatButton,
+  RaisedButton = mui.RaisedButton;
+
+
 // Components
 var MainView = require('./components/MainView.jsx');
 var LoginView = require('./components/LoginView.jsx');
@@ -25,12 +33,27 @@ var App = React.createClass({
 
   mixins: [Router.Navigation, Router.State],
 
+
+  childContextTypes: {
+    muiTheme: React.PropTypes.object
+  },
+
+  getChildContext: function(){
+    return {
+      muiTheme: ThemeManager.getCurrentTheme()
+    }
+  },
+
   render: function(){
     return (
       <RouteHandler />
     );
   }
 });
+
+App.contextTypes = {
+  router: React.PropTypes.func
+};
 
 var routes = (
   <Route name="app" path="/" handler={App}>

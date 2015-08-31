@@ -1,6 +1,7 @@
 var d3Chart = {};
 
 
+
 d3Chart.create = function(el, data, className){
   // console.log('you made it');
 
@@ -46,15 +47,6 @@ d3Chart.create = function(el, data, className){
     .style('stroke', 'white')
     .style('stroke-width', '5')
 
-  // arcs.append('svg:text')
-  //   .attr("transform", function(d){
-  //     d.innerRadius = 0;
-  //     d.outerRadius = specs.r;
-  //     return "translate(" + arc.centroid(d) + ")";
-  //   })
-  //   .attr('text-anchor', 'middle')
-  //   .text(function(d, i){ return specs.data[i].type; });
-
   arcs.on('mouseover', function(d){
     console.log(d);
   });
@@ -75,9 +67,9 @@ var legend = function(el, RectSize, Spacing, color, data){
     .attr('class', 'legend')
     .attr('transform', function(d, i){
       var height = RectSize + Spacing;
-      var offset = height * color.domain().length / 2;
-      var horz = (elSpecs.width / 2);
-      var vert = (elSpecs.height/2) - i * height + offset;
+      var offset = color.domain().length / 2;
+      var horz = (elSpecs.width / 2) - 10;
+      var vert = (elSpecs.height / 2) + (i - offset) * height;
       return "translate(" + horz + "," + vert + ")";
     });
 
