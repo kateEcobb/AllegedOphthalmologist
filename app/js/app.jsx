@@ -66,8 +66,10 @@ var App = React.createClass({
     ];
     var context = this;
     return (
-      <div className="nav">
-        <RaisedButton type="button" onClick={this.toggleNav}>MENU</RaisedButton>
+      <div className="app">
+        <span className="nav-btn">
+          <RaisedButton onClick={this.toggleNav}>Menu</RaisedButton>
+        </span>
         <LeftNav ref="leftNav" docked={false} menuItems={menuItems} onChange={this.handleMenuSelect}/>
       <RouteHandler />
       </div>
