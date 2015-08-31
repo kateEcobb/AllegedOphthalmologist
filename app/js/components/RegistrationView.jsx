@@ -1,6 +1,11 @@
 var React = require('react/addons');
 var Router = require('react-router');
 
+//MUI
+var mui = require('material-ui');
+var ThemeManager = new mui.Styles.ThemeManager();
+var FlatButton = mui.FlatButton;
+
 // Actions
 var ViewActions = require('./../actions/ViewActions');
 var ActionTypes = require('./../constants/Constants').ActionTypes;
@@ -18,6 +23,16 @@ var Dispatcher = require('./../dispatcher/Dispatcher');
 var RegistrationView = React.createClass({
   // Use a bit of two way data binding because forms are a pain otherwise.
   mixins: [React.addons.LinkedStateMixin, Router.Navigation],
+
+  childContextTypes: {
+    muiTheme: React.PropTypes.object
+  },
+
+  getChildContext() {
+    return {
+      muiTheme: ThemeManager.getCurrentTheme()
+    };
+  },
 
   getInitialState: function() {
     return {
@@ -80,7 +95,7 @@ var RegistrationView = React.createClass({
               validationError="Password must be between 6 and 20 characters"/>
             <FormInput name="pgeUsername" title="PG&E Username" type="text"/>
             <FormInput name="pgePassword" title="PG&E Password" type="password"/>
-          <button className="btn btn-submit" type="submit" disabled={!this.state.canSubmit}>Register</button>
+          <FlatButton className="btn btn-submit" type="submit" disabled={!this.state.canSubmit}>Register</FlatButton>
           </Formsy.Form>
           
           <div className="spinner-container">

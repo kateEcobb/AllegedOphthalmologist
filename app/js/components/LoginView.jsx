@@ -2,6 +2,11 @@ var React = require('react/addons');
 var Router = require('react-router');
 var Link = Router.Link;
 
+//MUI
+var mui = require('material-ui');
+var ThemeManager = new mui.Styles.ThemeManager();
+var FlatButton = mui.FlatButton;
+
 // Form validation
 var Formsy = require('formsy-react');
 var FormInput = require('./FormInput.jsx');
@@ -19,6 +24,16 @@ var Dispatcher = require('./../dispatcher/Dispatcher');
 var LoginView = React.createClass({
   // Use a bit of two way data binding because forms are a pain otherwise.
   mixins: [React.addons.LinkedStateMixin, Router.Navigation],
+
+  childContextTypes: {
+    muiTheme: React.PropTypes.object
+  },
+
+  getChildContext() {
+    return {
+      muiTheme: ThemeManager.getCurrentTheme()
+    };
+  },
 
   getInitialState: function() {
     return {
@@ -76,7 +91,7 @@ var LoginView = React.createClass({
               validations="isEmail" validationError="Please enter a valid email" required/>
             <FormInput name="password" title="Password" type="password" 
               validations="minLength:6" validationError="Password must be at least 6 characters in length"/>
-          <button className="btn btn-submit" type="submit" disabled={!this.state.canSubmit}>Login</button>
+          <FlatButton className="btn btn-submit" type="submit" disabled={!this.state.canSubmit}>Login</FlatButton>
           </Formsy.Form>
           
           <div className="spinner-container">
