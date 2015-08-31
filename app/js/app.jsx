@@ -17,7 +17,6 @@ var Dialog = mui.Dialog,
   flatButton = mui.FlatButton,
   RaisedButton = mui.RaisedButton;
 
-
 // Components
 var MainView = require('./components/MainView.jsx');
 var LoginView = require('./components/LoginView.jsx');
