@@ -136,6 +136,7 @@ var signIn = function(req, res){
               account_uid: rawRes.utilityAPIData.account_uid, 
               service_uid: rawRes.utilityAPIData.service_uid, 
               PGE_username: rawRes.utilityAPIData.PGE_username,
+              utility_service_address: rawRes.utilityAPIData.utility_service_address,
               token: rawRes.token
             });
           });
@@ -201,7 +202,9 @@ var signUp = function(req, res){
                 account_uid: saveRes.utilityAPIData.account_uid, 
                 service_uid: saveRes.utilityAPIData.service_uid, 
                 PGE_username: saveRes.utilityAPIData.PGE_username,
-                token: saveRes.token});
+                utility_service_address: saveRes.utilityAPIData.utility_service_address,
+                token: saveRes.token
+              });
             });
 
           }
