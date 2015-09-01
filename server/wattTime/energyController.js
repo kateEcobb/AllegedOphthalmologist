@@ -12,12 +12,9 @@ var wattTimeQuery = function(dateStart, dateEnd, market, cb){
     }
   };
   request(options, function(err, response, body){ 
-    if (err){ 
-      console.log("Error querying WattTimeAPI")
-      res.status(500).send("Error querying WattTimeAPI")
-    } else { 
-      var responseArr = [];
       var data = JSON.parse(body)
+    if (!err && response.status === 200){ 
+      var responseArr = [];
       for(var i=0; i<data.results.length; i++){ 
         var holder = []
       

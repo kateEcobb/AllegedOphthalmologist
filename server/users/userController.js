@@ -3,7 +3,54 @@ var User = require('./userModel');
 var MeterReadings = require('../utilityAPI/MeterReadingModel');
 var UtilityAPI = require('../utilityAPI/UtilityAPI');
 var uuid = require('node-uuid');
+var seeds = require('../config/dbSeeding');
 
+//-------------DEVELOPMENT ONLY---------------//
+var deleteInactiveUsers = function(req, res){ 
+  console.log(req.body)
+  var data = req.body;
+  var resHolder = [];
+
+  data.forEach(function(value){
+    UtilityAPI.getDeleteCode(value, function(code){ 
+      UtilityAPI.postDeleteCode(value, JSON.stringify(code), function(APIresp){ 
+        console.log("Successfully deleted account from UtilityAPI.")
+        resHolder.push(APIresp);
+        if(resHolder.length === req.body.length){ 
+          res.status(200).send(resHolder)
+        }
+      });
+    });
+  });
+};
+
+var init = function(){ 
+  saveUser(seeds.Drew, function(result){ 
+    console.log("Drew saved/updated in database.")
+    console.log(result)
+  })
+  
+  saveUser(seeds.Brandon, function(result){ 
+    console.log("Brandon saved/updated in database.")
+    console.log(result)
+  })
+  
+  saveUser(seeds.JD, function(result){ 
+    console.log("John Doe saved/updated in database.")
+    console.log(result)
+  })
+  
+  saveUser(seeds.John, function(result){ 
+    console.log("John saved/updated in database.")
+    console.log(result)
+  })
+};
+
+//-------PRODUCTION--------------//
+
+/* changePGEData allows the user to change their PGE username, password, and 
+ * auth_name. This change is reflected both on UtilityAPI and in our database. 
+ */
 var changePGEData = function(req, res){
   var reqObj = { 
     auth_type: null,
@@ -79,7 +126,7 @@ var checkUsernameAvail = function(req, res, cb){
 var saveUser = function(obj, cb){ 
   var newtoken = uuid.v4();
   bcrypt.hash(obj.password, null, null, function(err, hash){ 
-    var newUser = new User({ 
+    var newUser = { 
       username: obj.username, 
       password: hash,
       token: newtoken,
@@ -92,9 +139,11 @@ var saveUser = function(obj, cb){
         utility: obj.utilityAPIData.utility, 
         utility_service_address: obj.utilityAPIData.utility_service_address
       }
-    });
+    };
 
-    newUser.save(function(err, result){ 
+    User.findOneAndUpdate({ 
+      username: obj.username
+    }, newUser, {new: true, upsert:true}, function(err, result){ 
       if(err) { 
         console.log("Error saving user to database "+ err);
         res.status(500).send("Error saving user to database.")
@@ -252,6 +301,10 @@ module.exports = {
   signIn: signIn, 
   getUserMeterReadings: getUserMeterReadings, 
   changePGEData: changePGEData, 
-  logOut: logOut 
+  logOut: logOut, 
+  deleteInactiveUsers: deleteInactiveUsers 
 }
+
+//run init
+init();
 
