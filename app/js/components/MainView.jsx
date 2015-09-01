@@ -25,7 +25,10 @@ var ModalI = require('./energyBreakDownView.jsx')
 
 var MainView = React.createClass({
   getInitialState: function(){
-    return {};
+    return {
+      showModal: false,
+      modal: null,
+    };
   },
 
   childContextTypes: {
@@ -50,24 +53,47 @@ var MainView = React.createClass({
     // .catch(function(err) {
     //   console.log("ERROR: ", err);
     // });
+    window.addEventListener('close', function(){
+      console.log('modal closed');
+    })
   },
   
   componentWillUnmount: function (){
     // DataStore.removeChangeListener(this.loadData);
   },
 
+  modals: {
+    donutModal: ModalI, 
+  }, 
+
+  show: function(event){
+    console.log(this.state);
+    this.setState({showModal: true, modal: this.modals[event.target.id]});
+
+    // ModalI.addEventListener(this.close);
+  },
+
   render: function() {
-    return (
-      <div>
-        <div className="bulb">
-          <ModalI>Launch Modal</ModalI>   
-        </div>   
-
-          <LineGraphView />     
-
-      </div>
-      
-    );
+    if(this.state.showModal){
+      return (
+        <div>
+          <div className="bulb">
+            <button id='donutModal' onClick={this.show}>Launch Modal</button>   
+          </div>   
+            <LineGraphView /> 
+            <this.state.modal openImmediately={true}/>
+        </div>
+      )
+    }else{
+      return (
+        <div>
+          <div className="bulb">
+            <button id='donutModal' onClick={this.show}>Launch Modal</button>   
+          </div>   
+            <LineGraphView />     
+        </div>
+      );
+    }
   }
 });
 

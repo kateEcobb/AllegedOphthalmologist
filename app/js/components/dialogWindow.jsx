@@ -51,7 +51,7 @@ var dialog = React.createClass({
           ref='dialogBox'
           autoDetectWindowHeight={true} 
           autoScrollBodyContent={true}
-          openImmediately={true}>
+          openImmediately={this.props.openImmediately}>
           <div style={{'height': '500px'}}>
           {this.props.children}
           </div>

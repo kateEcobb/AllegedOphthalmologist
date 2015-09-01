@@ -9,6 +9,7 @@ var RaisedButton = mui.RaisedButton;
 
 var DataStore = require('./../stores/DataStore');
 
+var ViewActions = require('./../actions/ViewActions')
 
 var ModalI = React.createClass({
 
@@ -58,6 +59,7 @@ var ModalI = React.createClass({
   close: function(){
     this.setState({showModal: false});
     this.refs.dialog.dismiss();
+    ViewActions.launchModal();
   },
 
   render: function(){
@@ -68,12 +70,12 @@ var ModalI = React.createClass({
     var modalbody = 'modal-body';
     return (
       <div>
-        <RaisedButton label='modal' onClick={this.open} />
         <Dialog title='This is a material ui dialog box' 
           actions={this.state.standardActions} 
           actionFocus='submit' 
-          modal={this.state.modal}
+          modal={true}
           ref='dialog'
+          openImmediately={this.props.openImmediately}
           autoDetectWindowHeight={true} 
           autoScrollBodyContent={true}>
 
@@ -88,6 +90,7 @@ var ModalI = React.createClass({
 
 
 module.exports = ModalI;
+        // <RaisedButton label='modal' onClick={this.open} />
       // <div>
 
       //   <Button onClick={this.open}>{this.props.children}</Button>

@@ -98,8 +98,11 @@ var ViewActions = {
       type: ActionTypes.TOGGLE_NAV_MENU,
       payload: null
     });
-  }
-
+  },
+  launchModal: function(modal){
+    console.log('modal launched');
+    console.log('modal launched', this.state);
+  },
   // changeGraphView: function(event) {
   //   Dispatcher.handleViewAction({
   //     type: ActionTypes.MAIN_GRAPH_CHANGE,
