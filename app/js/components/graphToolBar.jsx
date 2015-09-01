@@ -1,6 +1,7 @@
 var React = require('react/addons');
 var mui = require('material-ui');
 var ThemeManager = new mui.Styles.ThemeManager();
+var GraphTypes = require('../constants/Constants.js').GraphTypes;
 
 // Mui Components
 var Tabs = mui.Tabs;
@@ -47,8 +48,8 @@ var graphToolBar = React.createClass({
     return (
       <div class="tasdf">
         <Tabs onChange={this.handleTabChange}>
-          <Tab label="Main"></Tab>
-          <Tab label="Item Two"></Tab>
+          <Tab label="Main" value={GraphTypes.MAIN}></Tab>
+          <Tab label="User" value={GraphTypes.USER_CARBON}></Tab>
         </Tabs>
       </div>
     );

@@ -21,8 +21,9 @@ var initGraph = function(el, props, state) {
   var data = options.data = [];
   // Parse state to obtain required data
   for (var i = 0; i < state.data.Watt.length; i++) {
+    console.log("Carbon;", state.data.Watt[i].carbon);
     data.push({
-      carbon: parseInt(state.data.Watt[i].carbon),
+      carbon: state.data.Watt[i].carbon,
       time: new Date(state.data.Watt[i].timestamp),
       id: state.data.Watt[i]._id
     });
@@ -32,7 +33,11 @@ var initGraph = function(el, props, state) {
     return a.time - b.time;
   });
 
-  // console.log("Watt is", data);
+  data = data.filter(function(datum) {
+    return data.carbon !== null;
+  })
+
+  console.log("Watt is", data);
 
   // SCALE /////////////////////////////////////////////
   // Initial parameters

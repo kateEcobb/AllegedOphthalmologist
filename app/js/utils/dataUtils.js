@@ -13,16 +13,16 @@ var nearestTimeIndex = function(array, datum) {
 module.exports = {
 
   // Parses the given state data into what we need
-  parseData: function(state) {
+  parseState: function(state) {
     var data = {};
 
     // Watt Data ////////////
     var watts = data.Watt = [];
     for (var i = 0; i < state.data.Watt.length; i++) {
       watts.push({
-        carbon: parseInt(state.data.Watt[i].carbon),
+        point: state.data.Watt[i].carbon,
         time: new Date(state.data.Watt[i].timestamp),
-        id: state.data.Watt[i]._id
+        id: (new Date(state.data.Watt[i].timestamp)).getTime()
       });
     }
     watts.sort(function(a, b) {
@@ -33,23 +33,23 @@ module.exports = {
     var utilities = data.Utility = [];
     for (var i = 0; i < state.data.Utility.length; i++) {
       utilities.push({
-        power: parseFloat(state.data.Utility[i].interval_kWh),
+        point: parseFloat(state.data.Utility[i].interval_kWh),
         time: new Date(state.data.Utility[i].interval_start),
         ratio: watts[nearestTimeIndex(watts, state.data.Utility[i])].carbon, 
-        id: state.data.Utility[i]._id
+        id: (new Date(state.data.Utility[i].timestamp)).getTime()
       });
     }
     utilities.sort(function(a, b) {
       return a.time - b.time;
     });
-    utilities = data.Utility = utilities.filter(function(datum) {
-      if (datum.time >= watts[0].time && datum.time <= watts[watts.length - 1].time) {
-        return true;
-      }
-      else {
-        return false;
-      }
-    });
+    // utilities = data.Utility = utilities.filter(function(datum) {
+    //   if (datum.time >= watts[0].time && datum.time <= watts[watts.length - 1].time) {
+    //     return true;
+    //   }
+    //   else {
+    //     return false;
+    //   }
+    // });
 
     return data;
   }

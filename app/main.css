@@ -17,6 +17,8 @@ div.login {
   visibility: hidden;
 }
 
+
+/* Energy Charts */
 .axis { 
   fill: none
 }
@@ -35,10 +37,10 @@ div.login {
   stroke: steelblue;
 }
 
-.userLinePath {
+.energyPath {
   fill: none;
   stroke-width: 2;
-  stroke: #C1CDC1;
+  stroke: steelblue;
 }
 
 .linePoint {
