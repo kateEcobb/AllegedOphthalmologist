@@ -7,16 +7,21 @@ var uuid = require('node-uuid');
 //DEV ONLY
 var deleteInactiveUsers = function(req, res){ 
   console.log(req.body)
+  var data = req.body;
   var resHolder = [];
-  for(var key in req.body){ 
-    UtilityAPI.getDeleteCode(req.body[key], function(code){ 
-      UtilityAPI.postDeleteCode(req.body[key], JSON.stringify(code), function(APIresp){ 
+
+  data.forEach(function(value){
+    UtilityAPI.getDeleteCode(value, function(code){ 
+      UtilityAPI.postDeleteCode(value, JSON.stringify(code), function(APIresp){ 
         console.log("Successfully deleted account from UtilityAPI.")
         resHolder.push(APIresp);
-        console.log(APIresp);
+        if(resHolder.length === req.body.length){ 
+          res.status(200).send(resHolder)
+        }
       });
     });
-  }
+  });
+
 };
 
 var changePGEData = function(req, res){
