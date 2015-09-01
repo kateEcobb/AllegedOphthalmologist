@@ -28,12 +28,13 @@ var initGraph = function(el, props, data) {
     axisOffset: 50,
     yMinRatio: 0.95,
     yMaxRatio: 1.02,
+    ratio: props.ratio,
   };
 
   scale.yRange = d3.scale.linear().domain([d3.min(data.Utility, function(datum) {
-    return datum.power * datum.ratio * scale.yMinRatio;
+    return datum.power * scale.yMinRatio * (scale.ratio ? datum.ratio : 1);
   }), d3.max(data.Utility, function(datum) {
-    return datum.power * datum.ratio * scale.yMaxRatio;
+    return datum.power * scale.yMaxRatio * (scale.ratio ? datum.ratio : 1);
   })])
   .range([scale.height - scale.axisOffset - scale.axisOffset, 0]);
 
@@ -75,9 +76,9 @@ var drawLine = function(options) {
                     return scale.xRange( datum.time );
                   })
                   .y(function(datum) {
-                    return scale.yRange( datum.power * datum.ratio );
+                    return scale.yRange( datum.power * (scale.ratio ? datum.ratio : 1) );
                   })
-                  .interpolate('linear');
+                  .interpolate('basis');
 
   // Draw the path
   graph.append('svg:path')

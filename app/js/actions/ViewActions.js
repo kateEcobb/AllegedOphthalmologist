@@ -71,7 +71,14 @@ var ViewActions = {
         payload: err
       });
     });
-  }
+  },
+
+  // changeGraphView: function(event) {
+  //   Dispatcher.handleViewAction({
+  //     type: ActionTypes.MAIN_GRAPH_CHANGE,
+  //     payload: event
+  //   });
+  // }
 };
 
 module.exports = ViewActions;
