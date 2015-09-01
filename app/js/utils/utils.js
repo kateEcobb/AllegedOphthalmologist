@@ -66,7 +66,13 @@ var GetReq = function(route){
 
 module.exports = {
   getWattTotal : function() {
-    return GetReq(routes.WATT_TOTAL);
+    return GetReq(routes.WATT_BEHIND)
+    .then(function(behind) {
+      return GetReq(routes.WATT_AHEAD)
+      .then(function(ahead) {
+        return behind.concat(ahead);
+      });
+    });
   },
 
   getUtilityTotal : function() {
