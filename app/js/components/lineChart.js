@@ -5,7 +5,7 @@ var createChart = function(el, props, state) {
   var options = initGraph(el, props, state);
   drawAxes(options);
   drawLine(options);
-  drawPoints(options);
+  //drawPoints(options);
   return options.graph;
 };
 ///////////////////////////////////////////////////////////////////////////////////
@@ -32,7 +32,7 @@ var initGraph = function(el, props, state) {
     return a.time - b.time;
   });
 
-  console.log("Watt is", data);
+  // console.log("Watt is", data);
 
   // SCALE /////////////////////////////////////////////
   // Initial parameters
@@ -101,7 +101,7 @@ var drawLine = function(options) {
                   .y(function(datum) {
                     return scale.yRange( datum.carbon );
                   })
-                  .interpolate('linear');
+                  .interpolate('basis');
 
   // Draw the path
   graph.append('svg:path')

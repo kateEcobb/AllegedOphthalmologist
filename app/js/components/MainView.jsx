@@ -5,8 +5,6 @@ var mui = require('material-ui');
 var ThemeManager = require('material-ui/lib/styles/theme-manager')();
 var ThemeManager = new mui.Styles.ThemeManager();
 
-var ModalI = require('./energyBreakDownView.jsx')
-
 // Actions
 var ViewActions = require('./../actions/ViewActions');
 
@@ -15,6 +13,9 @@ var DataStore = require('./../stores/DataStore');
 
 // Child Views
 var LineGraphView = require('./LineGraphView.jsx');
+var GraphToolBar = require('./graphToolBar.jsx');
+var ModalI = require('./energyBreakDownView.jsx')
+
 
 var MainView = React.createClass({
   getInitialState: function(){
