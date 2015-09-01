@@ -8,6 +8,8 @@ var CHANGE_EVENT = 'change';
 
 var user = {
   username: null,
+  account_auth: null,
+  PGE_username: null,
   service_uid: null,
   account_uid: null,
   token: null
@@ -24,8 +26,10 @@ var UserStore = assign({}, EventEmitter.prototype, {
     this.removeListener(CHANGE_EVENT, callback);
   },
   setUser: function(user_data) {
-    console.log("setting user data in store:", user_data)
+    // console.log("setting user data in store:", user_data)
     user.username = user_data.username;
+    user.account_auth = user_data.account_auth;
+    user.PGE_username = user_data.PGE_username;
     user.account_uid = user_data.account_uid;
     user.service_uid = user_data.service_uid;
     user.token = user_data.token;
@@ -35,6 +39,12 @@ var UserStore = assign({}, EventEmitter.prototype, {
   },
   getServiceUid: function(){
     return user.service_uid;
+  },  
+  getAccountAuth: function(){
+    return user.account_auth;
+  },  
+  getPGEUsername: function(){
+    return user.PGE_username;
   },  
   getAccountUid: function(){
     return user.account_uid;

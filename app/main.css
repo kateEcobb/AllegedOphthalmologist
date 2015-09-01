@@ -5,6 +5,13 @@
   left: 1em;
 }
 
+/*User Profile*/
+.update-pge-form {
+  width:400px;
+  text-align: center;
+  margin: 0 auto;
+}
+
 .app-title {
   text-align: center;
   margin-bottom: 2em;
