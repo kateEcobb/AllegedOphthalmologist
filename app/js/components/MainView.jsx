@@ -63,16 +63,7 @@ var MainView = React.createClass({
           <ModalI>Launch Modal</ModalI>   
         </div>   
 
-        <DialogWindow>
-          Registration
-          <Registration />
-        </DialogWindow>
-        
-        <DialogWindow>
-          Line Graph
           <LineGraphView />     
-        </DialogWindow>
-
 
       </div>
       
@@ -84,3 +75,4 @@ var MainView = React.createClass({
 
 
 module.exports = MainView;
+        

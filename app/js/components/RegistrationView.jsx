@@ -6,6 +6,8 @@ var mui = require('material-ui');
 var ThemeManager = new mui.Styles.ThemeManager();
 var FlatButton = mui.FlatButton;
 
+//dialog
+var Dialog = require('./dialogWindow.jsx');
 
 // Actions
 var ViewActions = require('./../actions/ViewActions');
@@ -83,33 +85,35 @@ var RegistrationView = React.createClass({
   },
   render: function() {
     return (
-      <div className="container">
-        <div /*className="login jumbotron center-block"*/>
-        <h2>Register</h2>
-          <Formsy.Form onSubmit={this.submitForm} className="registration" onValid={this.enableButton} onInvalid={this.disableButton}>
-            <FormInput name="pgeFullName" title="Full Name" type="text" 
-              validations="isWords" validationError="Please enter your name"/>
-            <FormInput name="username" title="Email" type="text" 
-              validations="isEmail" validationError="Please enter a valid email."/>
-            <FormInput name="password" title="Password" type="password" 
-              validations={{minLength:6, maxLength: 20}} 
-              validationError="Password must be between 6 and 20 characters"/>
-            <FormInput name="pgeUsername" title="PG&E Username" type="text"/>
-            <FormInput name="pgePassword" title="PG&E Password" type="password"/>
-          <FlatButton className="btn btn-submit" type="submit" disabled={!this.state.canSubmit}>Register</FlatButton>
-          </Formsy.Form>
-          
-          <div className="spinner-container">
-            <div className="spinner-loader">
-              Loading…
+      <Dialog>
+        <div className="container">
+          <div /*className="login jumbotron center-block"*/>
+          <h2>Register</h2>
+            <Formsy.Form onSubmit={this.submitForm} className="registration" onValid={this.enableButton} onInvalid={this.disableButton}>
+              <FormInput name="pgeFullName" title="Full Name" type="text" 
+                validations="isWords" validationError="Please enter your name"/>
+              <FormInput name="username" title="Email" type="text" 
+                validations="isEmail" validationError="Please enter a valid email."/>
+              <FormInput name="password" title="Password" type="password" 
+                validations={{minLength:6, maxLength: 20}} 
+                validationError="Password must be between 6 and 20 characters"/>
+              <FormInput name="pgeUsername" title="PG&E Username" type="text"/>
+              <FormInput name="pgePassword" title="PG&E Password" type="password"/>
+            <FlatButton className="btn btn-submit" type="submit" disabled={!this.state.canSubmit}>Register</FlatButton>
+            </Formsy.Form>
+            
+            <div className="spinner-container">
+              <div className="spinner-loader">
+                Loading…
+              </div>
+            </div>
+            <div className="login-failure">
+              <p>Failed to Register.</p>
+              <p>Is your PG&E Login Information Correct?</p>
             </div>
           </div>
-          <div className="login-failure">
-            <p>Failed to Register.</p>
-            <p>Is your PG&E Login Information Correct?</p>
-          </div>
         </div>
-      </div>
+      </Dialog>
     );
   }
 });
