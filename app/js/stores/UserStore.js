@@ -8,8 +8,11 @@ var CHANGE_EVENT = 'change';
 
 var user = {
   username: null,
+  account_auth: null,
+  PGE_username: null,
   service_uid: null,
   account_uid: null,
+  utility_service_address: null,
   token: null
 };
 
@@ -26,9 +29,15 @@ var UserStore = assign({}, EventEmitter.prototype, {
   setUser: function(user_data) {
     console.log("setting user data in store:", user_data)
     user.username = user_data.username;
+    user.account_auth = user_data.account_auth;
+    user.PGE_username = user_data.PGE_username;
     user.account_uid = user_data.account_uid;
     user.service_uid = user_data.service_uid;
+    user.utility_service_address = user_data.utility_service_address;
     user.token = user_data.token;
+  },
+  getUser: function(){
+    return user;
   },
   getUsername: function(){
     return user.username;
@@ -36,8 +45,17 @@ var UserStore = assign({}, EventEmitter.prototype, {
   getServiceUid: function(){
     return user.service_uid;
   },  
+  getAccountAuth: function(){
+    return user.account_auth;
+  },  
+  getPGEUsername: function(){
+    return user.PGE_username;
+  },  
   getAccountUid: function(){
     return user.account_uid;
+  },  
+  getServiceAddress: function(){
+    return user.utility_service_address;
   },  
   getToken: function(){
     return user.token;
