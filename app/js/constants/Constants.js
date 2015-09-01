@@ -15,7 +15,8 @@ module.exports = {
   }), 
 
   ServerRoutes: {
-    WATT_TOTAL: '/api/getWattTotal',
+    WATT_BEHIND: '/api/get24HourBehind',
+    WATT_AHEAD: '/api/get24HourAhead',
     UTILITY_TOTAL: '/api/meterreadings',
     USER_REGISTRATION: '/signup',
     USER_LOGIN: '/signin'
