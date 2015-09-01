@@ -6,6 +6,7 @@ var mui = require('material-ui');
 var ThemeManager = new mui.Styles.ThemeManager();
 var FlatButton = mui.FlatButton;
 
+
 // Actions
 var ViewActions = require('./../actions/ViewActions');
 var ActionTypes = require('./../constants/Constants').ActionTypes;
@@ -83,7 +84,7 @@ var RegistrationView = React.createClass({
   render: function() {
     return (
       <div className="container">
-        <div className="login jumbotron center-block">
+        <div /*className="login jumbotron center-block"*/>
         <h2>Register</h2>
           <Formsy.Form onSubmit={this.submitForm} className="registration" onValid={this.enableButton} onInvalid={this.disableButton}>
             <FormInput name="pgeFullName" title="Full Name" type="text" 

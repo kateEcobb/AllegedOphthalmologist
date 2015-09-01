@@ -2,10 +2,6 @@ var React = require('react');
 var chart = require('./donutChart.js');
 
 
-var Button = require('react-bootstrap').Button;
-var Modal = require('react-bootstrap').Modal;
-
-
 var mui = require('material-ui');
 var ThemeManager = new mui.Styles.ThemeManager();
 var Dialog = mui.Dialog;
@@ -46,6 +42,7 @@ var ModalI = React.createClass({
 
   componentDidMount: function(){
     this.setState({ data: DataStore.getData() });
+    console.log(this.state.data);
   },
 
   componentDidUpdate: function(){
@@ -67,7 +64,7 @@ var ModalI = React.createClass({
     // button can be used with any conent that the <ModalInstance> tag is wrapped around
     // or the div can be used to wrap around other things like images
     // <div onClick={this.open}>{this.props.children}</div> 
-    console.log(this.refs.dialog)
+    // console.log(this.refs.dialog)
     var modalbody = 'modal-body';
     return (
       <div>
@@ -76,10 +73,12 @@ var ModalI = React.createClass({
           actions={this.state.standardActions} 
           actionFocus='submit' 
           modal={this.state.modal}
-          ref='dialog'>
+          ref='dialog'
+          autoDetectWindowHeight={true} 
+          autoScrollBodyContent={true}>
 
           {this.props.children}
-          <div className={modalbody}></div>
+          <div style={{'height': '500px'}} className={modalbody}></div>
           
         </Dialog>
       </div>

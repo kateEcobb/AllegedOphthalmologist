@@ -69,9 +69,6 @@ var App = React.createClass({
   }
 });
 
-App.contextTypes = {
-  router: React.PropTypes.func
-};
 
 var routes = (
   <Route name="app" path="/" handler={App}>
