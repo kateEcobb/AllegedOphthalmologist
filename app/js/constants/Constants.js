@@ -6,7 +6,8 @@ module.exports = {
     WATT_LOADED: null,
     UTILITY_LOADED: null,
     USER_LOGIN: null,
-    USER_LOGIN_FAILURE: null
+    USER_LOGIN_FAILURE: null,
+    // MAIN_GRAPH_CHANGE: null,
   }),
 
   ActionSources: keyMirror({
