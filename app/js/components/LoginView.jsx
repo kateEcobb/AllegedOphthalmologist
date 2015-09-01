@@ -78,6 +78,7 @@ var LoginView = React.createClass({
   submitForm: function(data){
     $('.spinner-container').css('visibility', 'visible');
     this.disableButton();
+    // console.log('Logging in with: ', data);
     ViewActions.loginUser(data);
   },
   render: function() {

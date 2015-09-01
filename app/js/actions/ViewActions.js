@@ -66,6 +66,7 @@ var ViewActions = {
     })
     .catch(function(err){
       // Login not successful
+      console.log('Login not successful: ', err);
       Dispatcher.handleViewAction({
         type: ActionTypes.USER_LOGIN_FAILURE,
         payload: err

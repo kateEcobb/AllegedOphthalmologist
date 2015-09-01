@@ -22,18 +22,23 @@ var MenuItem = mui.MenuItem;
 // Stores -- Load here so Stores can begin listening to Events
 var UserStore = require('./../stores/UserStore');
 
-var menuItems = [
-  { route: 'default', text: 'Home' },
-  { route: 'register', text: 'Register' },
-  { route: 'login', text: 'Login' }
-];
-
 var NavMenu = React.createClass({
   childContextTypes: {
     muiTheme: React.PropTypes.object
   },
 
   mixins: [Router.Navigation],
+
+  getInitialState: function() {
+    return {
+      menuItems: [
+        { route: 'default', text: 'Home' },
+        { route: 'register', text: 'Register' },
+        { route: 'profile', text: 'Profile', reqLogin: true, disabled: true},
+        { route: 'login', text: 'Login' }
+      ]
+    };
+  },
 
   componentDidMount: function(){
     var context = this;
@@ -43,6 +48,16 @@ var NavMenu = React.createClass({
         // console.log('Nav menu button clicked');
         context.toggleNav();
       } 
+      // Un-disable menu items requiring login when the user logs in
+      else if(action.type === ActionTypes.USER_LOGIN){
+        var menuItems = context.state.menuItems;
+        for(var i = 0; i < menuItems.length; i++){
+          if(menuItems[i].reqLogin){
+            menuItems[i].disabled = false;
+          }
+        }
+        context.setState({menuItems: menuItems});
+      }
     });
   },
 
@@ -66,7 +81,7 @@ var NavMenu = React.createClass({
 
   render: function(){
     return(
-      <LeftNav ref="leftNav" docked={false} menuItems={menuItems} onChange={this.handleMenuSelect}/>
+      <LeftNav ref="leftNav" docked={false} menuItems={this.state.menuItems} onChange={this.handleMenuSelect}/>
     );
   }
 });

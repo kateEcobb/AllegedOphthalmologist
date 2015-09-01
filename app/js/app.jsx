@@ -16,8 +16,6 @@ var mui = require('material-ui');
 var ThemeManager = new mui.Styles.ThemeManager();
 var RaisedButton = mui.RaisedButton;
 var Dialog = mui.Dialog;
-var LeftNav = mui.LeftNav;
-var MenuItem = mui.MenuItem;
 
 // Components
 var NavMenu = require('./components/NavMenu.jsx');
@@ -38,7 +36,6 @@ var App = React.createClass({
 
   mixins: [Router.Navigation, Router.State],
 
-
   childContextTypes: {
     muiTheme: React.PropTypes.object
   },
@@ -51,14 +48,6 @@ var App = React.createClass({
 
   toggleNav: function(){
     ViewActions.toggleNavMenu();
-  },
-
-  handleMenuSelect: function(e, selectedIndex, menuItem){
-    // console.log(e, selectedIndex, menuItem);
-    if(menuItem.route){
-      this.transitionTo(menuItem.route);
-    }
-    this.toggleNav();
   },
 
   render: function(){
