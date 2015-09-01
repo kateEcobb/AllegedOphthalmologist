@@ -4,6 +4,21 @@ var MeterReadings = require('../utilityAPI/MeterReadingModel');
 var UtilityAPI = require('../utilityAPI/UtilityAPI');
 var uuid = require('node-uuid');
 
+//DEV ONLY
+var deleteInactiveUsers = function(req, res){ 
+  console.log(req.body)
+  var resHolder = [];
+  for(var key in req.body){ 
+    UtilityAPI.getDeleteCode(req.body[key], function(code){ 
+      UtilityAPI.postDeleteCode(req.body[key], JSON.stringify(code), function(APIresp){ 
+        console.log("Successfully deleted account from UtilityAPI.")
+        resHolder.push(APIresp);
+        console.log(APIresp);
+      });
+    });
+  }
+};
+
 var changePGEData = function(req, res){
   var reqObj = { 
     auth_type: null,
@@ -252,6 +267,7 @@ module.exports = {
   signIn: signIn, 
   getUserMeterReadings: getUserMeterReadings, 
   changePGEData: changePGEData, 
-  logOut: logOut 
+  logOut: logOut, 
+  deleteInactiveUsers: deleteInactiveUsers 
 }
 
