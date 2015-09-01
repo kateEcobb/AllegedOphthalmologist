@@ -7,6 +7,7 @@ module.exports = {
     UTILITY_LOADED: null,
     USER_LOGIN: null,
     USER_LOGIN_FAILURE: null,
+    TOGGLE_NAV_MENU: null,
     // MAIN_GRAPH_CHANGE: null,
   }),
 

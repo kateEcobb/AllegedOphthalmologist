@@ -20,6 +20,7 @@ var LeftNav = mui.LeftNav;
 var MenuItem = mui.MenuItem;
 
 // Components
+var NavMenu = require('./components/NavMenu.jsx');
 var MainView = require('./components/MainView.jsx');
 var LoginView = require('./components/LoginView.jsx');
 var ProfileView = require('./components/ProfileView.jsx');
@@ -29,6 +30,9 @@ var engergyBreakDown = require('./components/energyBreakDownView.jsx');
 // Stores -- Load here so Stores can begin listening to Events
 var UserStore = require('./stores/UserStore');
 var DataStore = require('./stores/DataStore');
+
+// Actions
+var ViewActions = require('./actions/ViewActions');
 
 var App = React.createClass({
 
@@ -46,7 +50,7 @@ var App = React.createClass({
   },
 
   toggleNav: function(){
-    this.refs.leftNav.toggle();
+    ViewActions.toggleNavMenu();
   },
 
   handleMenuSelect: function(e, selectedIndex, menuItem){
@@ -58,13 +62,6 @@ var App = React.createClass({
   },
 
   render: function(){
-    var context = this;
-    var menuItems = [
-      { route: 'default', text: 'Home' },
-      { route: 'register', text: 'Register' },
-      { route: 'login', text: 'Login' }
-    ];
-    var context = this;
     return (
       <div className="app-container">
       <div className="app-title">
@@ -74,7 +71,7 @@ var App = React.createClass({
         <span className="nav-btn">
           <RaisedButton onClick={this.toggleNav}>Menu</RaisedButton>
         </span>
-        <LeftNav ref="leftNav" docked={false} menuItems={menuItems} onChange={this.handleMenuSelect}/>
+        <NavMenu></NavMenu>
       <div className="content-container">
         <RouteHandler />
       </div>

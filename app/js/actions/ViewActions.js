@@ -73,6 +73,13 @@ var ViewActions = {
     });
   },
 
+  toggleNavMenu: function() {
+    Dispatcher.handleViewAction({
+      type: ActionTypes.TOGGLE_NAV_MENU,
+      payload: null
+    });
+  }
+
   // changeGraphView: function(event) {
   //   Dispatcher.handleViewAction({
   //     type: ActionTypes.MAIN_GRAPH_CHANGE,
