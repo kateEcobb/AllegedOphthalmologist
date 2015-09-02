@@ -1,4 +1,5 @@
-var WattEnergy = require('./energyModel')
+var WattTotal = require('./energyModel').WattTotal;
+var TestData = require('./energyModel').TestData;
 var request = require('request');
 var wattTimeToken = require('../../.tokens.js').wattTimeAPIToken;
 var debounce = require('debounce');
@@ -13,7 +14,9 @@ var wattTimeQuery = function(dateStart, dateEnd, market, cb){
   };
   request(options, function(err, response, body){ 
       var data = JSON.parse(body)
-    if (!err && response.status === 200){ 
+      console.log(data)
+
+    if (!err && data.results){ 
       var responseArr = [];
       for(var i=0; i<data.results.length; i++){ 
         var holder = []
@@ -76,6 +79,29 @@ var get24HourAhead = function(req,res){
   })
 };
 
+var getTestData = function(req, res){ 
+  TestData.find().exec(function(err, data){ 
+    if (err) res.status(500).send("Error in querying test data.");
+    else res.json(data);
+  })
+};
+
+var loadTestData = function(){ 
+  var today = new Date().toISOString().slice(0,-5).replace(/:/g, '%3A');
+  var tomorrow = new Date(new Date().setDate(new Date().getDate()+1)).toISOString().slice(0,-5).replace(/:/g, '%3A');
+
+  wattTimeQuery(today, tomorrow, 'DAHR', function(datas){
+    datas.forEach(function(data){
+      TestData.findOneAndUpdate({ 
+        timestamp: data.timestamp
+      }, data, {upsert:true}, function(err, result){ 
+        if (err) console.log("Error adding to TestData.")
+      })      
+    }) 
+  })
+
+};
+
 var get24HourBehind = function(req, res){ 
   var yesterday = new Date(new Date().setDate(new Date().getDate()-1)).toISOString().slice(0,-5);
   WattEnergy.find({ 
@@ -109,8 +135,10 @@ var updateWattData = function() {
 debounce(updateWattData, 180000)();
 setInterval(updateWattData, 900000);
 
+// loadTestData();
 module.exports = { 
   get24HourBehind: get24HourBehind, 
-  get24HourAhead: get24HourAhead
+  get24HourAhead: get24HourAhead, 
+  getTestData: getTestData
 };
 

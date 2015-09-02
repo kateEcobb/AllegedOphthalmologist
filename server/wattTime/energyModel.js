@@ -15,5 +15,9 @@ var WattEnergySchema = new mongoose.Schema({
 }); 
 
 var WattTotal = mongoose.model('WattTotal', WattEnergySchema);
+var TestData = mongoose.model('TestData', WattEnergySchema);
 
-module.exports = WattTotal;
+module.exports = { 
+  WattTotal: WattTotal, 
+  TestData: TestData
+};
