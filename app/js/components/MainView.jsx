@@ -39,13 +39,15 @@ var MainView = React.createClass({
   loadData: function (data) {
     // this.setState({data: DataStore.getData()});
   },
+
+  modalListener: function(){
+    var modalSpecs = modalStore.getModalState();
+    this.setState({showModal: modalSpecs.isOpen, modal: modalSpecs.modal});
+  },
   
   componentDidMount: function (){
     var context = this;
-    modalStore.addChangeListener(function(){
-      var modalSpecs = modalStore.getModalState();
-      context.setState({showModal: modalSpecs.isOpen, modal: modalSpecs.modal});
-    })
+    modalStore.addChangeListener(this.modalListener);
     // DataStore.addChangeListener(this.loadData);
     // ViewActions.loadWatt()
     // .then(ViewActions.loadUtility)
@@ -59,6 +61,7 @@ var MainView = React.createClass({
   
   componentWillUnmount: function (){
     // DataStore.removeChangeListener(this.loadData);
+    modalStore.removeChangeListener(this.modalListener);
   },
 
   modals: {
