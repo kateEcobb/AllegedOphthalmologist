@@ -16,6 +16,8 @@
   margin-bottom: 2em;
 }
 
+
+/* Energy Charts */
 .axis { 
   fill: none
 }
@@ -34,10 +36,10 @@
   stroke: steelblue;
 }
 
-.userLinePath {
+.energyPath {
   fill: none;
   stroke-width: 2;
-  stroke: #C1CDC1;
+  stroke: steelblue;
 }
 
 .linePoint {

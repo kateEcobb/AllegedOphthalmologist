@@ -24,5 +24,12 @@ module.exports = {
     USER_REGISTRATION: '/signup',
     USER_LOGIN: '/signin',
     PGE_UPDATE: '/api/user/changePGE'
-  }
+  },
+
+  GraphTypes: keyMirror({
+    MAIN: null,
+    USER_KWH: null,
+    USER_CARBON: null,
+  }),
+
 };
