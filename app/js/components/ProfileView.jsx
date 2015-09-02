@@ -9,6 +9,9 @@ var Dispatcher = require('./../dispatcher/Dispatcher');
 var ViewActions = require('./../actions/ViewActions');
 var ActionTypes = require('./../constants/Constants').ActionTypes;
 
+//dialog
+var Dialog = require('./dialogWindow.jsx')
+
 // Form validation
 var Formsy = require('formsy-react');
 var FormInput = require('./FormInput.jsx');
@@ -103,6 +106,7 @@ var ProfileView = React.createClass({
 
   render: function (){
     return(
+      <Dialog openImmediately={true}>
       <div className="container">
         <Tabs>
         <Tab label="Account Summary">
@@ -145,6 +149,7 @@ var ProfileView = React.createClass({
         </Tabs>
 
       </div>
+      </Dialog>
     );
   }
 });

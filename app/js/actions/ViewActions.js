@@ -98,8 +98,14 @@ var ViewActions = {
       type: ActionTypes.TOGGLE_NAV_MENU,
       payload: null
     });
-  }
+  },
 
+  loadModal: function(modal){
+    Dispatcher.handleViewAction({
+      type: ActionTypes.LOAD_MODAL,
+      payload: modal
+    })
+  },
   // changeGraphView: function(event) {
   //   Dispatcher.handleViewAction({
   //     type: ActionTypes.MAIN_GRAPH_CHANGE,
