@@ -18,21 +18,6 @@ var dialog = React.createClass({
       ]
     }
   },
-
-  contextTypes: {
-    muiTheme: React.PropTypes.string.isrequired
-  },
-
-  childContextTypes: {
-    muiTheme: React.PropTypes.object
-  },
-
-  getChildContext: function(){
-    return{
-      muiTheme: ThemeManager.getCurrentTheme()
-    }
-  },
-
   
   close: function(){
     this.refs.dialogBox.dismiss();

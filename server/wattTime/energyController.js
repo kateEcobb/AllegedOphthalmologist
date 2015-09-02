@@ -14,7 +14,6 @@ var wattTimeQuery = function(dateStart, dateEnd, market, cb){
   };
   request(options, function(err, response, body){ 
       var data = JSON.parse(body)
-      console.log(data)
 
     if (!err && data.results){ 
       var responseArr = [];

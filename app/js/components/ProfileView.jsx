@@ -34,16 +34,6 @@ var UserStore = require('./../stores/UserStore');
 
 var ProfileView = React.createClass({
 
-  childContextTypes: {
-    muiTheme: React.PropTypes.object
-  },
-
-  getChildContext: function() {
-    return {
-      muiTheme: ThemeManager.getCurrentTheme()
-    };
-  },
-
   getInitialState: function() {
     return {
       user: {

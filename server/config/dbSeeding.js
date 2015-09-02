@@ -1,7 +1,7 @@
 module.exports = {
 
   Drew: { 
-    username: "admin1",
+    username: "admin1@blah.com",
     password: "tightHips",
     token: null,
     utilityAPIData: { 
@@ -16,7 +16,7 @@ module.exports = {
   },
 
   Brandon: { 
-    username: "admin2",
+    username: "admin2@blah.com",
     password: "tightHips",
     token: null,
     utilityAPIData: { 
@@ -31,7 +31,7 @@ module.exports = {
   },
 
   JD: { 
-    username: "admin3",
+    username: "admin3@blah.com",
     password: "tightHips",
     token: null,
     utilityAPIData: { 
@@ -46,7 +46,7 @@ module.exports = {
   },
 
   John: { 
-    username: "admin4",
+    username: "admin4@blah.com",
     password: "tightHips",
     token: null,
     utilityAPIData: { 

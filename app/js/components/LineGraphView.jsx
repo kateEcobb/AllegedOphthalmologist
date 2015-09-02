@@ -31,16 +31,6 @@ var LineGraphView = React.createClass({
     this.setState({data: DataStore.getData()});
   },
 
-  childContextTypes: {
-    muiTheme: React.PropTypes.object
-  },
-
-  getChildContext: function() {
-    return {
-      muiTheme: ThemeManager.getCurrentTheme()
-    };
-  },
-
   componentDidMount: function() {
     DataStore.addChangeListener(this.loadData);
     ViewActions.loadWatt()

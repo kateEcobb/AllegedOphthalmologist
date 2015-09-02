@@ -25,10 +25,6 @@ var UserStore = require('./../stores/UserStore');
 var modalStore = require('./../stores/modalStore');
 
 var NavMenu = React.createClass({
-  childContextTypes: {
-    muiTheme: React.PropTypes.object
-  },
-
   getInitialState: function() {
     return {
       menuItems: [
@@ -58,12 +54,6 @@ var NavMenu = React.createClass({
         context.setState({menuItems: menuItems});
       }
     });
-  },
-
-  getChildContext: function(){
-    return {
-      muiTheme: ThemeManager.getCurrentTheme()
-    }
   },
 
   toggleNav: function(){

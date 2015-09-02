@@ -36,14 +36,30 @@ var App = React.createClass({
 
   mixins: [Router.Navigation, Router.State],
 
-  childContextTypes: {
-    muiTheme: React.PropTypes.object
-  },
-
   getChildContext: function(){
     return {
       muiTheme: ThemeManager.getCurrentTheme()
     }
+  },
+  
+  childContextTypes: {
+    muiTheme: React.PropTypes.object
+  },
+
+  componentWillMount: function(){ 
+    //Set color palette
+    var appPalette = { 
+      primary1Color: '#607D8B',
+      primary2Color: '#455A64',
+      primary3Color: '#CFD8DC',
+      accent1Color: '#FFC107',
+      accent2Color: '#F39C12',
+      accent3Color: '#FFDE55',
+      textColor: '#212121',
+      canvasColor: '#FFFFFF',
+      borderColor: '#B6B6B6'
+    };
+    ThemeManager.setPalette(appPalette);
   },
 
   toggleNav: function(){
