@@ -10,6 +10,7 @@ module.exports = {
     TOGGLE_NAV_MENU: null,
     PGE_UPDATE_SUCCESS: null,
     PGE_UPDATE_FAILURE: null,
+    LOAD_MODAL: null,
     // MAIN_GRAPH_CHANGE: null,
   }),
 

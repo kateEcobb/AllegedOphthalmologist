@@ -3,16 +3,16 @@ var React = require('react');
 var mui = require('material-ui');
 var ThemeManager = new mui.Styles.ThemeManager();
 var Dialog = mui.Dialog;
-var RaisedButton = mui.RaisedButton;
 
-var DataStore = require('./../stores/DataStore');
+var modalStore = require('./../stores/modalStore');
 
+var ViewActions = require('../actions/ViewActions');
 
 var dialog = React.createClass({
 
   getInitialState: function(){
     return {
-      showModal: false,
+      showModal: modalStore.getModalState().isOpen,
       standardActions: [
       {text: 'cancel', onClick: this.close},
       ]
@@ -33,12 +33,10 @@ var dialog = React.createClass({
     }
   },
 
-  open: function(){
-    this.refs.dialogBox.show();
-  },
-
+  
   close: function(){
     this.refs.dialogBox.dismiss();
+    ViewActions.loadModal();
   },
 
   
@@ -47,14 +45,16 @@ var dialog = React.createClass({
       <div className='hello'>
         <Dialog
           actions={this.state.standardActions}
-          modal={this.state.modal}
+          modal={true}
           ref='dialogBox'
           autoDetectWindowHeight={true} 
           autoScrollBodyContent={true}
           openImmediately={this.props.openImmediately}>
-          <div style={{'height': '500px'}}>
-          {this.props.children}
-          </div>
+            <div style={{'height': '500px'}}>
+
+              {this.props.children}
+            
+            </div>
         </Dialog>
       </div>
     )
@@ -62,4 +62,3 @@ var dialog = React.createClass({
 })
 
 module.exports = dialog;
-        // <RaisedButton onClick={this.open}>{this.props.children[0]}</RaisedButton>

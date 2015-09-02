@@ -85,7 +85,7 @@ var RegistrationView = React.createClass({
   },
   render: function() {
     return (
-      <Dialog>
+      <Dialog openImmediately={true} >
         <div className="container">
           <div /*className="login jumbotron center-block"*/>
           <h2>Register</h2>

@@ -99,9 +99,12 @@ var ViewActions = {
       payload: null
     });
   },
-  launchModal: function(modal){
-    console.log('modal launched');
-    console.log('modal launched', this.state);
+
+  loadModal: function(modal){
+    Dispatcher.handleViewAction({
+      type: ActionTypes.LOAD_MODAL,
+      payload: modal
+    })
   },
   // changeGraphView: function(event) {
   //   Dispatcher.handleViewAction({

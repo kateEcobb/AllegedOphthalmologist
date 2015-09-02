@@ -7,6 +7,9 @@ var mui = require('material-ui');
 var ThemeManager = new mui.Styles.ThemeManager();
 var FlatButton = mui.FlatButton;
 
+//dialog
+var Dialog = require('./dialogWindow.jsx')
+
 // Form validation
 var Formsy = require('formsy-react');
 var FormInput = require('./FormInput.jsx');
@@ -83,8 +86,9 @@ var LoginView = React.createClass({
   },
   render: function() {
     return (
+      <Dialog openImmediately={true}>
       <div className="container">
-        <div className="login jumbotron center-block">
+        <div>
         <h2>Login</h2>
           
           <Formsy.Form onSubmit={this.submitForm} className="login" onValid={this.enableButton} onInvalid={this.disableButton}>
@@ -104,6 +108,7 @@ var LoginView = React.createClass({
           </div>
         </div>
       </div>
+      </Dialog>
     );
   }
 });

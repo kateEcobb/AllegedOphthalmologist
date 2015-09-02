@@ -5,34 +5,28 @@ var mui = require('material-ui');
 var ThemeManager = require('material-ui/lib/styles/theme-manager')();
 var ThemeManager = new mui.Styles.ThemeManager();
 
-
-//dialog boxes
-var ModalI = require('./energyBreakDownView.jsx');
-var DialogWindow = require('./dialogWindow.jsx');
-var Registration = require('./RegistrationView.jsx');
-
 // Actions
 var ViewActions = require('./../actions/ViewActions');
 
 //Store
 var DataStore = require('./../stores/DataStore');
+var modalStore = require('./../stores/modalStore');
 
 // Child Views
 var LineGraphView = require('./LineGraphView.jsx');
 var GraphToolBar = require('./graphToolBar.jsx');
-var ModalI = require('./energyBreakDownView.jsx')
+var donutGraphWindow = require('./energyBreakDownView.jsx')
 
 
 var MainView = React.createClass({
   getInitialState: function(){
     return {
-      showModal: false,
+      showModal: modalStore.getModalState().isOpen,
       modal: null,
     };
   },
 
   childContextTypes: {
-    // console.log(this.context)
     muiTheme: React.PropTypes.object,
   },
   
@@ -47,15 +41,20 @@ var MainView = React.createClass({
   },
   
   componentDidMount: function (){
+    var context = this;
+    modalStore.addChangeListener(function(){
+      var modalSpecs = modalStore.getModalState();
+      context.setState({showModal: modalSpecs.isOpen, modal: modalSpecs.modal});
+    })
     // DataStore.addChangeListener(this.loadData);
     // ViewActions.loadWatt()
     // .then(ViewActions.loadUtility)
     // .catch(function(err) {
     //   console.log("ERROR: ", err);
     // });
-    window.addEventListener('close', function(){
-      console.log('modal closed');
-    })
+    // window.addEventListener('close', function(){
+    //   console.log('modal closed');
+    // })
   },
   
   componentWillUnmount: function (){
@@ -63,14 +62,11 @@ var MainView = React.createClass({
   },
 
   modals: {
-    donutModal: ModalI, 
+    donutModal: donutGraphWindow, 
   }, 
 
-  show: function(event){
-    console.log(this.state);
-    this.setState({showModal: true, modal: this.modals[event.target.id]});
-
-    // ModalI.addEventListener(this.close);
+  showDonutGraph: function(event){
+    ViewActions.loadModal(this.modals[event.target.id]);
   },
 
   render: function() {
@@ -78,7 +74,7 @@ var MainView = React.createClass({
       return (
         <div>
           <div className="bulb">
-            <button id='donutModal' onClick={this.show}>Launch Modal</button>   
+            <button id='donutModal' onClick={this.showDonutGraph}>Launch Modal</button>   
           </div>   
             <LineGraphView /> 
             <this.state.modal openImmediately={true}/>
@@ -88,7 +84,7 @@ var MainView = React.createClass({
       return (
         <div>
           <div className="bulb">
-            <button id='donutModal' onClick={this.show}>Launch Modal</button>   
+            <button id='donutModal' onClick={this.showDonutGraph}>Launch Modal</button>   
           </div>   
             <LineGraphView />     
         </div>

@@ -1,13 +1,16 @@
 var React = require('react');
 var chart = require('./donutChart.js');
 
-
+//material ui
 var mui = require('material-ui');
 var ThemeManager = new mui.Styles.ThemeManager();
-var Dialog = mui.Dialog;
-var RaisedButton = mui.RaisedButton;
 
+//dialog
+var Dialog = require('./dialogWindow.jsx');
+
+//stores
 var DataStore = require('./../stores/DataStore');
+var modalStore = require('./../stores/modalStore');
 
 var ViewActions = require('./../actions/ViewActions')
 
@@ -19,11 +22,6 @@ var ModalI = React.createClass({
         "Watt": [{}],
         "Utility": [{}]
       },
-      showModal: false,
-      standardActions: [
-        {text: 'cancel', onClick: this.close},
-        {text: 'submit', onTouchTap: this.close, ref: 'submit'}
-      ]
     };
   },
 
@@ -43,7 +41,6 @@ var ModalI = React.createClass({
 
   componentDidMount: function(){
     this.setState({ data: DataStore.getData() });
-    console.log(this.state.data);
   },
 
   componentDidUpdate: function(){
@@ -51,36 +48,19 @@ var ModalI = React.createClass({
     chart.create('.modal-body', this.state.data.Watt[0].genmix, 'test2');
   },
 
-  open: function(){
-    this.setState({showModal: true});
-    this.refs.dialog.show();
-  },
-
-  close: function(){
-    this.setState({showModal: false});
-    this.refs.dialog.dismiss();
-    ViewActions.launchModal();
-  },
-
   render: function(){
     // button can be used with any conent that the <ModalInstance> tag is wrapped around
     // or the div can be used to wrap around other things like images
-    // <div onClick={this.open}>{this.props.children}</div> 
-    // console.log(this.refs.dialog)
     var modalbody = 'modal-body';
+
     return (
       <div>
-        <Dialog title='This is a material ui dialog box' 
-          actions={this.state.standardActions} 
-          actionFocus='submit' 
-          modal={true}
-          ref='dialog'
-          openImmediately={this.props.openImmediately}
-          autoDetectWindowHeight={true} 
-          autoScrollBodyContent={true}>
-
-          {this.props.children}
-          <div style={{'height': '500px'}} className={modalbody}></div>
+        <Dialog 
+          openImmediately={this.props.openImmediately}>
+          
+          <div style={{'height': '500px'}} className={modalbody}>
+            <h4>This is a break down of how the grid is being powered</h4> 
+          </div>
           
         </Dialog>
       </div>
@@ -90,20 +70,3 @@ var ModalI = React.createClass({
 
 
 module.exports = ModalI;
-        // <RaisedButton label='modal' onClick={this.open} />
-      // <div>
-
-      //   <Button onClick={this.open}>{this.props.children}</Button>
-
-      //   <Modal show={this.state.showModal} onHide={this.close}>
-      //     <Modal.Header>
-      //       <Modal.Title>This is a modal</Modal.Title>
-      //     </Modal.Header>
-      //     <Modal.Body>  
-      //       <div>this is a break down of where the electricity is coming from</div>
-      //     </Modal.Body>
-      //     <Modal.Footer>
-      //       <Button onClick={this.close}>Close</Button>
-      //     </Modal.Footer>
-      //   </Modal>
-      // </div>

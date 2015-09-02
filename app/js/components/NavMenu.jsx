@@ -1,17 +1,12 @@
 var React = require('react');
 
-// Routing
-var Router = require('react-router');
-var Route = Router.Route;
-var RouteHandler = Router.RouteHandler;
-var DefaultRoute = Router.DefaultRoute;
-var Link = Router.Link;
-
 //Dispatcher
 var Dispatcher = require('./../dispatcher/Dispatcher');
 
 //Actions
 var ActionTypes = require('./../constants/Constants').ActionTypes;
+var ViewAction = require('../actions/ViewActions');
+
 
 //mui theme
 var mui = require('material-ui');
@@ -19,23 +14,27 @@ var ThemeManager = new mui.Styles.ThemeManager();
 var LeftNav = mui.LeftNav;
 var MenuItem = mui.MenuItem;
 
+//dialog boxes
+var register = require('./RegistrationView.jsx');
+var profile = require('./ProfileView.jsx');
+var login = require('./LoginView.jsx');
+
+
 // Stores -- Load here so Stores can begin listening to Events
 var UserStore = require('./../stores/UserStore');
+var modalStore = require('./../stores/modalStore');
 
 var NavMenu = React.createClass({
   childContextTypes: {
     muiTheme: React.PropTypes.object
   },
 
-  mixins: [Router.Navigation],
-
   getInitialState: function() {
     return {
       menuItems: [
-        { route: 'default', text: 'Home' },
-        { route: 'register', text: 'Register' },
-        { route: 'profile', text: 'Profile', reqLogin: true, disabled: true},
-        { route: 'login', text: 'Login' }
+        { route: register, text: 'Register' },
+        { route: profile, text: 'Profile', reqLogin: true, disabled: true},
+        { route: login, text: 'Login' }
       ]
     };
   },
@@ -73,10 +72,7 @@ var NavMenu = React.createClass({
 
   handleMenuSelect: function(e, selectedIndex, menuItem){
     // console.log(e, selectedIndex, menuItem);
-    if(menuItem.route){
-      this.transitionTo(menuItem.route);
-    }
-    this.toggleNav();
+    ViewAction.loadModal(menuItem.route);
   },
 
   render: function(){
