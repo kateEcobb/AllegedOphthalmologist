@@ -66,12 +66,39 @@ var ViewActions = {
     })
     .catch(function(err){
       // Login not successful
+      console.log('Login not successful: ', err);
       Dispatcher.handleViewAction({
         type: ActionTypes.USER_LOGIN_FAILURE,
         payload: err
       });
     });
   },
+
+  updateUserPGE: function(update_data){
+    util.updateUserPGE(update_data)
+    .then(function(response){
+      //console.log("Updated PGE data: ", user);
+      Dispatcher.handleViewAction({
+        type: ActionTypes.PGE_UPDATE_SUCCESS,
+        payload: response
+      });
+    })
+    .catch(function(err){
+      // Login not successful
+      // console.log('Update not successful: ', err);
+      Dispatcher.handleViewAction({
+        type: ActionTypes.PGE_UPDATE_FAILURE,
+        payload: err
+      });
+    });
+  },
+
+  toggleNavMenu: function() {
+    Dispatcher.handleViewAction({
+      type: ActionTypes.TOGGLE_NAV_MENU,
+      payload: null
+    });
+  }
 
   // changeGraphView: function(event) {
   //   Dispatcher.handleViewAction({

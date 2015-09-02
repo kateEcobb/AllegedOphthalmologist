@@ -5,16 +5,15 @@
   left: 1em;
 }
 
-div.login {
-  width: 500px;
-}
-.spinner-container {
+/*User Profile*/
+.update-pge-form {
+  width:100%;
   text-align: center;
-  visibility: hidden;
 }
-.login-failure {
+
+.app-title {
   text-align: center;
-  visibility: hidden;
+  margin-bottom: 2em;
 }
 
 
@@ -52,4 +51,47 @@ div.login {
   position: absolute;
   left: 75%;
   top: 15%;
+}
+/*Forms*/
+
+div.login {
+  width: 500px;
+}
+
+.spinner-container {
+  text-align: center;
+  visibility: hidden;
+}
+
+.login-failure {
+  text-align: center;
+  visibility: hidden;
+}
+
+.form-status {
+  position: relative;
+  width: 100%;
+
+}
+
+.pge-update-failure {
+  position: absolute;
+  visibility: hidden;
+  top: 0;
+  height: 100px;
+  left: 50px;
+  right: 50px;
+  color: red;
+  font-size: 2em;
+}
+
+.pge-update-success {
+  position: absolute;
+  visibility: hidden;
+  top: 0;
+  height: 100px;
+  left: 50px;
+  right: 50px;
+  color: lightblue;
+  font-size: 2em;
 }

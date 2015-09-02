@@ -66,7 +66,13 @@ var GetReq = function(route){
 
 module.exports = {
   getWattTotal : function() {
-    return GetReq(routes.WATT_TOTAL);
+    return GetReq(routes.WATT_BEHIND)
+    .then(function(behind) {
+      return GetReq(routes.WATT_AHEAD)
+      .then(function(ahead) {
+        return behind.concat(ahead);
+      });
+    });
   },
 
   getUtilityTotal : function() {
@@ -77,13 +83,12 @@ module.exports = {
     return PostReq(routes.USER_REGISTRATION, data);
   },
 
-  updateSettings: function(data){
-    //TODO: Send object with
-    // {
-    //   uid: USERS_UID,
-    //   pgeUsername: UPDATED PGE USERNAME,
-    //   pgePassword: UPDATED PGE Password
-    // }
+  updateUserPGE: function(update_data){
+    return PostReq(routes.PGE_UPDATE, update_data);
+    // return new Promise(function(resolve, reject) {
+    //   if(false) resolve(update_data);
+    //   if(true) reject('err');
+    // });
   },
 
   loginUser: function(data) {

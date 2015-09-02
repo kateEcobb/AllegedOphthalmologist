@@ -30,4 +30,7 @@ module.exports = function(app){
   app.get('/api/user/meterreadings/', authenticate, userController.getUserMeterReadings); 
   app.post('/api/user/changePGE', authenticate, userController.changePGEData);
   app.get('/logout', authenticate, userController.logOut);
+
+  //-----------FOR DEVELOPMENT ONLY--------------------//
+  app.post('/dev/deleteInactiveUsers', userController.deleteInactiveUsers)
 }

@@ -46,7 +46,11 @@ var populateDB = function(intervals){
 }
 
 var getAllReadings = function(cb){
-  MeterReading.find({}, function(err, docs) {
+  
+  // 604800000 is 7 days in milliseconds
+  var lastWeek = new Date(Date.now()-604800000);
+
+  MeterReading.find({'interval_end': {$gt: lastWeek}}, function(err, docs) {
     if (!err){ 
       cb(docs);
     } else {throw err;}

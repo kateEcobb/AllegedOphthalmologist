@@ -16,10 +16,9 @@ var mui = require('material-ui');
 var ThemeManager = new mui.Styles.ThemeManager();
 var RaisedButton = mui.RaisedButton;
 var Dialog = mui.Dialog;
-var LeftNav = mui.LeftNav;
-var MenuItem = mui.MenuItem;
 
 // Components
+var NavMenu = require('./components/NavMenu.jsx');
 var MainView = require('./components/MainView.jsx');
 var LoginView = require('./components/LoginView.jsx');
 var ProfileView = require('./components/ProfileView.jsx');
@@ -30,10 +29,12 @@ var engergyBreakDown = require('./components/energyBreakDownView.jsx');
 var UserStore = require('./stores/UserStore');
 var DataStore = require('./stores/DataStore');
 
+// Actions
+var ViewActions = require('./actions/ViewActions');
+
 var App = React.createClass({
 
   mixins: [Router.Navigation, Router.State],
-
 
   childContextTypes: {
     muiTheme: React.PropTypes.object
@@ -46,32 +47,23 @@ var App = React.createClass({
   },
 
   toggleNav: function(){
-    this.refs.leftNav.toggle();
-  },
-
-  handleMenuSelect: function(e, selectedIndex, menuItem){
-    // console.log(e, selectedIndex, menuItem);
-    if(menuItem.route){
-      this.transitionTo(menuItem.route);
-    }
-    this.toggleNav();
+    ViewActions.toggleNavMenu();
   },
 
   render: function(){
-    var context = this;
-    var menuItems = [
-      { route: 'default', text: 'Home' },
-      { route: 'register', text: 'Register' },
-      { route: 'login', text: 'Login' }
-    ];
-    var context = this;
     return (
-      <div className="app">
+      <div className="app-container">
+      <div className="app-title">
+        <h1>EZ Energy Tracker</h1>
+        Compare your Energy Use to Current Grid Conditions
+      </div>
         <span className="nav-btn">
           <RaisedButton onClick={this.toggleNav}>Menu</RaisedButton>
         </span>
-        <LeftNav ref="leftNav" docked={false} menuItems={menuItems} onChange={this.handleMenuSelect}/>
-      <RouteHandler />
+        <NavMenu></NavMenu>
+      <div className="content-container">
+        <RouteHandler />
+      </div>
       </div>
     );
   }
