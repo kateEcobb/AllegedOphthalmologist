@@ -16,12 +16,16 @@ module.exports = {
   parseState: function(state) {
     var data = {};
 
+    // Get Timeoffset
+    var now = new Date();
+    var timeOffset = now.getTimezoneOffset() * 1000 * 60;
+
     // Watt Data ////////////
     var watts = data.Watt = [];
     for (var i = 0; i < state.data.Watt.length; i++) {
       watts.push({
         point: state.data.Watt[i].carbon,
-        time: new Date(state.data.Watt[i].timestamp),
+        time: new Date((new Date(state.data.Watt[i].timestamp)).getTime() + timeOffset),
         id: (new Date(state.data.Watt[i].timestamp)).getTime()
       });
     }
@@ -34,7 +38,7 @@ module.exports = {
     for (var i = 0; i < state.data.Utility.length; i++) {
       utilities.push({
         point: parseFloat(state.data.Utility[i].interval_kWh),
-        time: new Date(state.data.Utility[i].interval_start),
+        time: new Date((new Date(state.data.Utility[i].interval_start)).getTime() + timeOffset),
         ratio: watts[nearestTimeIndex(watts, state.data.Utility[i])].carbon, 
         id: (new Date(state.data.Utility[i].timestamp)).getTime()
       });
