@@ -12,16 +12,6 @@ var FormInput = React.createClass({
 
   // Add the Formsy Mixin
   mixins: [React.addons.LinkedStateMixin, Formsy.Mixin],
-
-  childContextTypes: {
-    muiTheme: React.PropTypes.object
-  },
-
-  getChildContext() {
-    return {
-      muiTheme: ThemeManager.getCurrentTheme()
-    };
-  },
   
   changeValue: function (event) {
     this.setValue(event.currentTarget.value);

@@ -17,16 +17,6 @@ var graphToolBar = React.createClass({
   getInitialState: function() {
     return {};
   },
-  
-  childContextTypes: {
-    muiTheme: React.PropTypes.object
-  },
-
-  getChildContext: function(){
-    return {
-      muiTheme: ThemeManager.getCurrentTheme()
-    }
-  },
 
   componentDidMount: function() {
 
@@ -46,7 +36,7 @@ var graphToolBar = React.createClass({
 
   render: function() {
     return (
-      <div class="tasdf">
+      <div className="tasdf">
         <Tabs onChange={this.handleTabChange}>
           <Tab label="Main" value={GraphTypes.MAIN}></Tab>
           <Tab label="User" value={GraphTypes.USER_CARBON}></Tab>

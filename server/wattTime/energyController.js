@@ -14,7 +14,6 @@ var wattTimeQuery = function(dateStart, dateEnd, market, cb){
   };
   request(options, function(err, response, body){ 
       var data = JSON.parse(body)
-      console.log(data)
 
     if (!err && data.results){ 
       var responseArr = [];
@@ -103,9 +102,9 @@ var loadTestData = function(){
 };
 
 var get24HourBehind = function(req, res){ 
-  var yesterday = new Date(new Date().setDate(new Date().getDate()-1)).toISOString().slice(0,-5);
+  var twoDaysAgo = new Date(new Date().setDate(new Date().getDate()-2)).toISOString().slice(0,-5);
   WattEnergy.find({ 
-    timestamp: {$lt: new Date(), $gt: yesterday}
+    timestamp: {$lt: new Date(), $gt: twoDaysAgo}
   }).exec(function(err, data){ 
     if(err){ 
       res.status(500).send("Error in querying Watt database.");

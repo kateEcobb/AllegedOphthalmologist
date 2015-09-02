@@ -25,16 +25,6 @@ var MainView = React.createClass({
       modal: null,
     };
   },
-
-  childContextTypes: {
-    muiTheme: React.PropTypes.object,
-  },
-  
-  getChildContext: function(){
-    return {
-      muiTheme: ThemeManager.getCurrentTheme()
-    }
-  },
   
   loadData: function (data) {
     // this.setState({data: DataStore.getData()});

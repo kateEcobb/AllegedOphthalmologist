@@ -28,16 +28,6 @@ var LoginView = React.createClass({
   // Use a bit of two way data binding because forms are a pain otherwise.
   mixins: [React.addons.LinkedStateMixin, Router.Navigation],
 
-  childContextTypes: {
-    muiTheme: React.PropTypes.object
-  },
-
-  getChildContext() {
-    return {
-      muiTheme: ThemeManager.getCurrentTheme()
-    };
-  },
-
   getInitialState: function() {
     return {
       canSubmit: false
