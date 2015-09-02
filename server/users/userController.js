@@ -27,22 +27,18 @@ var deleteInactiveUsers = function(req, res){
 var init = function(){ 
   saveUser(seeds.Drew, function(result){ 
     console.log("Drew saved/updated in database.")
-    console.log(result)
   })
   
   saveUser(seeds.Brandon, function(result){ 
     console.log("Brandon saved/updated in database.")
-    console.log(result)
   })
   
   saveUser(seeds.JD, function(result){ 
     console.log("John Doe saved/updated in database.")
-    console.log(result)
   })
   
   saveUser(seeds.John, function(result){ 
     console.log("John saved/updated in database.")
-    console.log(result)
   })
 };
 
