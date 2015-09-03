@@ -84,9 +84,10 @@
 
 /*Light Bulb*/
 .bulb {
-  position: absolute;
-  left: 75%;
-  top: 15%;
+    max-width: 100px;
+    margin: auto;
+    display: block;
+    position: relative;
 }
 /*Forms*/
 
@@ -139,6 +140,7 @@ svg {
     vertical-align: top;
     overflow: hidden;
 }
+
 
 
 .svg-content-responsive {
