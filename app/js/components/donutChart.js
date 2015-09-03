@@ -5,20 +5,31 @@ var d3Chart = {};
 d3Chart.create = function(el, data, className){
   // console.log('you made it');
 
+  //el is modal-body
   var modal = d3.select(el)
-  
+
+  var modalSpec = modal.node().getBoundingClientRect();
+
   specs = {
-    w: 310,
-    h: 310,
-    r: 150,
-    innerR: 100,
+    w: modalSpec.width/2 - 15,
+    h: modalSpec.width/2 - 15,
+    r: modalSpec.width/4 - 20,
+    innerR: (modalSpec.width/4 - 20)*.75,
     color: d3.scale.ordinal().range(['#A60F2B', '#648C85', '#B3F2C9', '#528C18']),
     data: processData(data),
     legendRectSize: 18,
     legendSpacing: 4,
   };
+  
 
-  var vis = modal.append("svg:svg")
+  var vis = modal
+    .append('div')
+    .attr('class', className+'div')
+    .style({
+      'display': 'inline',
+      'position': 'relative',
+    })
+    .append("svg:svg")
     .data([specs.data])
     .attr("width", specs.w)
     .attr("height", specs.h)
@@ -48,19 +59,26 @@ d3Chart.create = function(el, data, className){
     .style('stroke-width', '5')
 
   arcs.on('mouseover', function(d){
-    console.log(d);
-  });
+    toolTip(className+'div', d, specs);
+
+  }).on('mouseout', function(d){
+    d3.select('.tooltip')
+      .remove()
+  })
 
   legend(className, specs.legendRectSize, specs.legendSpacing, specs.color, specs.data);
-
 }
 
-var legend = function(el, RectSize, Spacing, color, data){
-  // console.log(d3.select(el).node().getBoundingClientRect());
+d3Chart.removeGraph = function(className){
+  d3.select('.'+className+'div').remove();
+}
 
-  var elSpecs = d3.select("."+el).node().getBoundingClientRect();
+var legend = function(className, RectSize, Spacing, color, data){
+  // console.log(d3.select(className).node().getBoundingClientRect());
 
-  var legend = d3.select("."+el).selectAll('.legend')
+  var elSpecs = d3.select("."+className).node().getBoundingClientRect();
+
+  var legend = d3.select("."+className).selectAll('.legend')
     .data(color.domain())
     .enter()
     .append('g')
@@ -68,7 +86,7 @@ var legend = function(el, RectSize, Spacing, color, data){
     .attr('transform', function(d, i){
       var height = RectSize + Spacing;
       var offset = color.domain().length / 2;
-      var horz = (elSpecs.width / 2) - 10;
+      var horz = (elSpecs.width / 2) - 30;
       var vert = (elSpecs.height / 2) + (i - offset) * height;
       return "translate(" + horz + "," + vert + ")";
     });
@@ -84,9 +102,36 @@ var legend = function(el, RectSize, Spacing, color, data){
     .attr('y', RectSize - Spacing)
     .text(function(d){return data[d].type; })
 
-  // return legend;
 }
 
+var toolTip = function(className, data, specs){
+
+  position = {
+    height: 3*(specs.h/4),
+    width: specs.w/2 - 55,
+  };
+
+  var textBox = d3.select('.'+className)
+    .append('div')
+    .attr('class', 'tooltip')
+    .style({
+      'display': 'inline',
+      'position': 'absolute',
+      'top': -position.height + 'px',
+      'left': position.width +'px',
+      'height': 'auto',
+      'width': '100px',
+      'background-color': 'black',
+      'z-index': '10',
+      'opacity': '0.95',
+      'color': 'white',
+      'text-align': 'center',
+      'font-size': '11pt'
+    })
+
+  textBox
+    .text('energy type: ' + data.data.type  + '\n'  +'percentage: ' + data.data.percentage)
+}
 
 var processData = function(data){
   var totalMW = 0, breakDown = [];
@@ -99,7 +144,6 @@ var processData = function(data){
     var percentage = Math.round((element.gen_MW / totalMW)*100, 2);
     breakDown.push({type: type, percentage: percentage});
   })
-  // console.log(breakDown);
   return breakDown;
 }
 
