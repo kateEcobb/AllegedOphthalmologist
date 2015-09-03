@@ -23,11 +23,10 @@ var dialog = React.createClass({
     this.refs.dialogBox.dismiss();
     ViewActions.loadModal();
   },
-
   
   render: function(){
     return (
-      <div className='hello'>
+      <div>
         <Dialog
           actions={this.state.standardActions}
           modal={true}
