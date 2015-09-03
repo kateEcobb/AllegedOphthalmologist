@@ -76,7 +76,7 @@ module.exports = {
   },
 
   getHexCode: function(){ 
-    return GetReq(routes.WATT_AHEAD);
+    return GetReq(routes.BULB_COLOR);
   },
 
   getUtilityTotal : function() {

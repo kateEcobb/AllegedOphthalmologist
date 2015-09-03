@@ -5,9 +5,9 @@ var ActionTypes = require('../constants/Constants').ActionTypes;
 
 var CHANGE_EVENT = 'change';
 
-var data = {'Watt': [{}], 'Utility': [{}]};
+var data = {};
 
-var DataStore = assign({}, EventEmitter.prototype, {
+var BulbStore = assign({}, EventEmitter.prototype, {
   emitChange: function () {
     this.emit(CHANGE_EVENT);
   },
@@ -17,30 +17,20 @@ var DataStore = assign({}, EventEmitter.prototype, {
   removeChangeListener: function (callback) {
     this.removeListener(CHANGE_EVENT, callback);
   },
-  setData: function(newData, key){
-    data[key] = newData;
+  setData: function(newData){
+    data = newData;
   },
-  getData: function(key){
-    if (key) {
-      return data[key];
-    }
-    else {
-      return data;
-    }
+  getData: function(){
+    return data;
   }
 });
-DataStore.dispatchToken = Dispatcher.register(function (dispatch) {
+BulbStore.dispatchToken = Dispatcher.register(function (dispatch) {
   
   var action = dispatch.action;
-  if (action.type === ActionTypes.WATT_LOADED) {
-    DataStore.setData(action.payload, 'Watt');
-    DataStore.emitChange();
+  if (action.type === ActionTypes.SET_BULB_COLOR) {
+    BulbStore.setData(action.payload);
+    BulbStore.emitChange();
   } 
-  else if (action.type === ActionTypes.UTILITY_LOADED) {
-    DataStore.setData(action.payload, 'Utility');
-    DataStore.emitChange();
-  }
-
 });
 
-module.exports = DataStore;
+module.exports = BulbStore;

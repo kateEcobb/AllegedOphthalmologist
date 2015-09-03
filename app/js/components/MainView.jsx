@@ -23,7 +23,8 @@ var MainView = React.createClass({
     return {
       showModal: modalStore.getModalState().isOpen,
       modal: null,
-      bulbData: null
+      bulbData: null, 
+      rgb: null
     };
   },
   
@@ -33,6 +34,18 @@ var MainView = React.createClass({
 
   bulbListener: function(){ 
     this.setState({bulbData: BulbStore.getData()});
+    if(this.state.bulbData > .5){ 
+      var green = ((this.state.bulbData-.5)/.5)*255 
+      this.setState({rgb: 'rgb(255,'+green+',0)'})
+
+    } else if(this.state.bulbData < .5){ 
+      var red = (this.state.bulbData/.5)*255
+      this.setState({rgb: 'rgb('+red+',255,0)'})
+
+    } else { 
+      this.setState({rgb: 'rgb(255,255,0)'})
+    }    
+
   }, 
 
   modalListener: function(){
@@ -43,7 +56,11 @@ var MainView = React.createClass({
   componentDidMount: function (){
     var context = this;
     modalStore.addChangeListener(this.modalListener);
-    BulbStore.addChangeListener(this.bulbListener);
+    BulbStore.addChangeListener(this.bulbListener)
+    .then(this.drawBulbGlow)
+    .catch(function(err){ 
+      console.log("Error: " + err)
+    });
   },
   
   componentWillUnmount: function (){
@@ -65,7 +82,7 @@ var MainView = React.createClass({
       height: 100,
       width: 100,
       margin: 5
-    }, '#227889');
+    }, this.state.rgb);
   },
 
   render: function() {
