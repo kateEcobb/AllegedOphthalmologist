@@ -26,7 +26,8 @@ module.exports = {
       watts.push({
         point: state.data.Watt[i].carbon,
         time: new Date((new Date(state.data.Watt[i].timestamp)).getTime() + timeOffset),
-        id: (new Date(state.data.Watt[i].timestamp)).getTime()
+        id: (new Date(state.data.Watt[i].timestamp)).getTime(),
+        market: state.data.Watt[i].market,
       });
     }
     watts.sort(function(a, b) {
@@ -56,6 +57,14 @@ module.exports = {
     // });
 
     return data;
-  }
+  },
+
+  bisectDateIndex : function(sortArray, date) {
+    for (var i = 0; i < sortArray.length; i++) {
+      if (sortArray[i].time >= date) {
+        return i - 1 > 0 ? i - 1 : 0;
+      }
+    }
+  },
 
 }

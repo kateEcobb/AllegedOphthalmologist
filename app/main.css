@@ -46,6 +46,36 @@
   r: 6;
 }
 
+.currentTimeBar {
+  fill: blue;
+  opacity: 0.5;
+}
+
+.actualTimeBar {
+  fill: red;
+  opacity: 0.5;
+}
+
+.actualText {
+
+}
+
+.predictedText {
+
+}
+
+.focusXLine {
+  stroke: blue;
+  stroke-dasharray: 3,3;
+  opacity: 0.5;
+}
+
+.focusYLine {
+  stroke: blue;
+  stroke-dasharray: 3,3;
+  opacity: 0.5;
+}
+
 /*Light Bulb*/
 .bulb {
   position: absolute;

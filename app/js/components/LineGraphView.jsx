@@ -64,7 +64,7 @@ var LineGraphView = React.createClass({
   },
 
   drawMainGraph: function() {
-    console.log(this.state.data.Watt);
+    console.log(this.state.data.Utility);
     var el = React.findDOMNode(this.refs.graphContainer);
     el.innerHTML = '';
     console.log(this.state.data.Watt[0]);
