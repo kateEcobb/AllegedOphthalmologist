@@ -23,6 +23,19 @@ var ViewActions = {
 
   },
 
+  getBulbColor: function(){ 
+    return util.getHexCode()
+      .then(function(code){ 
+        Dispatcher.handleViewAction({ 
+          type: ActionTypes.SET_BULB_COLOR, 
+          payload: code
+        });
+      })
+      .catch(function(err){ 
+        throw err;
+      })
+  },
+
   loadUtility: function() {
 
     return util.getUtilityTotal()

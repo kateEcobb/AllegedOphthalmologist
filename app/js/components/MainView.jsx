@@ -2,7 +2,6 @@ var React = require('react');
 
 //material ui
 var mui = require('material-ui');
-var ThemeManager = require('material-ui/lib/styles/theme-manager')();
 var ThemeManager = new mui.Styles.ThemeManager();
 
 // Actions
@@ -15,20 +14,26 @@ var modalStore = require('./../stores/modalStore');
 // Child Views
 var LineGraphView = require('./LineGraphView.jsx');
 var GraphToolBar = require('./graphToolBar.jsx');
-var donutGraphWindow = require('./energyBreakDownView.jsx')
+var donutGraphWindow = require('./energyBreakDownView.jsx');
 
+var BulbGlow = require('./bulbGlow');
 
 var MainView = React.createClass({
   getInitialState: function(){
     return {
       showModal: modalStore.getModalState().isOpen,
       modal: null,
+      bulbData: null
     };
   },
   
-  loadData: function (data) {
-    // this.setState({data: DataStore.getData()});
+  loadData: function () {
+    this.setState({bulbData: BulbStore.getData()});
   },
+
+  bulbListener: function(){ 
+    this.setState({bulbData: BulbStore.getData()});
+  }, 
 
   modalListener: function(){
     var modalSpecs = modalStore.getModalState();
@@ -38,19 +43,10 @@ var MainView = React.createClass({
   componentDidMount: function (){
     var context = this;
     modalStore.addChangeListener(this.modalListener);
-    // DataStore.addChangeListener(this.loadData);
-    // ViewActions.loadWatt()
-    // .then(ViewActions.loadUtility)
-    // .catch(function(err) {
-    //   console.log("ERROR: ", err);
-    // });
-    // window.addEventListener('close', function(){
-    //   console.log('modal closed');
-    // })
+    BulbStore.addChangeListener(this.bulbListener);
   },
   
   componentWillUnmount: function (){
-    // DataStore.removeChangeListener(this.loadData);
     modalStore.removeChangeListener(this.modalListener);
   },
 
@@ -62,11 +58,21 @@ var MainView = React.createClass({
     ViewActions.loadModal(this.modals[event.target.id]);
   },
 
+  drawBulbGlow: function(){ 
+    var el = React.findDOMNode(this.refs.bulb); 
+    el.innerHTML = ''
+    BulbGlow.makeCircle(el, { 
+      height: 100,
+      width: 100,
+      margin: 5
+    }, '#227889');
+  },
+
   render: function() {
     if(this.state.showModal){
       return (
         <div>
-          <div className="bulb">
+          <div className="bulb" ref='bulb'>
             <img src={'http://uxrepo.com/static/icon-sets/ionicons/png32/256/000000/ios7-lightbulb-outline-256-000000.png'} id='donutModal' className='img-responsive' onClick={this.showDonutGraph}/>     
           </div>  
             <LineGraphView testing={true}/> 
@@ -76,7 +82,7 @@ var MainView = React.createClass({
     }else{
       return (
         <div>
-          <div className="bulb">
+          <div className="bulb" ref ='bulb'>
             <img src={'http://uxrepo.com/static/icon-sets/ionicons/png32/256/000000/ios7-lightbulb-outline-256-000000.png'} id='donutModal' className='img-responsive' onClick={this.showDonutGraph}/>    
           </div>   
             <LineGraphView />  

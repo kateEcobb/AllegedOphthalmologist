@@ -141,7 +141,9 @@ svg {
     overflow: hidden;
 }
 
-
+.tick text{ 
+  fill: black;
+}
 
 .svg-content-responsive {
     display: inline-block;

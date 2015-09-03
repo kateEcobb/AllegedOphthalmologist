@@ -54,7 +54,7 @@ var initGraph = function(el, props, parsedState) {
     default:
       break;
   }
-
+  console.log(data);
   // SCALE ==============================
   var scale = options.scale = {
     height: parseInt(props.height, 10),

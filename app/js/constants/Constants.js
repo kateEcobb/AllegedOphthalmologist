@@ -11,6 +11,7 @@ module.exports = {
     PGE_UPDATE_SUCCESS: null,
     PGE_UPDATE_FAILURE: null,
     LOAD_MODAL: null,
+    SET_BULB_COLOR: null
     // MAIN_GRAPH_CHANGE: null,
   }),
 
