@@ -36,10 +36,10 @@ var graphToolBar = React.createClass({
 
   render: function() {
     return (
-      <div className="tasdf">
-        <Tabs onChange={this.handleTabChange}>
+      <div className="graphToolBar">
+        <Tabs onChange={this.handleTabChange} style={{width:this.props.width}}>
           <Tab label="Main" value={GraphTypes.MAIN}></Tab>
-          <Tab label="User" value={GraphTypes.USER_CARBON}></Tab>
+          <Tab label="User" value={GraphTypes.USER_MWH}></Tab>
         </Tabs>
       </div>
     );

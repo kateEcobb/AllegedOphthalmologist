@@ -76,6 +76,11 @@
   opacity: 0.5;
 }
 
+.disablePad {
+  fill: grey;
+  opacity: 0.75;
+}
+
 /*Light Bulb*/
 .bulb {
   position: absolute;

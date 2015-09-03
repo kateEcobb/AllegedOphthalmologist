@@ -69,7 +69,7 @@ var MainView = React.createClass({
           <div className="bulb">
             <button id='donutModal' onClick={this.showDonutGraph}>Launch Modal</button>   
           </div>   
-            <LineGraphView /> 
+            <LineGraphView testing={true} /> 
             <this.state.modal openImmediately={true}/>
         </div>
       )
