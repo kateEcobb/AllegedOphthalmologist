@@ -5,6 +5,12 @@ var d3 = require('d3');
 var EnergyChart = require('./EnergyChart.js');
 var GraphTypes = require('../constants/Constants.js').GraphTypes;
 
+var mui = require('material-ui');
+var ThemeManager = new mui.Styles.ThemeManager();
+var Card = mui.Card;
+var Paper = mui.Paper;
+
+
 // Actions
 var ViewActions = require('./../actions/ViewActions');
 
@@ -73,9 +79,9 @@ var LineGraphView = React.createClass({
     el.innerHTML = '';
     console.log(this.state.data.Watt[0]);
     EnergyChart.graph(el, {
-      height: 500,
-      width: 1000,
-      margin: 10,
+      height: 600,
+      width: 900,
+      margin: 5,
       type: GraphTypes.MAIN,
     }, this.state);
   },
@@ -103,6 +109,7 @@ var LineGraphView = React.createClass({
         type: GraphTypes.USER_REQUIRE,
       }, this.state);
     }
+
   },
 
   handleTabChange: function(tab) {
@@ -123,10 +130,12 @@ var LineGraphView = React.createClass({
   render: function () {
     return (
 
-      <div className="mainGraphView">
-        <GraphToolBar handleTabChange={this.handleTabChange} width={1020} />
-        <div className ="graphContainer" ref="graphContainer"></div>
-      </div>
+      <Paper className="mainGraphView" style={{margin: '50px', minWidth:"900px"}}>
+        <GraphToolBar handleTabChange={this.handleTabChange} />
+        <div className='graphOuterContainer'>
+          <div className ="graphContainer" ref="graphContainer"></div>
+        </div>
+      </Paper>
 
     );
   },

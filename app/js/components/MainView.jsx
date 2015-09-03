@@ -67,9 +67,9 @@ var MainView = React.createClass({
       return (
         <div>
           <div className="bulb">
-            <button id='donutModal' onClick={this.showDonutGraph}>Launch Modal</button>   
-          </div>   
-            <LineGraphView testing={true} /> 
+            <img src={'http://uxrepo.com/static/icon-sets/ionicons/png32/256/000000/ios7-lightbulb-outline-256-000000.png'} id='donutModal' className='img-responsive' onClick={this.showDonutGraph}/>     
+          </div>  
+            <LineGraphView testing={true}/> 
             <this.state.modal openImmediately={true}/>
         </div>
       )
@@ -77,9 +77,9 @@ var MainView = React.createClass({
       return (
         <div>
           <div className="bulb">
-            <button id='donutModal' onClick={this.showDonutGraph}>Launch Modal</button>   
+            <img src={'http://uxrepo.com/static/icon-sets/ionicons/png32/256/000000/ios7-lightbulb-outline-256-000000.png'} id='donutModal' className='img-responsive' onClick={this.showDonutGraph}/>    
           </div>   
-            <LineGraphView />     
+            <LineGraphView />  
         </div>
       );
     }

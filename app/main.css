@@ -1,4 +1,5 @@
 /*Nav Button*/
+
 .nav-btn {
   position: absolute;
   top: 1em;
@@ -129,4 +130,20 @@ div.login {
   right: 50px;
   color: lightblue;
   font-size: 2em;
+}
+
+svg {
+    display: block;
+    position: relative;
+    margin: auto;
+    vertical-align: top;
+    overflow: hidden;
+}
+
+
+.svg-content-responsive {
+    display: inline-block;
+    position: absolute;
+    top: 10px;
+    left: 0;
 }
