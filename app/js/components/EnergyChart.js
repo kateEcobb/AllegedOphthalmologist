@@ -1,6 +1,10 @@
 var d3 = require('d3');
 var utils = require('../utils/dataUtils.js');
 var GraphType = require('../constants/Constants.js').GraphTypes;
+var debounce = require('debounce');
+
+var mui = require('material-ui');
+var Tooltip = mui.Tooltip;
 
 // MAIN CHARTS ///////////////////////////////////////////////
 /*
@@ -9,6 +13,7 @@ var GraphType = require('../constants/Constants.js').GraphTypes;
   height:   Number  - Required - Height of the graph element
   width:    Number  - Required - Width of the graph element
   margin:   Number  - Optional - Margin around the graph element
+  barWidth: Number  - Optional - Width of any Time Bars, defaults to 10
   ratio:    boolean - Optional - Specific case of whether you want to ratio user power by watt carbon emissions 
   overlay:  String  - Optional - Name of state data that you want to overlay on top of
 */
@@ -17,6 +22,9 @@ var graph = function(el, props, state) {
   var options = initGraph(el, props, parsedState);
   drawAxis(options);
   drawLine(options);
+  drawTimeBar(options);
+  drawActualPredictText(options);
+  drawCapturePad(options);
 }
 //////////////////////////////////////////////////////////////
 
@@ -46,11 +54,13 @@ var initGraph = function(el, props, parsedState) {
     height: parseInt(props.height, 10),
     width: parseInt(props.width, 10),
     margin: props.margin ? parseInt(props.margin, 10) : 10,
+    barWidth: parseFloat(props.barWidth) || 10,
     axisOffset: 50, 
     yMinRatio: 0.95,
     yMaxRatio: 1.02,
     ratio: props.ratio || false,
     orient: options.overlay ? 'right' : 'left',
+    actualTime: new Date(findActualTime(data).getTime() + ((new Date()).getTimezoneOffset() * 1000 * 60)),
   };
 
   // Set up the yRange
@@ -62,7 +72,7 @@ var initGraph = function(el, props, parsedState) {
   .range([scale.height - scale.axisOffset - scale.axisOffset, 0]);
 
   // Set up the xRange - Time Scale
-  scale.xRange = d3.time.scale.utc().domain([ 
+  scale.xRange = d3.time.scale().domain([ 
     (options.overlay ? parsedState[options.overlay][0].time : data[0].time), 
     (options.overlay ? parsedState[options.overlay][parsedState[options.overlay].length - 1].time : data[data.length - 1].time)
   ])
@@ -116,13 +126,19 @@ var drawLine = function(options) {
                   .y(function(datum) {
                     return scale.yRange( datum.point * (scale.ratio ? datum.ratio : 1) );
                   })
-                  .interpolate('basis');
+                  .interpolate('linear');
 
   // Draw the Path
   graph.append('svg:path')
   .attr('d', lineFunc(data))
   .attr('class', 'energyPath')
-  .attr('transform', 'translate(' + (scale.axisOffset) + ',' + (scale.axisOffset) + ')');
+  .attr('transform', 'translate(' + (scale.axisOffset) + ',' + (scale.axisOffset) + ')')
+  .on('mousemove', function(event) {
+    var mouse = d3.mouse(this);
+    console.log(event);
+    d3.select('.energyPath').select('title').text(mouse[1]);
+  })
+  .append('title');
 
   return;
 };
@@ -160,6 +176,157 @@ var drawPoints = function(options) {
 
   return;
 };
+
+var drawTimeBar = function(options) {
+
+  var graph = options.graph;
+  var scale = options.scale;
+  var data = options.data;
+  console.log(options.data);
+
+  var timeOffset = ((new Date()).getTimezoneOffset() * 1000 * 60);
+  var timeNow = new Date(Date.now());
+
+  console.log(scale.actualTime);
+  // var actualX = scale.xRange(new Date(findActualTime(data).getTime() + timeOffset));
+  var actualX = scale.xRange(scale.actualTime);
+
+  graph.append('svg:g')
+  .attr('transform', 'translate(' + (scale.axisOffset) + ',' + (0) + ')')
+    .append('svg:rect')
+    .attr('class', 'actualTimeBar')
+    .attr('height', scale.height - scale.axisOffset)
+    .attr('width', scale.barWidth)
+    .attr('x', actualX - scale.barWidth / 2)
+    .attr('y', 0);
+
+  var currentX = scale.xRange(timeNow);
+
+  graph.append('svg:g')
+  .attr('transform', 'translate(' + (scale.axisOffset) + ',' + (scale.axisOffset) + ')')
+    .append('svg:rect')
+    .attr('class', 'currentTimeBar')
+    .attr('height', scale.height - scale.axisOffset - scale.axisOffset)
+    .attr('width', scale.barWidth)
+    .attr('x', currentX - scale.barWidth / 2)
+    .attr('y', 0);
+
+};
+
+var drawActualPredictText = function(options) {
+
+  var graph = options.graph;
+  var scale = options.scale;
+  var data = options.data;
+
+  var actualX = scale.xRange(scale.actualTime);
+
+  // Actual
+  graph.append('svg:g')
+  .attr('transform', 'translate(' + (scale.axisOffset) + ',' + (0) + ')')
+    .append('svg:text')
+    .attr('class', 'actualText')
+    .attr('x', (actualX - scale.axisOffset - scale.axisOffset) / 2)
+    .attr('y', scale.axisOffset / 2)
+    .text('Measured Data');
+
+  // Predicted
+  graph.append('svg:g')
+  .attr('transform', 'translate(' + (actualX + scale.axisOffset) + ',' + (0) + ')')
+    .append('svg:text')
+    .attr('class', 'predictedText')
+    // .attr('x', 0)
+    .attr('x', (scale.width - scale.axisOffset - scale.axisOffset - actualX) / 2)
+    .attr('y', scale.axisOffset / 2)
+    .text('Predicted Data');
+  
+};
+
+var drawCapturePad = function(options) {
+
+  var graph = options.graph;
+  var scale = options.scale;
+  var data = options.data;
+
+
+  // Draw the focus
+  var focus = graph.append('svg:g')
+  .attr('transform', 'translate(' + (scale.axisOffset) + ',' + (scale.axisOffset) + ')')
+  .style('display', 'none');
+
+  // Attach Point to focus
+  focus.append('svg:circle')
+  .attr('class', 'focal')
+  .style('fill', 'none')
+  .style('stroke', 'blue')
+  .attr('r', 5);
+
+  focus.append('svg:line')
+  .attr('class', 'focusXLine')
+  .attr('y1', 0)
+  .attr('y2', scale.height - scale.axisOffset - scale.axisOffset);
+
+  focus.append('svg:line')
+  .attr('class', 'focusYLine')
+  .attr('x1', 0)
+  .attr('x2', scale.width - scale.axisOffset - scale.axisOffset);
+  
+  var mouseMove = function() {
+    // console.log('move');
+    var mouseDate = scale.xRange.invert(d3.mouse(this)[0]);
+    var mousePos = d3.mouse(this);
+
+    var bisectTime = d3.bisector(function(datum) { return datum.time; }).left;
+
+    var index = utils.bisectDateIndex(data, mouseDate);
+    var nearestDatum = (mouseDate - data[index].time > data[index + 1].time - mouseDate) ? data[index + 1] : data[index];
+
+    var x = scale.xRange(nearestDatum.time);
+    var y = scale.yRange(nearestDatum.point * (scale.ratio ? nearestDatum.ratio : 1));
+
+    focus.select('.focal')
+    .attr('transform', 'translate(' + (x) + ',' + (y) + ')');  
+
+    focus.select('.focusXLine')
+    .attr('transform', 'translate(' + (x) + ',' + (y) + ')')
+    .attr('y2', scale.height - scale.axisOffset - scale.axisOffset - y);
+
+    focus.select('.focusYLine')
+    .attr('transform', 'translate(' + (0) + ',' + (y) + ')');  
+
+
+
+  };
+
+  // Draw the Surface
+  graph.append('svg:rect')
+  .attr('transform', 'translate(' + (scale.axisOffset) + ',' + (scale.axisOffset) + ')')
+  .attr('width', scale.width - scale.axisOffset - scale.axisOffset)
+  .attr('height', scale.height - scale.axisOffset - scale.axisOffset)
+  .style('fill', 'none')
+  .style('pointer-events', 'all')
+  .on('mouseover', function() { 
+    // console.log('over');
+    focus.style('display', null); })
+  .on('mouseout', function() { 
+    // console.log('out');
+    focus.style('display', 'none'); })
+  .on('mousemove', mouseMove);
+
+};
+
+//////
+
+var findActualTime = function(data) {
+  if (!data[0].market) {
+    return new Date(Date.now());
+  }
+  for (var i = 0; i < data.length; i++) {
+    if (data[i].market === 'DAHR') {
+      return data[i - 1].time || null;
+    }
+  }
+}
 
 module.exports = {
   graph: graph,
