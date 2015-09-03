@@ -21,6 +21,9 @@ var ActionTypes = require('./../constants/Constants').ActionTypes;
 // Stores
 var UserStore = require('./../stores/UserStore');
 
+// register view
+var register = require('./RegistrationView.jsx');
+
 //Dispatcher
 var Dispatcher = require('./../dispatcher/Dispatcher');
 
@@ -38,7 +41,7 @@ var LoginView = React.createClass({
     this.token = Dispatcher.register(function (dispatch) {
       var action = dispatch.action;
       if (action.type === ActionTypes.USER_LOGIN_FAILURE) {
-        // console.log('login failure');
+        console.log('login failure');
         context.failedLogin();
       } 
       else if (action.type === ActionTypes.USER_LOGIN) {
@@ -56,6 +59,7 @@ var LoginView = React.createClass({
     Dispatcher.unregister(this.token);
   },
   redirectHome: function(){
+    // console.log('redirecting');
     this.transitionTo("/");
   },
   enableButton: function () {
@@ -74,6 +78,13 @@ var LoginView = React.createClass({
     // console.log('Logging in with: ', data);
     ViewActions.loginUser(data);
   },
+
+  handleRegister: function(){
+    console.log('register');
+    ViewActions.loadModal();
+    ViewActions.loadModal(register);
+  }, 
+
   render: function() {
     return (
       <Dialog openImmediately={true}>
@@ -94,7 +105,7 @@ var LoginView = React.createClass({
           </div>
           <div className="login-failure">
             <p>Login Failure.</p>
-            <p>Have you <Link to="/register">Registered</Link>?</p>
+            <p>Have you <span stype='font-color:blue' onClick={this.handleRegister}>Registered</span>?</p>
           </div>
         </div>
       </div>

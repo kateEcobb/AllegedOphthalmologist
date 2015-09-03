@@ -34,7 +34,12 @@ var ModalStore = assign({}, EventEmitter.prototype, {
 ModalStore.dispatchToken = Dispatcher.register(function(dispatcher){
 
   var action = dispatcher.action;
-  if(action.type === ActionTypes.LOAD_MODAL){
+  var actions = {
+    USER_LOGIN: 'dismiss dailog box when user login in',
+    LOAD_MODAL: 'load dialog box if payload is provided',
+    register: 'dismiss dialog box when user registers',
+  }
+  if(actions.hasOwnProperty(action.type)){
     ModalStore.toggleModal();
     if(modalStats.isOpen){
       ModalStore.setModal(action.payload);
