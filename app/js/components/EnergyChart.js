@@ -19,8 +19,6 @@ var graph = function(el, props, state) {
   drawAxis(options);
   if (!options.userDisable) {
     drawLine(options);
-    // drawTimeBar(options);
-    // drawActualPredictText(options);
     drawMiscData(options);
     drawCapturePad(options);
   }
@@ -66,7 +64,6 @@ var initGraph = function(el, props, parsedState) {
     yMaxRatio: 1.02,
     ratio: props.ratio || false,
     orient: options.overlay ? 'right' : 'left',
-    actualTime: new Date(findActualTime(data).getTime() + ((new Date()).getTimezoneOffset() * 1000 * 60)),
   };
 
   // Set up the yRange
@@ -192,7 +189,8 @@ var drawTimeBar = function(options) {
   var timeNow = new Date(Date.now());
 
   // var actualX = scale.xRange(new Date(findActualTime(data).getTime() + timeOffset));
-  var actualX = scale.xRange(scale.actualTime);
+  var actualTime = new Date(findActualTime(data).getTime() + ((new Date()).getTimezoneOffset() * 1000 * 60));
+  var actualX = scale.xRange(actualTime);
 
   graph.append('svg:g')
   .attr('transform', 'translate(' + (scale.axisOffset) + ',' + (0) + ')')
@@ -222,7 +220,8 @@ var drawActualPredictText = function(options) {
   var scale = options.scale;
   var data = options.data;
 
-  var actualX = scale.xRange(scale.actualTime);
+  var actualTime = new Date(findActualTime(data).getTime() + ((new Date()).getTimezoneOffset() * 1000 * 60));
+  var actualX = scale.xRange(actualTime);
 
   // Actual
   graph.append('svg:g')

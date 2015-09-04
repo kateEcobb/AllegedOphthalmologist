@@ -52,7 +52,6 @@ var LineGraphView = React.createClass({
     ViewActions.loadWatt()
     .then(this.drawMainGraph)
     .then(function() {
-      console.log(that.state);
       if (that.state.user) {
         ViewActions.loadUtilityUser();
       }
@@ -75,7 +74,6 @@ var LineGraphView = React.createClass({
   drawMainGraph: function() {
     // console.log(this.state.data.Utility);
     var el = React.findDOMNode(this.refs.graphContainer);
-    console.log(React.findDOMNode(this).offsetWidth);
     el.innerHTML = '';
     console.log(this.state.data.Watt[0]);
     EnergyChart.graph(el, {
@@ -90,7 +88,6 @@ var LineGraphView = React.createClass({
     var el = React.findDOMNode(this.refs.graphContainer);
     el.innerHTML = '';
     if (this.state.user) {
-      console.log(this.state.user);
       if (this.state.data.Utility.length > 1) {
         EnergyChart.graph(el, {
           height: 500,
