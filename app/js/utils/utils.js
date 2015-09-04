@@ -75,6 +75,10 @@ module.exports = {
     });
   },
 
+  getHexCode: function(){ 
+    return GetReq(routes.BULB_COLOR);
+  },
+
   getUtilityTotal : function() {
     return GetReq(routes.UTILITY_TOTAL);
   },

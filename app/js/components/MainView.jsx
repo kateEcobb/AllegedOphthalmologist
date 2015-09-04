@@ -2,7 +2,6 @@ var React = require('react');
 
 //material ui
 var mui = require('material-ui');
-var ThemeManager = require('material-ui/lib/styles/theme-manager')();
 var ThemeManager = new mui.Styles.ThemeManager();
 
 // Actions
@@ -11,24 +10,44 @@ var ViewActions = require('./../actions/ViewActions');
 //Store
 var DataStore = require('./../stores/DataStore');
 var modalStore = require('./../stores/modalStore');
+var BulbStore = require('./../stores/BulbStore')
 
 // Child Views
 var LineGraphView = require('./LineGraphView.jsx');
 var GraphToolBar = require('./graphToolBar.jsx');
-var donutGraphWindow = require('./energyBreakDownView.jsx')
+var donutGraphWindow = require('./energyBreakDownView.jsx');
 
+var BulbGlow = require('./bulbGlow.js');
 
 var MainView = React.createClass({
   getInitialState: function(){
     return {
       showModal: modalStore.getModalState().isOpen,
       modal: null,
+      bulbData: null, 
+      rgb: null
     };
   },
   
-  loadData: function (data) {
-    // this.setState({data: DataStore.getData()});
+  loadData: function () {
+    this.setState({bulbData: BulbStore.getData()});
   },
+
+  bulbListener: function(){ 
+    this.setState({bulbData: BulbStore.getData()});
+    if(this.state.bulbData > .5){ 
+      var green = Math.floor(((this.state.bulbData-.5)/.5)*255) 
+      this.setState({rgb: 'rgb(255,'+green+',0)'})
+
+    } else if(this.state.bulbData < .5){ 
+      var red = Math.floor((this.state.bulbData/.5)*255)
+      this.setState({rgb: 'rgb('+red+',255,0)'})
+
+    } else { 
+      this.setState({rgb: 'rgb(255,255,0)'})
+    }    
+
+  }, 
 
   modalListener: function(){
     var modalSpecs = modalStore.getModalState();
@@ -38,19 +57,15 @@ var MainView = React.createClass({
   componentDidMount: function (){
     var context = this;
     modalStore.addChangeListener(this.modalListener);
-    // DataStore.addChangeListener(this.loadData);
-    // ViewActions.loadWatt()
-    // .then(ViewActions.loadUtility)
-    // .catch(function(err) {
-    //   console.log("ERROR: ", err);
-    // });
-    // window.addEventListener('close', function(){
-    //   console.log('modal closed');
-    // })
+    BulbStore.addChangeListener(this.bulbListener)
+    ViewActions.getBulbColor()
+    .then(this.drawBulbGlow)
+    .catch(function(err){ 
+      console.log("Error: " + err)
+    });
   },
   
   componentWillUnmount: function (){
-    // DataStore.removeChangeListener(this.loadData);
     modalStore.removeChangeListener(this.modalListener);
   },
 
@@ -62,24 +77,36 @@ var MainView = React.createClass({
     ViewActions.loadModal(this.modals[event.target.id]);
   },
 
+  drawBulbGlow: function(){ 
+    var el = React.findDOMNode(this.refs.bulb); 
+    el.innerHTML = ''
+    BulbGlow.makeCircle(el, { 
+      height: 100,
+      width: 100,
+      margin: 5
+    }, this.state.rgb)
+  },
+
   render: function() {
     if(this.state.showModal){
       return (
         <div>
-          <div className="bulb">
-            <button id='donutModal' onClick={this.showDonutGraph}>Launch Modal</button>   
-          </div>   
-            <LineGraphView testing={true} /> 
+          <div className='bulbcontainer'>
+          <div className="bulb" ref='bulb'></div>
+            <img src={'http://uxrepo.com/static/icon-sets/ionicons/png32/256/000000/ios7-lightbulb-outline-256-000000.png'} id='donutModal' className='img-responsive' onClick={this.showDonutGraph}/>     
+          </div>  
+            <LineGraphView testing={true}/> 
             <this.state.modal openImmediately={true}/>
         </div>
       )
     }else{
       return (
         <div>
-          <div className="bulb">
-            <button id='donutModal' onClick={this.showDonutGraph}>Launch Modal</button>   
+          <div className='bulbcontainer'>
+          <div className="bulb" ref='bulb'></div>
+            <img src={'http://uxrepo.com/static/icon-sets/ionicons/png32/256/000000/ios7-lightbulb-outline-256-000000.png'} id='donutModal' className='img-responsive' onClick={this.showDonutGraph}/>    
           </div>   
-            <LineGraphView />     
+            <LineGraphView />  
         </div>
       );
     }

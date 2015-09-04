@@ -11,6 +11,7 @@ module.exports = {
     PGE_UPDATE_SUCCESS: null,
     PGE_UPDATE_FAILURE: null,
     LOAD_MODAL: null,
+    SET_BULB_COLOR: null
     // MAIN_GRAPH_CHANGE: null,
   }),
 
@@ -24,8 +25,9 @@ module.exports = {
     UTILITY_TOTAL: '/api/meterreadings',
     USER_REGISTRATION: '/signup',
     USER_LOGIN: '/signin',
-    PGE_UPDATE: '/api/user/changePGE',
-    UTILITY_USER: '/api/user/meterreadings/'
+    UTILITY_USER: '/api/user/meterreadings/',
+    PGE_UPDATE: '/api/user/changePGE', 
+    BULB_COLOR: '/api/bulbcolor'
   },
 
   GraphTypes: keyMirror({

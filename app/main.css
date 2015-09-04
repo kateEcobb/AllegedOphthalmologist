@@ -1,4 +1,5 @@
 /*Nav Button*/
+
 .nav-btn {
   position: absolute;
   top: 1em;
@@ -83,9 +84,10 @@
 
 /*Light Bulb*/
 .bulb {
-  position: absolute;
-  left: 75%;
-  top: 15%;
+    max-width: 100px;
+    margin: auto;
+    display: block;
+    position: relative;
 }
 /*Forms*/
 
@@ -129,4 +131,45 @@ div.login {
   right: 50px;
   color: lightblue;
   font-size: 2em;
+}
+
+svg {
+    display: block;
+    position: relative;
+    margin: auto;
+    vertical-align: top;
+    overflow: hidden;
+}
+
+.tick text{ 
+  fill: black;
+}
+
+.bulbcontainer{ 
+  width: 100px;
+  height: 100px;
+  position: relative;
+  display: block;
+  margin: auto;
+}
+
+
+
+.bulb, .img-responsive{ 
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+.img-responsive{ 
+  z-index: 10;
+}
+
+.svg-content-responsive {
+    display: inline-block;
+    position: absolute;
+    top: 10px;
+    left: 0;
 }

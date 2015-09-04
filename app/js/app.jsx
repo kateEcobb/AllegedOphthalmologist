@@ -49,12 +49,11 @@ var App = React.createClass({
   componentWillMount: function(){ 
     //Set color palette
     var appPalette = { 
-      primary1Color: '#607D8B',
-      primary2Color: '#455A64',
-      primary3Color: '#CFD8DC',
-      accent1Color: '#FFC107',
-      accent2Color: '#F39C12',
-      accent3Color: '#FFDE55',
+      primary1Color: '#58C1BE',
+      primary2Color: '#227889',
+      primary3Color: '#94D9BB',
+      accent1Color: '#FFDE55',
+      accent2Color: '#F6BB42',
       textColor: '#212121',
       canvasColor: '#FFFFFF',
       borderColor: '#B6B6B6'
@@ -70,7 +69,7 @@ var App = React.createClass({
     return (
       <div className="app-container">
       <div className="app-title">
-        <h1>EZ Energy Tracker</h1>
+        <h1>GridAware</h1>
         Compare your Energy Use to Current Grid Conditions
       </div>
         <span className="nav-btn">
