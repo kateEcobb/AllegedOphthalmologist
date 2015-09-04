@@ -167,12 +167,13 @@ svg {
 
 }
 
+.bulbGlow{ 
+  filter: blur(20px);
+}
+
 .svg-content-responsive {
     display: inline-block;
     position: absolute;
     top: 10px;
     left: 0;
-}
-.bulbGlowContainer { 
-  left: 19px;
 }
