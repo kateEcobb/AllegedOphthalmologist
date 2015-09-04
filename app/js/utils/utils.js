@@ -79,6 +79,10 @@ module.exports = {
     return GetReq(routes.UTILITY_TOTAL);
   },
 
+  getUtilityUser : function() {
+    return GetReq(routes.UTILITY_USER);
+  },
+
   registerNewUser: function(data) {
     return PostReq(routes.USER_REGISTRATION, data);
   },

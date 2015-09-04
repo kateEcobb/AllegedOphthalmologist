@@ -24,12 +24,14 @@ module.exports = {
     UTILITY_TOTAL: '/api/meterreadings',
     USER_REGISTRATION: '/signup',
     USER_LOGIN: '/signin',
-    PGE_UPDATE: '/api/user/changePGE'
+    PGE_UPDATE: '/api/user/changePGE',
+    UTILITY_USER: '/api/user/meterreadings/'
   },
 
   GraphTypes: keyMirror({
+    USER_REQUIRE: null,
     MAIN: null,
-    USER_KWH: null,
+    USER_MWH: null,
     USER_CARBON: null,
   }),
 

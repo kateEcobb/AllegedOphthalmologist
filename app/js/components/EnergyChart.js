@@ -1,15 +1,11 @@
 var d3 = require('d3');
 var utils = require('../utils/dataUtils.js');
-var GraphType = require('../constants/Constants.js').GraphTypes;
-var debounce = require('debounce');
-
-var mui = require('material-ui');
-var Tooltip = mui.Tooltip;
+var GraphTypes = require('../constants/Constants.js').GraphTypes;
 
 // MAIN CHARTS ///////////////////////////////////////////////
 /*
   Values to pass to props
-  type:     String  - Optional - type of graph you want, defaults to main watt emissions
+  type:     String  - Optional - type of graph you want, defaults to main watt emissions, check Constants for names
   height:   Number  - Required - Height of the graph element
   width:    Number  - Required - Width of the graph element
   margin:   Number  - Optional - Margin around the graph element
@@ -21,28 +17,38 @@ var graph = function(el, props, state) {
   var parsedState = utils.parseState(state);
   var options = initGraph(el, props, parsedState);
   drawAxis(options);
-  drawLine(options);
-  drawTimeBar(options);
-  drawActualPredictText(options);
-  drawCapturePad(options);
+  if (!options.userDisable) {
+    drawLine(options);
+    // drawTimeBar(options);
+    // drawActualPredictText(options);
+    drawMiscData(options);
+    drawCapturePad(options);
+  }
+  else {
+    drawDisablePad(options);
+  }
 }
 //////////////////////////////////////////////////////////////
 
 var initGraph = function(el, props, parsedState) {
   var options = {};
   var data;
-  var graphType = props.type || GraphType.MAIN;
-
+  options.graphType = props.type || GraphTypes.MAIN;
+  console.log(options.graphType);
   // DATA ===============================
-  switch(graphType) {
-    case GraphType.MAIN:
+  switch(options.graphType) {
+    case GraphTypes.USER_REQUIRE:
+      data = options.data = parsedState.Watt;
+      options.userDisable = true;
+      break;
+    case GraphTypes.MAIN:
       data = options.data = parsedState.Watt;
       break;
-    case GraphType.USER_KWH:
+    case GraphTypes.USER_CARBON:
       data = options.data = parsedState.Utility;
       options.overlay = 'Watt';
       break;
-    case GraphType.USER_CARBON:
+    case GraphTypes.USER_MWH:
       data = options.data = parsedState.Utility;
       break;
     default:
@@ -80,7 +86,7 @@ var initGraph = function(el, props, parsedState) {
 
   // GRAPH ==============================
   var graph = options.graph = d3.select(el).append('svg:svg')
-                              .attr('class', 'eneryGraph')
+                              .attr('class', 'energyGraph')
                               .attr('width', scale.width + scale.margin + scale.margin)
                               .attr('height', scale.height + scale.margin + scale.margin)
                             .append('svg:g')
@@ -135,7 +141,6 @@ var drawLine = function(options) {
   .attr('transform', 'translate(' + (scale.axisOffset) + ',' + (scale.axisOffset) + ')')
   .on('mousemove', function(event) {
     var mouse = d3.mouse(this);
-    console.log(event);
     d3.select('.energyPath').select('title').text(mouse[1]);
   })
   .append('title');
@@ -182,12 +187,10 @@ var drawTimeBar = function(options) {
   var graph = options.graph;
   var scale = options.scale;
   var data = options.data;
-  console.log(options.data);
 
   var timeOffset = ((new Date()).getTimezoneOffset() * 1000 * 60);
   var timeNow = new Date(Date.now());
 
-  console.log(scale.actualTime);
   // var actualX = scale.xRange(new Date(findActualTime(data).getTime() + timeOffset));
   var actualX = scale.xRange(scale.actualTime);
 
@@ -235,12 +238,36 @@ var drawActualPredictText = function(options) {
   .attr('transform', 'translate(' + (actualX + scale.axisOffset) + ',' + (0) + ')')
     .append('svg:text')
     .attr('class', 'predictedText')
-    // .attr('x', 0)
     .attr('x', (scale.width - scale.axisOffset - scale.axisOffset - actualX) / 2)
     .attr('y', scale.axisOffset / 2)
     .text('Predicted Data');
   
 };
+
+var drawDisablePad = function(options) {
+
+  var graph = options.graph;
+  var scale = options.scale;
+
+  graph.append('svg:rect')
+  .attr('transform', utils.translate(-scale.margin, -scale.margin))
+  .attr('class', 'disablePad')
+  .attr('width', scale.width + scale.margin + scale.margin)
+  .attr('height', scale.height + scale.margin + scale.margin);
+
+};
+
+var drawMiscData = function(options) {
+  // console.log(options.GraphType);
+  // console.log(GraphTypes.MAIN);
+  if (options.graphType === GraphTypes.MAIN) {
+    drawTimeBar(options);
+    drawActualPredictText(options);
+  }
+  // if (options.graphType === GraphTypes.USER_REQUIRE) {
+  //   drawCapturePad(options);
+  // }
+}
 
 var drawCapturePad = function(options) {
 
@@ -318,6 +345,7 @@ var drawCapturePad = function(options) {
 //////
 
 var findActualTime = function(data) {
+  console.log("Time", data);
   if (!data[0].market) {
     return new Date(Date.now());
   }

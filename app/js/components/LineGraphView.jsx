@@ -5,15 +5,12 @@ var d3 = require('d3');
 var EnergyChart = require('./EnergyChart.js');
 var GraphTypes = require('../constants/Constants.js').GraphTypes;
 
-var mui = require('material-ui');
-var ThemeManager = new mui.Styles.ThemeManager();
-var Card = mui.Card;
-
 // Actions
 var ViewActions = require('./../actions/ViewActions');
 
 // Store
 var DataStore = require('./../stores/DataStore');
+var UserStore = require('./../stores/UserStore');
 
 // Child Views
 var GraphToolBar = require('./graphToolBar.jsx');
@@ -24,24 +21,44 @@ var LineGraphView = React.createClass({
   // React Functions /////////////////////////////////
 
   getInitialState: function() {
-    return {};
+    return {
+      data: null,
+      user: null,
+    };
   },
 
   loadData: function() {
     this.setState({data: DataStore.getData()});
   },
 
+  loadUser: function() {
+    this.setState({user: UserStore.getUser()});
+    ViewActions.loadUtilityUser();
+  },
+
   componentDidMount: function() {
+    var that = this;
+
+    // Set Stores
     DataStore.addChangeListener(this.loadData);
+    UserStore.addChangeListener(this.loadUser);
+
     ViewActions.loadWatt()
-    .then(ViewActions.loadUtility)
     .then(this.drawMainGraph)
+    .then(function() {
+      console.log(that.state);
+      if (that.state.user) {
+        ViewActions.loadUtilityUser();
+      }
+      return;
+    })
     .catch(function(err) {
       console.log("ERROR: ", err);
     });
   },
 
   componentDidUpdate: function() {
+
     // var el = React.findDOMNode(this.refs.graphContainer);
     // el.innerHTML = '';
     // console.log(this.state.data.Watt[0]);
@@ -61,11 +78,13 @@ var LineGraphView = React.createClass({
 
   componentWillUnmount: function() {
     DataStore.removeChangeListener(this.loadData);
+    UserStore.removeChangeListener(this.loadUser);
   },
 
   drawMainGraph: function() {
-    console.log(this.state.data.Utility);
+    // console.log(this.state.data.Utility);
     var el = React.findDOMNode(this.refs.graphContainer);
+    console.log(React.findDOMNode(this).offsetWidth);
     el.innerHTML = '';
     console.log(this.state.data.Watt[0]);
     EnergyChart.graph(el, {
@@ -74,35 +93,37 @@ var LineGraphView = React.createClass({
       margin: 10,
       type: GraphTypes.MAIN,
     }, this.state);
-    // if (this.state.data.Utility.length > 1) {
-    //   userLineChart.createChart(el.children[0], {
-    //     width: '1000',
-    //     height: '500',
-    //     margin: '10',
-    //     ratio: false
-    //   }, this.state);
-    // }
   },
 
   drawUserGraph: function() {
-    console.log(this.state.data.Utility);
     var el = React.findDOMNode(this.refs.graphContainer);
     el.innerHTML = '';
-    EnergyChart.graph(el, {
-      height: 500,
-      width: 1000,
-      margin: 10,
-      type: GraphTypes.USER_CARBON,
-    }, this.state);
+    if (this.state.user) {
+      console.log(this.state.user);
+      EnergyChart.graph(el, {
+        height: 500,
+        width: 1000,
+        margin: 10,
+        type: GraphTypes.USER_MWH,
+      }, this.state);
+    }
+    else {
+      console.log("Not logged in");
+      EnergyChart.graph(el, {
+        height: 500,
+        width: 1000,
+        margin: 10,
+        type: GraphTypes.USER_REQUIRE,
+      }, this.state);
+    }
   },
 
   handleTabChange: function(tab) {
-    // console.log("This was a test of the emergency broadcast system", tab);
     switch(tab.props.value) {
       case GraphTypes.MAIN:
         this.drawMainGraph();
         break;
-      case GraphTypes.USER_CARBON:
+      case GraphTypes.USER_MWH:
         this.drawUserGraph();
         break;
       default:
@@ -116,7 +137,7 @@ var LineGraphView = React.createClass({
     return (
 
       <div className="mainGraphView">
-        <GraphToolBar handleTabChange={this.handleTabChange} />
+        <GraphToolBar handleTabChange={this.handleTabChange} width={1020} />
         <div className ="graphContainer" ref="graphContainer"></div>
       </div>
 

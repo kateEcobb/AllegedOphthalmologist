@@ -37,6 +37,21 @@ var ViewActions = {
     });
   },
 
+  loadUtilityUser: function() {
+
+    return util.getUtilityUser()
+    .then(function(data) {
+      Dispatcher.handleViewAction({
+        type: ActionTypes.UTILITY_LOADED,
+        payload: data
+      });
+    })
+    .catch(function(err) {
+      throw err;
+    });
+
+  },
+
   registerUser: function (user_data) {
     util.registerNewUser(user_data)
     .then(function(user){
