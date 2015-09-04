@@ -6,9 +6,9 @@ var wattTimeToken = require('./../config/tokenConfig.js').wattTimeAPIToken;
 // This value gets updated every hour with the findMaxCarbonThisWeek function below
 // That function runs once every hour
 var weeklyMaxCarbon = 1450;
-
-// This value gets updated every 15 minutes
-var colorValue = 0.75;
+var weeklyMinCarbon = 950;
+// This value gets updated every hour
+var colorValue = 0.38;
 
 var getColor = function(req, res){
   res.json(colorValue);
@@ -16,21 +16,26 @@ var getColor = function(req, res){
 
 var findMaxCarbonThisWeek = function(data) {
   getOneWeek(function(data){
-    setMax(data);
+    setMaxMin(data);
   });
 };
 
-var setMax = function(data){
+var setMaxMin = function(data){
   if(data.length > 1){
     var max = data[0].carbon;
+    var min = data[0].carbon;
     for(var i = 1; i < data.length; i++){
       if(data[i].carbon > max){
         max = data[i].carbon;
       }
+      if(data[i].carbon < min){
+        min = data[i].carbon;
+      }
     }
     weeklyMaxCarbon = parseFloat(max.toFixed(2));
+    weeklyMinCarbon = parseFloat(min.toFixed(2));
   }
-}
+};
 
 var getOneWeek = function(cb){ 
   var oneWeekAgo = new Date(new Date().setDate(new Date().getDate()-7)).toISOString().slice(0,-5);
@@ -93,10 +98,10 @@ var makeWattTimeRequest = function(){
 };
 
 var setColorCode = function(carbon){
-  // divide current carbon rating by highest seen this month
-  // to get % of maximum
-  var percentMax = carbon/weeklyMaxCarbon;
+  var carbonRange = weeklyMaxCarbon - weeklyMinCarbon;
+  var percentMax = (carbon - weeklyMinCarbon)/carbonRange;
   if(percentMax > 1){percentMax = 1};
+  if(percentMax < 0){percentMax = 0};
 
   colorValue = parseFloat(percentMax.toFixed(2));
 };
