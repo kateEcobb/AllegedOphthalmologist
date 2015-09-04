@@ -10,6 +10,7 @@ var ViewActions = require('./../actions/ViewActions');
 //Store
 var DataStore = require('./../stores/DataStore');
 var modalStore = require('./../stores/modalStore');
+var BulbStore = require('./../stores/BulbStore')
 
 // Child Views
 var LineGraphView = require('./LineGraphView.jsx');
@@ -57,6 +58,7 @@ var MainView = React.createClass({
     var context = this;
     modalStore.addChangeListener(this.modalListener);
     BulbStore.addChangeListener(this.bulbListener)
+    ViewActions.getBulbColor()
     .then(this.drawBulbGlow)
     .catch(function(err){ 
       console.log("Error: " + err)
