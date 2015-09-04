@@ -1,7 +1,7 @@
 var request = require('request');
 var moment = require('moment');
 var WattEnergy = require('./../wattTime/energyModel').WattTotal;
-var wattTimeToken = require('../../.tokens.js').wattTimeAPIToken;
+var wattTimeToken = require('./../config/tokenConfig.js').wattTimeAPIToken;
 
 // This value gets updated every hour with the findMaxCarbonThisWeek function below
 // That function runs once every hour

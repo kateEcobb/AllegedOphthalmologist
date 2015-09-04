@@ -1,5 +1,5 @@
 var request = require('request');
-var TOKENS = require('./../../.tokens');
+var TOKENS = require('./../config/tokenConfig.js');
 
 // API Authorization Token provided by UtilityAPI:
 var authHeader = TOKENS.utilityAPIToken;
