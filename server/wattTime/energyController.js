@@ -134,7 +134,7 @@ var updateWattData = function() {
 debounce(updateWattData, 180000)();
 setInterval(updateWattData, 900000);
 
-loadTestData();
+// loadTestData();
 module.exports = { 
   get24HourBehind: get24HourBehind, 
   get24HourAhead: get24HourAhead, 
