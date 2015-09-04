@@ -1,6 +1,7 @@
 var d3 = require('d3');
 
 var makeCircle = function(el, props, state){ 
+  console.log(state)
   var svgContainer = d3.select(el).append('svg:svg')
                     .attr('className', 'bulbGlowContainer')
                     .attr('width', props.width)
@@ -11,7 +12,10 @@ var makeCircle = function(el, props, state){
                           .attr('cx', 30)
                           .attr('cy', 30)
                           .attr('r', 20)
-                          .style('color', state)
+                          .style('fill', state.toString())
+  return;
 };
 
-module.exports = makeCircle;
+module.exports = { 
+  makeCircle: makeCircle
+}

@@ -145,9 +145,34 @@ svg {
   fill: black;
 }
 
+.bulbcontainer{ 
+  width: 100px;
+  height: 100px;
+  position: relative;
+  display: block;
+  margin: auto;
+}
+
+
+.bulb, .img-responsive{ 
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+.img-responsive{ 
+  z-index: 10;
+
+}
+
 .svg-content-responsive {
     display: inline-block;
     position: absolute;
     top: 10px;
     left: 0;
+}
+.bulbGlowContainer { 
+  left: 19px;
 }

@@ -17,7 +17,7 @@ var LineGraphView = require('./LineGraphView.jsx');
 var GraphToolBar = require('./graphToolBar.jsx');
 var donutGraphWindow = require('./energyBreakDownView.jsx');
 
-var BulbGlow = require('./bulbGlow');
+var BulbGlow = require('./bulbGlow.js');
 
 var MainView = React.createClass({
   getInitialState: function(){
@@ -36,11 +36,11 @@ var MainView = React.createClass({
   bulbListener: function(){ 
     this.setState({bulbData: BulbStore.getData()});
     if(this.state.bulbData > .5){ 
-      var green = ((this.state.bulbData-.5)/.5)*255 
+      var green = Math.floor(((this.state.bulbData-.5)/.5)*255) 
       this.setState({rgb: 'rgb(255,'+green+',0)'})
 
     } else if(this.state.bulbData < .5){ 
-      var red = (this.state.bulbData/.5)*255
+      var red = Math.floor((this.state.bulbData/.5)*255)
       this.setState({rgb: 'rgb('+red+',255,0)'})
 
     } else { 
@@ -84,14 +84,15 @@ var MainView = React.createClass({
       height: 100,
       width: 100,
       margin: 5
-    }, this.state.rgb);
+    }, this.state.rgb)
   },
 
   render: function() {
     if(this.state.showModal){
       return (
         <div>
-          <div className="bulb" ref='bulb'>
+          <div className='bulbcontainer'>
+          <div className="bulb" ref='bulb'></div>
             <img src={'http://uxrepo.com/static/icon-sets/ionicons/png32/256/000000/ios7-lightbulb-outline-256-000000.png'} id='donutModal' className='img-responsive' onClick={this.showDonutGraph}/>     
           </div>  
             <LineGraphView testing={true}/> 
@@ -101,7 +102,8 @@ var MainView = React.createClass({
     }else{
       return (
         <div>
-          <div className="bulb" ref ='bulb'>
+          <div className='bulbcontainer'>
+          <div className="bulb" ref='bulb'></div>
             <img src={'http://uxrepo.com/static/icon-sets/ionicons/png32/256/000000/ios7-lightbulb-outline-256-000000.png'} id='donutModal' className='img-responsive' onClick={this.showDonutGraph}/>    
           </div>   
             <LineGraphView />  
