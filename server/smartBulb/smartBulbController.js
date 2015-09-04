@@ -114,7 +114,7 @@ setInterval(makeWattTimeRequest, 3600000);
 // Check for new max carbon value every 3 hours
 setInterval(findMaxCarbonThisWeek, 10800000)
 
-findMaxCarbonThisWeek()
+// findMaxCarbonThisWeek()
 setTimeout(makeWattTimeRequest, 15000);
 
 module.exports = {
