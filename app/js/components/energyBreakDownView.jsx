@@ -61,18 +61,28 @@ var ModalI = React.createClass({
 
   render: function(){
     var modalbody = 'modal-body';
-    return (
-      <div>
-        <Dialog 
-          openImmediately={this.props.openImmediately}>
-          
+    if(this.props.dialog){
+      return (
+        <div>
+          <Dialog 
+            openImmediately={this.props.openImmediately}>
+            
+            <div style={{'textAlign': 'center'}} className={modalbody}>
+              <h4>This is a break down of how the grid is being powered</h4> 
+            </div>
+            
+          </Dialog>
+        </div>
+      )
+    }else{
+      return(
+        <div>
           <div style={{'textAlign': 'center'}} className={modalbody}>
             <h4>This is a break down of how the grid is being powered</h4> 
           </div>
-          
-        </Dialog>
-      </div>
-    )
+        </div>
+      )
+    }
   }
 });
 
