@@ -8,7 +8,9 @@ d3Chart.create = function(el, data, className){
   //el is modal-body
   var modal = d3.select(el)
 
-  var modalSpec = modal.node().getBoundingClientRect();
+  if(modal.node() !== null){
+    var modalSpec = modal.node().getBoundingClientRect();
+  }
 
   specs = {
     w: modalSpec.width/2 - 15,
@@ -34,6 +36,7 @@ d3Chart.create = function(el, data, className){
     .attr("width", specs.w)
     .attr("height", specs.h)
     .attr("class", className)
+    .attr('display', 'inline')
     .append('svg:g')
     .attr("transform", "translate("+specs.r+","+specs.r+")")
 
@@ -62,7 +65,7 @@ d3Chart.create = function(el, data, className){
     toolTip(className+'div', d, specs);
 
   }).on('mouseout', function(d){
-    d3.select('.tooltip')
+    d3.select('.toooltip')
       .remove()
   })
 
@@ -106,18 +109,20 @@ var legend = function(className, RectSize, Spacing, color, data){
 
 var toolTip = function(className, data, specs){
 
+  console.log('toooltip',className, specs);
+
   position = {
-    height: 3*(specs.h/4),
-    width: specs.w/2 - 55,
+    height: (specs.h/6),
+    width: specs.w/3.25,
   };
 
   var textBox = d3.select('.'+className)
     .append('div')
-    .attr('class', 'tooltip')
+    .attr('class', 'toooltip')
     .style({
       'display': 'inline',
       'position': 'absolute',
-      'top': -position.height + 'px',
+      'top': position.height + 'px',
       'left': position.width +'px',
       'height': 'auto',
       'width': '100px',
@@ -125,8 +130,8 @@ var toolTip = function(className, data, specs){
       'z-index': '10',
       'opacity': '0.95',
       'color': 'white',
-      'text-align': 'center',
-      'font-size': '11pt'
+      'textAlign': 'center',
+      'font-size': '11pt',
     })
 
   textBox
