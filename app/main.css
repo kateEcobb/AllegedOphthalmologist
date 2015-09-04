@@ -154,6 +154,7 @@ svg {
 }
 
 
+
 .bulb, .img-responsive{ 
   width: 100%;
   height: 100%;
@@ -164,11 +165,6 @@ svg {
 
 .img-responsive{ 
   z-index: 10;
-
-}
-
-.bulbGlow{ 
-  filter: blur(20px);
 }
 
 .svg-content-responsive {
