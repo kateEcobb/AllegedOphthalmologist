@@ -285,7 +285,7 @@ var logOut = function(req, res){
           console.log('Error in destroying token '+ err);
           res.status(500).send("Error in destroying token.");
         } else { 
-          res.status(301).send("Redirect to homepage.")
+          res.status(202).json("Redirect to home")
         }
       });
     }
