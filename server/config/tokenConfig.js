@@ -1,4 +1,4 @@
-if(!process.env.deploy === 'production'){
+if(!process.env.DEPLOY === 'production'){
   var tokens = require('./../tokens');
 }
 else{
