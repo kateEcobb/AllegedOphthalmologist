@@ -23,7 +23,6 @@ var GraphToolBar = require('./graphToolBar.jsx');
 var BulbView = require('./bulbView.jsx');
 
 var MainView = React.createClass({
-  
 
   showDonutModal: function(){
     ViewActions.loadModal(donutGraphWindow);

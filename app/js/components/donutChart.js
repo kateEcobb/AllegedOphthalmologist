@@ -159,6 +159,7 @@ var processData = function(data){
 
   data.forEach(function(element){
     var type = element.fuel;
+    type = type.substr(0,1).toUpperCase() + type.substr(1).toLowerCase()
     var percentage = Math.round((element.gen_MW / totalMW)*100, 2);
     breakDown.push({type: type, percentage: percentage});
   })
