@@ -25,8 +25,16 @@ var ModalI = React.createClass({
     };
   },
 
+  dismount: function(){
+    var isOpen = modalStore.getModalState().isOpen;
+    if(!isOpen){
+      window.removeEventListener('resize', this.reSizeGraphs);
+    }
+  },
+
   componentDidMount: function(){
     this.setState({ data: DataStore.getData() });
+    modalStore.addChangeListener(this.dismount);
   },
 
   componentDidUpdate: function(){
@@ -34,7 +42,8 @@ var ModalI = React.createClass({
     window.addEventListener('resize', this.reSizeGraphs);
   },
 
-  componentWillUnmout: function(){
+  componentWillUnmount: function(){
+    // modalStore.removeEventListener(this.dismount);
     window.removeEventListener('resize', this.reSizeGraphs);
   },
 
