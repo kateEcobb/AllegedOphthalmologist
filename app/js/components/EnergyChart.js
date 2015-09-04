@@ -60,7 +60,7 @@ var initGraph = function(el, props, parsedState) {
     height: parseInt(props.height, 10),
     width: parseInt(props.width, 10),
     margin: props.margin ? parseInt(props.margin, 10) : 10,
-    barWidth: parseFloat(props.barWidth) || 10,
+    barWidth: parseFloat(props.barWidth) || 3,
     axisOffset: 50, 
     yMinRatio: 0.95,
     yMaxRatio: 1.02,
@@ -238,7 +238,7 @@ var drawActualPredictText = function(options) {
   .attr('transform', 'translate(' + (actualX + scale.axisOffset) + ',' + (0) + ')')
     .append('svg:text')
     .attr('class', 'predictedText')
-    .attr('x', (scale.width - scale.axisOffset - scale.axisOffset - actualX) / 2)
+    .attr('x', (scale.width - scale.axisOffset - scale.axisOffset - scale.axisOffset - actualX) / 2)
     .attr('y', scale.axisOffset / 2)
     .text('Predicted Data');
   
@@ -297,6 +297,14 @@ var drawCapturePad = function(options) {
   .attr('class', 'focusYLine')
   .attr('x1', 0)
   .attr('x2', scale.width - scale.axisOffset - scale.axisOffset);
+
+  focus.append('svg:text')
+  .attr('class', 'focusInfo')
+  .attr('dy', '-3rem');
+  
+  focus.append('svg:text')
+  .attr('class', 'focusDate')
+  .attr('dy', '-1rem');
   
   var mouseMove = function() {
     // console.log('move');
@@ -321,7 +329,13 @@ var drawCapturePad = function(options) {
     focus.select('.focusYLine')
     .attr('transform', 'translate(' + (0) + ',' + (y) + ')');  
 
+    focus.select('.focusInfo')
+    .attr('transform', utils.translate(x, y))
+    .text( (Math.round((nearestDatum.point + 0.00001) * 100) / 100));
 
+    focus.select('.focusDate')
+    .attr('transform', utils.translate(x, y))
+    .text( utils.formatFocusDate(nearestDatum.time) );
 
   };
 
