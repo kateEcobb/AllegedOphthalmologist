@@ -10,16 +10,12 @@ var ViewAction = require('../actions/ViewActions');
 // Routing
 var Router = require('react-router');
 var Nav = Router.Navigation;
-var Route = Router.Route;
-var RouteHandler = Router.RouteHandler;
-var DefaultRoute = Router.DefaultRoute;
-var Link = Router.Link;
+
 
 //mui theme
 var mui = require('material-ui');
 var ThemeManager = new mui.Styles.ThemeManager();
 var LeftNav = mui.LeftNav;
-var MenuItem = mui.MenuItem;
 
 //dialog boxes
 var register = require('./RegistrationView.jsx');
@@ -46,16 +42,15 @@ var NavMenu = React.createClass({
 
   componentDidMount: function(){
     menuStore.addChangeListener(this.changeMenuItems);
+    
     var context = this;
     this.token = Dispatcher.register(function (dispatch) {
       var action = dispatch.action;
       if (action.type === ActionTypes.TOGGLE_NAV_MENU) {
-        // console.log('Nav menu button clicked');
         context.toggleNav();
       } 
       // Un-disable menu items requiring login when the user logs in
       else if(action.type === ActionTypes.USER_LOGIN){
-        // console.log('getting this far')
         var menuItems = context.state.menuItems;
         for(var i = 0; i < menuItems.length; i++){
           if(menuItems[i].reqLogin){
@@ -78,13 +73,10 @@ var NavMenu = React.createClass({
   handleMenuSelect: function(e, selectedIndex, menuItem){
     console.log(e, selectedIndex, menuItem);
     if(menuItem.text === 'Profile'){
-      console.log('transitioning')
       this.transitionTo('profile')
     }else if(menuItem.text === 'Home'){
       this.transitionTo('/')
     }else if(menuItem.text === 'Logout'){
-      console.log('logging out');
-      // var token = UserStore.getToken();
       ViewAction.logoutUser();
     }else{
       ViewAction.loadModal(menuItem.route);

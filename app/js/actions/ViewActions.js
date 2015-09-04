@@ -113,10 +113,10 @@ var ViewActions = {
     })
     .catch(function(err){
       console.log('Log out failed: ', err);
-      // Dispatcher.handleViewAction({
-      //   type: ActionTypes.USER_LOGIN_FAILURE,
-      //   payload: err
-      // });
+      Dispatcher.handleViewAction({
+        type: ActionTypes.USER_LOGOUT_FAILURE,
+        payload: err
+      });
     });
   },
 
