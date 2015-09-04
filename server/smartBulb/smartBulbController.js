@@ -5,8 +5,8 @@ var wattTimeToken = require('./../config/tokenConfig.js').wattTimeAPIToken;
 
 // This value gets updated every hour with the findMaxCarbonThisWeek function below
 // That function runs once every hour
-var weeklyMaxCarbon = 1350;
-var weeklyMinCarbon = 1050;
+var weeklyMaxCarbon = 1353;
+var weeklyMinCarbon = 1056;
 // This value gets updated every hour
 var colorValue = 0.38;
 
@@ -32,6 +32,8 @@ var setMaxMin = function(data){
         min = data[i].carbon;
       }
     }
+    console.log('Weekly max carbon now: ', max.toFixed(2));
+    console.log('Weekly min carbon now: ', min.toFixed(2));
     weeklyMaxCarbon = parseFloat(max.toFixed(2));
     weeklyMinCarbon = parseFloat(min.toFixed(2));
   }
@@ -111,6 +113,9 @@ setInterval(makeWattTimeRequest, 3600000);
 
 // Check for new max carbon value every 3 hours
 setInterval(findMaxCarbonThisWeek, 10800000)
+
+// findMaxCarbonThisWeek()
+setTimeout(makeWattTimeRequest, 15000);
 
 module.exports = {
   getColor: getColor
