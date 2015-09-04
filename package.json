@@ -5,7 +5,8 @@
   "main": "server/server.js",
   "scripts": {
     "postinstall": "grunt build",
-    "start": "node server/server.js"
+    "start": "node server/server.js",
+    "test": "jest"
   },
   "repository": {
     "type": "git",
@@ -54,6 +55,5 @@
     "request": "^2.61.0",
     "webpack": "^1.12.0",
     "webpack-dev-server": "^1.10.1"
-  },
-  "devDependencies": {}
+  }
 }

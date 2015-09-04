@@ -111,6 +111,7 @@ setInterval(makeWattTimeRequest, 3600000);
 
 // Check for new max carbon value every 3 hours
 setInterval(findMaxCarbonThisWeek, 10800000)
+makeWattTimeRequest();
 
 module.exports = {
   getColor: getColor
