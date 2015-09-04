@@ -11,7 +11,7 @@ module.exports = {
     PGE_UPDATE_SUCCESS: null,
     PGE_UPDATE_FAILURE: null,
     LOAD_MODAL: null,
-    SET_BULB_COLOR: null
+    SET_BULB_COLOR: null,
     USER_LOGOUT: null,
     USER_LOGOUT_FAILURE: null,
     // MAIN_GRAPH_CHANGE: null,
@@ -27,7 +27,7 @@ module.exports = {
     UTILITY_TOTAL: '/api/meterreadings',
     USER_REGISTRATION: '/signup',
     USER_LOGIN: '/signin',
-    BULB_COLOR: '/api/bulbcolor'
+    BULB_COLOR: '/api/bulbcolor',
     USER_LOGOUT: '/logout',
     PGE_UPDATE: '/api/user/changePGE',
     UTILITY_USER: '/api/user/meterreadings/'
