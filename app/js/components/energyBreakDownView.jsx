@@ -57,7 +57,7 @@ var ModalI = React.createClass({
         <Dialog 
           openImmediately={this.props.openImmediately}>
           
-          <div style={{'text-align': 'center'}} className={modalbody}>
+          <div style={{'textAlign': 'center'}} className={modalbody}>
             <h4>This is a break down of how the grid is being powered</h4> 
           </div>
           
