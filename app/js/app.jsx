@@ -24,6 +24,7 @@ var LoginView = require('./components/LoginView.jsx');
 var ProfileView = require('./components/ProfileView.jsx');
 var RegistrationView = require('./components/RegistrationView.jsx');
 var engergyBreakDown = require('./components/energyBreakDownView.jsx');
+var AboutUs = require('./components/AboutUs.jsx');
 
 // Stores -- Load here so Stores can begin listening to Events
 var UserStore = require('./stores/UserStore');

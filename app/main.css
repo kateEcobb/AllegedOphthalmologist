@@ -131,7 +131,7 @@ div.login {
   font-size: 2em;
 }
 
-.test1, .test2{
+.popup1, .popup2 { 
   display: inline;
 }
 
@@ -154,8 +154,6 @@ svg {
   display: block;
   margin: auto;
 }
-
-
 
 .bulb, .img-responsive{ 
   width: 100%;

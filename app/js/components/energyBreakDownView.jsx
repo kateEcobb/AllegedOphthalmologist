@@ -43,20 +43,23 @@ var ModalI = React.createClass({
   },
 
   componentWillUnmount: function(){
+<<<<<<< HEAD
     // modalStore.removeEventListener(this.dismount);
+=======
+>>>>>>> [fix] Minor styling changes, factored out bulbView + in the process of creating a new homepage
     window.removeEventListener('resize', this.reSizeGraphs);
   },
 
   reSizeGraphs: function(){
-    chart.removeGraph('test1');
-    chart.removeGraph('test2');
+    chart.removeGraph('popup1');
+    chart.removeGraph('popup2');
 
     this.makeGraphs();
   },
 
   makeGraphs: function(){
-    chart.create('.modal-body', this.state.data.Watt[0].genmix.slice(1, 4), 'test1');
-    chart.create('.modal-body', this.state.data.Watt[0].genmix, 'test2');
+    chart.create('.modal-body', this.state.data.Watt[0].genmix.slice(1, 4), 'popup1');
+    chart.create('.modal-body', this.state.data.Watt[0].genmix, 'popup2');
   },
 
   render: function(){
@@ -67,7 +70,7 @@ var ModalI = React.createClass({
           <Dialog 
             openImmediately={this.props.openImmediately}>
             
-            <div style={{'textAlign': 'center'}} className={modalbody}>
+            <div style={{'textAlign': 'center', 'minWidth':'500px'}} className={modalbody}>
               <h4>This is a break down of how the grid is being powered</h4> 
             </div>
             
@@ -83,6 +86,7 @@ var ModalI = React.createClass({
         </div>
       );
     }
+
   }
 });
 
