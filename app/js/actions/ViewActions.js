@@ -102,6 +102,24 @@ var ViewActions = {
     });
   },
 
+  logoutUser: function(){
+    util.logoutUser()
+    .then(function(){
+      console.log(arguments);
+      Dispatcher.handleViewAction({
+        type: ActionTypes.USER_LOGOUT,
+        payload: null
+      });
+    })
+    .catch(function(err){
+      console.log('Log out failed: ', err);
+      // Dispatcher.handleViewAction({
+      //   type: ActionTypes.USER_LOGIN_FAILURE,
+      //   payload: err
+      // });
+    });
+  },
+
   updateUserPGE: function(update_data){
     util.updateUserPGE(update_data)
     .then(function(response){

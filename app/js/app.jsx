@@ -87,8 +87,6 @@ var App = React.createClass({
 
 var routes = (
   <Route name="app" path="/" handler={App}>
-  <Route name="register" path="/register" handler={RegistrationView} />
-  <Route name="login" path="/login" handler={LoginView} />
   <Route name="profile" path="/profile" handler={ProfileView} />
   <DefaultRoute name="default" handler={MainView} />
   </Route>

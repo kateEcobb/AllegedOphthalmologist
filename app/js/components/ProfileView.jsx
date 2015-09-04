@@ -96,7 +96,6 @@ var ProfileView = React.createClass({
 
   render: function (){
     return(
-      <Dialog openImmediately={true}>
       <div className="container">
         <Tabs>
         <Tab label="Account Summary">
@@ -139,7 +138,6 @@ var ProfileView = React.createClass({
         </Tabs>
 
       </div>
-      </Dialog>
     );
   }
 });

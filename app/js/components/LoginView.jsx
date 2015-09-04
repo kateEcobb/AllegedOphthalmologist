@@ -44,10 +44,6 @@ var LoginView = React.createClass({
         console.log('login failure');
         context.failedLogin();
       } 
-      else if (action.type === ActionTypes.USER_LOGIN) {
-        // console.log('login success');
-        context.redirectHome();
-      } 
     });
   },
   failedLogin: function(){
@@ -57,10 +53,6 @@ var LoginView = React.createClass({
   },
   componentDidUnmount: function(){
     Dispatcher.unregister(this.token);
-  },
-  redirectHome: function(){
-    // console.log('redirecting');
-    this.transitionTo("/");
   },
   enableButton: function () {
     this.setState({
@@ -105,7 +97,7 @@ var LoginView = React.createClass({
           </div>
           <div className="login-failure">
             <p>Login Failure.</p>
-            <p>Have you <span stype='font-color:blue' onClick={this.handleRegister}>Registered</span>?</p>
+            <p>Have you <span style={{color:'blue', 'text-decoration': 'underline'}} onClick={this.handleRegister}>Registered</span>?</p>
           </div>
         </div>
       </div>

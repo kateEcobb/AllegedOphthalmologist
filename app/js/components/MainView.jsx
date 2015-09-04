@@ -55,8 +55,8 @@ var MainView = React.createClass({
   },
   
   componentDidMount: function (){
-    var context = this;
     modalStore.addChangeListener(this.modalListener);
+
     BulbStore.addChangeListener(this.bulbListener)
     ViewActions.getBulbColor()
     .then(this.drawBulbGlow)
