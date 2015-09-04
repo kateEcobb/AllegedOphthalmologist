@@ -59,21 +59,6 @@ var LineGraphView = React.createClass({
 
   componentDidUpdate: function() {
 
-    // var el = React.findDOMNode(this.refs.graphContainer);
-    // el.innerHTML = '';
-    // console.log(this.state.data.Watt[0]);
-    // lineChart.createChart(el, {
-    //   width: '1000',
-    //   height: '500',
-    //   margin: '10'
-    // }, this.state);
-    // if (this.state.data.Utility.length > 1) {
-    //   userLineChart.createChart(el.children[0], {
-    //     width: '1000',
-    //     height: '500',
-    //     margin: '10'
-    //   }, this.state);
-    // }
   },
 
   componentWillUnmount: function() {
@@ -100,12 +85,14 @@ var LineGraphView = React.createClass({
     el.innerHTML = '';
     if (this.state.user) {
       console.log(this.state.user);
-      EnergyChart.graph(el, {
-        height: 500,
-        width: 1000,
-        margin: 10,
-        type: GraphTypes.USER_MWH,
-      }, this.state);
+      if (this.state.data.Utility.length > 1) {
+        EnergyChart.graph(el, {
+          height: 500,
+          width: 1000,
+          margin: 10,
+          type: GraphTypes.USER_MWH,
+        }, this.state);
+      }
     }
     else {
       console.log("Not logged in");

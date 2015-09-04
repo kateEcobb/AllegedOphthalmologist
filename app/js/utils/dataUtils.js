@@ -1,3 +1,6 @@
+var Weekdays = require('../constants/Constants').Weekdays;
+var Months = require('../constants/Constants').Months;
+
 // For the given utility object, find the watt element with the nearest timestamp and return index of watt
 // element
 var nearestTimeIndex = function(array, datum) {
@@ -88,6 +91,14 @@ module.exports = {
     });
     console.log(data.Utility);
     return data;
+  },
+
+  formatFocusDate : function(date) {
+    var num = date.getDate();
+    var day = Weekdays[date.getDay()];
+    var month = Months[date.getMonth()];
+
+    return day + ', ' + month + ' ' + num;
   },
 
   bisectDateIndex : function(sortArray, date) {
