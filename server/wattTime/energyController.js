@@ -1,7 +1,7 @@
 var WattEnergy = require('./energyModel').WattTotal;
 var TestData = require('./energyModel').TestData;
 var request = require('request');
-var wattTimeToken = require('../../.tokens.js').wattTimeAPIToken;
+var wattTimeToken = require('./../config/tokenConfig.js').wattTimeAPIToken;
 var debounce = require('debounce');
 
 //General wattTime query
