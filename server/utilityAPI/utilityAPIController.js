@@ -22,13 +22,15 @@ var loadNewReadings = function() {
   var end_date = year + '-' + month + '-' + end_day;
 
   UtilityAPI.getActiveUsers(function(accounts){
-    accounts.forEach(function(account){
-      if(account.bill_count > 0){
-        UtilityAPI.getIntervalData(account.uid, start_date, end_date, function(intervals){
-          populateDB(intervals);
-        });
-      }
-    });
+    if(Array.isArray(accounts)){
+      accounts.forEach(function(account){
+        if(account.bill_count > 0){
+          UtilityAPI.getIntervalData(account.uid, start_date, end_date, function(intervals){
+            populateDB(intervals);
+          });
+        }
+      });
+    }
   });
 }
 
