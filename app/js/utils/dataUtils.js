@@ -50,8 +50,14 @@ module.exports = {
     // Need to filter out old DAHR from watt data since the RT5M is updating
     var index = latestRT5MIndex(watts);
 
-    // find latest RT5M and then filter out DAHR to that index
+    // find latest RT5M and then filter out DAHR to that index 
     watts = data.Watt = watts.filter(function(datum, i) {
+
+      // ADDON we also need to filter out null value data points
+      if (datum.point === null) {
+        return false;
+      }
+
       if (i > index ) {
         return true;
       }
@@ -97,8 +103,21 @@ module.exports = {
     var num = date.getDate();
     var day = Weekdays[date.getDay()];
     var month = Months[date.getMonth()];
+    var fullHour = date.getHours();
+    var minutes = date.getMinutes();
+    var hours = 12;
+    var latin = fullHour >= 12 ? "PM" : "AM";
 
-    return day + ', ' + month + ' ' + num;
+    // Format the Hours
+    if (fullHour !== 0 && fullHour !== 12) {
+      hours = fullHour % 12;
+    }
+    // Format the Minutes
+    if (minutes === 0) {
+      minutes = "00";
+    }
+
+    return day + ' ' + num + ', ' + hours + ':' + minutes + ' ' + latin;
   },
 
   bisectDateIndex : function(sortArray, date) {
