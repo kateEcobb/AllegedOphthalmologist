@@ -19,6 +19,7 @@ var mui = require('material-ui');
 var ThemeManager = new mui.Styles.ThemeManager();
 var RaisedButton = mui.RaisedButton;
 var Dialog = mui.Dialog;
+var SnackBar = mui.Snackbar;
 
 // Components
 var NavMenu = require('./components/NavMenu.jsx');
@@ -80,6 +81,13 @@ var App = React.createClass({
 
   componentDidMount: function() {
     modalStore.addChangeListener(this.modalListener);
+    var context = this;
+    this.token = Dispatcher.register(function (dispatch){
+      var action = dispatch.action;
+      if(action.type === ActionTypes.SHOW_SNACK){
+        context.showSnack();
+      }
+    });
   },
 
   componentWillUnmount: function (){
@@ -92,6 +100,10 @@ var App = React.createClass({
 
   toggleNav: function(){
     ViewActions.toggleNavMenu();
+  },
+
+  showSnack: function(){
+    this.refs.snackbar.show();
   },
 
   render: function(){
@@ -114,6 +126,10 @@ var App = React.createClass({
           <this.state.modal openImmediately={true} dialog={true} />
         </div> : null }
       </div>
+      <SnackBar
+          ref='snackbar'
+          message='Logged out'
+          autoHideDuration={2000} />
       </div>
     );
   }

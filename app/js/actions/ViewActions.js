@@ -152,6 +152,13 @@ var ViewActions = {
       payload: modal
     });
   },
+
+  showSnack: function(){
+    Dispatcher.handleViewAction({
+      type: ActionTypes.SHOW_SNACK,
+      payload: null
+    });
+  },
   // changeGraphView: function(event) {
   //   Dispatcher.handleViewAction({
   //     type: ActionTypes.MAIN_GRAPH_CHANGE,

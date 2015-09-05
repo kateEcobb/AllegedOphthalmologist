@@ -79,6 +79,7 @@ var NavMenu = React.createClass({
     }else if(menuItem.text === 'Logout'){
       this.transitionTo('/');
       ViewAction.logoutUser();
+      ViewAction.showSnack();
     }else{
       ViewAction.loadModal(menuItem.route);
     }
