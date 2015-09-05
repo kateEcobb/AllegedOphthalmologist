@@ -16,7 +16,7 @@ d3Chart.create = function(el, data, className){
     w: modalSpec.width/2 - 15,
     h: modalSpec.width/2 - 15,
     r: modalSpec.width/4 - 20,
-    innerR: (modalSpec.width/4 - 20)*.75,
+    innerR: (modalSpec.width/4 - 20)*0.75,
     color: d3.scale.ordinal().range(['#A60F2B', '#648C85', '#B3F2C9', '#528C18']),
     data: processData(data),
     legendRectSize: 18,
@@ -28,15 +28,16 @@ d3Chart.create = function(el, data, className){
     .append('div')
     .attr('class', className+'div')
     .style({
-      'display': 'inline',
+      'display': 'inline-block',
       'position': 'relative',
+      'width': specs.w + 'px',
     })
     .append("svg:svg")
     .data([specs.data])
     .attr("width", specs.w)
     .attr("height", specs.h)
     .attr("class", className)
-    .attr('display', 'inline')
+    .attr('display', 'inline-block')
     .append('svg:g')
     .attr("transform", "translate("+specs.r+","+specs.r+")")
 
@@ -109,11 +110,13 @@ var legend = function(className, RectSize, Spacing, color, data){
 
 var toolTip = function(className, data, specs){
 
-  console.log('toooltip',className, specs);
+  var svg = d3.select('.'+className).select('svg').node().getBoundingClientRect();
+  var svgParent = d3.select('.'+className).node().getBoundingClientRect();
+  // console.log('toooltip',svgParent, 'svg ', svg);
 
   position = {
-    height: (specs.h/6),
-    width: specs.w/3.25,
+    top: (specs.h/6) - (svg.height - svgParent.height),
+    left: svgParent.width/2 - 62,
   };
 
   var textBox = d3.select('.'+className)
@@ -122,8 +125,8 @@ var toolTip = function(className, data, specs){
     .style({
       'display': 'inline',
       'position': 'absolute',
-      'top': position.height + 'px',
-      'left': position.width +'px',
+      'top': position.top + 'px',
+      'left': position.left +'px',
       'height': 'auto',
       'width': '100px',
       'background-color': 'black',
@@ -136,6 +139,15 @@ var toolTip = function(className, data, specs){
 
   textBox
     .text('energy type: ' + data.data.type  + '\n'  +'percentage: ' + data.data.percentage)
+}
+
+d3Chart.title = function(className, title){
+  d3.select('.' + className + 'div')
+    .insert('h4', ':first-child')
+    .style({
+      'display':'inline-block',
+    })
+    .text(title);
 }
 
 var processData = function(data){
@@ -151,30 +163,5 @@ var processData = function(data){
   })
   return breakDown;
 }
-
-
-var testData = [
-  {
-    _id: "55df874cda7c5d2c59ec6e09",
-    fuel: "other",
-    gen_MW: 36103.55,
-  },
-  
-  {
-    _id: "55df874cda7c5d2c59ec6e08",
-    fuel: "wind",
-    gen_MW: 606,
-  },
-  {
-    _id: "55df874cda7c5d2c59ec6e07",
-    fuel: "solar",
-    gen_MW: 5891,
-  },
-  {
-    _id: "55df874cda7c5d2c59ec6e06",
-    fuel: "renewable",
-    gen_MW: 1708,
-  }
-]
 
 module.exports = d3Chart;

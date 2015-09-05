@@ -56,7 +56,9 @@ var ModalI = React.createClass({
 
   makeGraphs: function(){
     chart.create('.modal-body', this.state.data.Watt[0].genmix.slice(1, 4), 'test1');
+    chart.title('test1', 'This is break down of renewable energy');
     chart.create('.modal-body', this.state.data.Watt[0].genmix, 'test2');
+    chart.title('test2', 'This is break down of all energy on the grid');
   },
 
   render: function(){
@@ -68,7 +70,7 @@ var ModalI = React.createClass({
             openImmediately={this.props.openImmediately}>
             
             <div style={{'textAlign': 'center'}} className={modalbody}>
-              <h4>This is a break down of how the grid is being powered</h4> 
+              <h3>This is a break down of how the grid is being powered</h3> 
             </div>
             
           </Dialog>
