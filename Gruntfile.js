@@ -83,7 +83,12 @@ module.exports = function(grunt) {
 
     nodemon: {
       dev: {
-        script: 'server/server.js'
+        script: 'server/server.js',
+        options: {
+          ignore: ['node_modules'],
+          watch: ['server'],
+          delay: 1000
+        },
       }
     }
 

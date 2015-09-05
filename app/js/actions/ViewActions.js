@@ -33,7 +33,7 @@ var ViewActions = {
       })
       .catch(function(err){ 
         throw err;
-      })
+      });
   },
 
   loadUtility: function() {
@@ -150,7 +150,7 @@ var ViewActions = {
     Dispatcher.handleViewAction({
       type: ActionTypes.LOAD_MODAL,
       payload: modal
-    })
+    });
   },
   // changeGraphView: function(event) {
   //   Dispatcher.handleViewAction({

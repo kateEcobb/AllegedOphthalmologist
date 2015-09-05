@@ -44,7 +44,7 @@ var LineGraphView = React.createClass({
 
   componentDidMount: function() {
     var that = this;
-    console.log(";alskdjf;asldf", this.props);
+
     // Set Stores
     DataStore.addChangeListener(this.loadData);
     UserStore.addChangeListener(this.loadUser);
