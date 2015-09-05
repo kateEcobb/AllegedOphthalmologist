@@ -11,6 +11,9 @@ var RouteHandler = Router.RouteHandler;
 var DefaultRoute = Router.DefaultRoute;
 var Link = Router.Link;
 
+// Dispatcher
+var Dispatcher = require('./dispatcher/Dispatcher');
+
 //mui theme
 var mui = require('material-ui');
 var ThemeManager = new mui.Styles.ThemeManager();
@@ -24,6 +27,7 @@ var LoginView = require('./components/LoginView.jsx');
 var ProfileView = require('./components/ProfileView.jsx');
 var RegistrationView = require('./components/RegistrationView.jsx');
 var engergyBreakDown = require('./components/energyBreakDownView.jsx');
+var modalStore = require('./stores/modalStore');
 
 // Stores -- Load here so Stores can begin listening to Events
 var UserStore = require('./stores/UserStore');
@@ -31,9 +35,17 @@ var DataStore = require('./stores/DataStore');
 
 // Actions
 var ViewActions = require('./actions/ViewActions');
+var ActionTypes = require('./constants/Constants').ActionTypes;
 
 var App = React.createClass({
+  getInitialState: function(){
+    return{
+      showModal: modalStore.getModalState().isOpen,
+      modal: null
+    }
 
+  },
+  
   mixins: [Router.Navigation, Router.State],
 
   getChildContext: function(){
@@ -44,6 +56,11 @@ var App = React.createClass({
   
   childContextTypes: {
     muiTheme: React.PropTypes.object
+  },
+
+  modalListener: function(){
+    var modalSpecs = modalStore.getModalState();
+    this.setState({showModal: modalSpecs.isOpen, modal: modalSpecs.modal});
   },
 
   componentWillMount: function(){ 
@@ -59,6 +76,18 @@ var App = React.createClass({
       borderColor: '#B6B6B6'
     };
     ThemeManager.setPalette(appPalette);
+  },
+
+  componentDidMount: function() {
+    modalStore.addChangeListener(this.modalListener);
+  },
+
+  componentWillUnmount: function (){
+    modalStore.removeChangeListener(this.modalListener);
+  },
+  
+  componentDidUnmount: function(){
+    Dispatcher.unregister(this.token);
   },
 
   toggleNav: function(){
@@ -78,6 +107,12 @@ var App = React.createClass({
         <NavMenu></NavMenu>
       <div className="content-container">
         <RouteHandler />
+      </div>
+      <div className="modal-container">
+      { this.state.showModal ? 
+        <div>
+          <this.state.modal openImmediately={true} dialog={true} />
+        </div> : null }
       </div>
       </div>
     );

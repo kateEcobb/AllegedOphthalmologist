@@ -13,7 +13,7 @@ module.exports = {
     LOAD_MODAL: null,
     SET_BULB_COLOR: null,
     USER_LOGOUT: null,
-    USER_LOGOUT_FAILURE: null,
+    USER_LOGOUT_FAILURE: null
     // MAIN_GRAPH_CHANGE: null,
   }),
 
