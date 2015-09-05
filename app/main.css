@@ -86,20 +86,56 @@
 }
 
 /*Light Bulb*/
-.bulb {
+.bulb1 {
     max-width: 100px;
     margin: auto;
     display: block;
     position: relative;
 }
 
-.bulb2 img{ 
+.bulb2 { 
   margin: auto;
   display: block;
   position: relative;
   max-width: 500px;
-
 }
+
+.bulb2 > svg { 
+  left: 50px;
+  top: 9px;
+  -webkit-filter: blur(5px);
+}
+
+.bulb1 > svg { 
+  left: 20px;
+  top: 3px;
+  -webkit-filter: blur(3px);  
+}
+
+.bulbContainer1{ 
+  width: 100px;
+  height: 100px;
+  position: relative;
+  display: block;
+  margin: auto;
+}
+
+.bulbContainer2{ 
+  width: 250px;
+  height: 250px;
+  position: relative;
+  display: block;
+  margin: auto;
+}
+
+.bulb, .img-responsive{ 
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
 /*Forms*/
 
 div.login {
@@ -160,21 +196,7 @@ svg {
   fill: black;
 }
 
-.bulbcontainer{ 
-  width: 100px;
-  height: 100px;
-  position: relative;
-  display: block;
-  margin: auto;
-}
 
-.bulb, .img-responsive{ 
-  width: 100%;
-  height: 100%;
-  position: absolute;
-  top: 0;
-  left: 0;
-}
 
 .img-responsive{ 
   z-index: 10;

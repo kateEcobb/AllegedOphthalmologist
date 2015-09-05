@@ -64,13 +64,15 @@ var BulbView = React.createClass({
   },
 
   showDonutGraph: function(){
-    ViewActions.loadModal(donutGraphWindow);
+    if(this.props.loadModal){ 
+      ViewActions.loadModal(donutGraphWindow);
+    }
   },
 
   render: function(){ 
     return ( 
-      <div className='bulbcontainer'>
-        <div className={this.props.name} ref='bulb'></div>
+      <div className={this.props.name}>
+        <div className={this.props.SVGname} ref='bulb'></div>
         <img src={'http://uxrepo.com/static/icon-sets/ionicons/png32/256/000000/ios7-lightbulb-outline-256-000000.png'} 
              id='donutModal' className='img-responsive' onClick={this.showDonutGraph}/>     
       </div> 

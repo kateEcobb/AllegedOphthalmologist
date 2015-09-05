@@ -6,9 +6,6 @@ var makeCircle = function(el, props, state){
                     .attr('className', 'bulbGlowContainer')
                     .attr('width', props.width)
                     .attr('height', props.height)
-                    .style('left', '20px')
-                    .style('top', '3px')
-                    .style('-webkit-filter', 'blur(3px)')
 
   var defs = svgContainer.append('defs')
   var filter = defs.append('filter')

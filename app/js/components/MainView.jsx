@@ -32,7 +32,7 @@ var MainView = React.createClass({
     return (
       <div>
 
-          <BulbView name={'bulb'} height={100} width={100} margin={5} cy={30} cx={30} r={30} />   
+          <BulbView loadModal={true} name={"bulbContainer1"} SVGname={'bulb1'} height={100} width={100} margin={5} cy={30} cx={30} r={30} />   
           <LineGraphView height={300} width={900} margin={10} />  
       </div>
     );
