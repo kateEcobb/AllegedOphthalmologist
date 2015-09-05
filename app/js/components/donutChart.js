@@ -116,7 +116,7 @@ var toolTip = function(className, data, specs){
 
   position = {
     top: (specs.h/6) - (svg.height - svgParent.height),
-    left: specs.w/3.25,
+    left: svgParent.width/2 - 62,
   };
 
   var textBox = d3.select('.'+className)
