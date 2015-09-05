@@ -17,6 +17,9 @@ var DataStore = assign({}, EventEmitter.prototype, {
   removeChangeListener: function (callback) {
     this.removeListener(CHANGE_EVENT, callback);
   },
+  logoutUser: function(){
+    data['Utility'] = [{}];
+  },
   setData: function(newData, key){
     data[key] = newData;
   },
@@ -40,6 +43,11 @@ DataStore.dispatchToken = Dispatcher.register(function (dispatch) {
     DataStore.setData(action.payload, 'Utility');
     DataStore.emitChange();
   }
+  // Clear user's utility data on logout
+  else if (action.type === ActionTypes.USER_LOGOUT){
+    // console.log('logging out');
+    DataStore.logoutUser();
+  } 
 
 });
 

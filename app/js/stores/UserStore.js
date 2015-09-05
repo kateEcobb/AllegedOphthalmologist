@@ -36,6 +36,11 @@ var UserStore = assign({}, EventEmitter.prototype, {
     user.utility_service_address = user_data.utility_service_address;
     user.token = user_data.token;
   },
+  logoutUser: function() {
+    for(i in user){
+      user[i] = null;
+    }
+  },
   getUser: function(){
     return user;
   },
@@ -68,6 +73,10 @@ UserStore.dispatchToken = Dispatcher.register(function (dispatch) {
   if (action.type === ActionTypes.USER_LOGIN) {
     UserStore.setUser(action.payload);
     UserStore.emitChange();
+  }
+  if (action.type === ActionTypes.USER_LOGOUT){
+    // console.log('logging out');
+    UserStore.logoutUser();
   } 
 });
 
