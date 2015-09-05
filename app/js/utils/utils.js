@@ -7,7 +7,7 @@ var setAuthHeader = function(){
   $.ajaxSetup({
       headers: { 'Authorization': "Bearer "+UserStore.getToken() }
   });
-}
+};
 
 var PostReq = function(route, data){ 
   console.log("Sending POST to " + route + " with " + data);
@@ -46,7 +46,7 @@ var GetReq = function(route){
       method: 'GET',
       dataType: 'json',
       success: function(data) {
-        console.log('succuss in ajax')
+        console.log('succuss in ajax');
         resolve(data);
       },
       error: function(xhr, status, err) {

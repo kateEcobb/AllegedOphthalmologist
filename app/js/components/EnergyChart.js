@@ -26,7 +26,7 @@ var graph = function(el, props, state) {
   else {
     drawDisablePad(options);
   }
-}
+};
 //////////////////////////////////////////////////////////////
 
 var initGraph = function(el, props, parsedState) {
@@ -188,7 +188,7 @@ var drawTimeBar = function(options) {
   var scale = options.scale;
   var data = options.data;
 
-  var timeOffset = ((new Date()).getTimezoneOffset() * 1000 * 60);
+  // var timeOffset = ((new Date()).getTimezoneOffset() * 1000 * 60);
   var timeNow = new Date(Date.now());
 
   // var actualX = scale.xRange(new Date(findActualTime(data).getTime() + timeOffset));
@@ -406,13 +406,13 @@ var findDAHRIndex = function(data) {
   }
   for (var i = 0; i < data.length; i++) {
     if (data[i].market === 'DAHR') {
-      // return [data[i - 1].time || null, i - 1];
+
       return i;
     }
   }
   return data.length - 1;
-}
+};
 
 module.exports = {
   graph: graph,
-}
+};

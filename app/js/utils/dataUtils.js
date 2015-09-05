@@ -21,7 +21,7 @@ var latestRT5MIndex = function(array) {
     }
   }
   return index;
-}
+};
 
 module.exports = {
 
@@ -38,11 +38,13 @@ module.exports = {
     for (var i = 0; i < state.data.Watt.length; i++) {
       watts.push({
         point: state.data.Watt[i].carbon,
-        time: new Date((new Date(state.data.Watt[i].timestamp)).getTime() + timeOffset),
+        // time: new Date((new Date(state.data.Watt[i].timestamp)).getTime()),
+        time: new Date(state.data.Watt[i].timestamp),
         id: (new Date(state.data.Watt[i].timestamp)).getTime(),
         market: state.data.Watt[i].market,
       });
     }
+    console.log(watts[0]);
     watts.sort(function(a, b) {
       return a.time - b.time;
     });
@@ -58,9 +60,16 @@ module.exports = {
         return false;
       }
 
+      // For situation where RT5M and DAHR occur at same time, but DAHR is next index
+      if (watts[i + 1] && datum.time === watts[i + 1].time) {
+        return false;
+      }
+
+      // If the datapoint is past the filter point
       if (i > index ) {
         return true;
       }
+      // otherwise filter out the point if it is a DAHR datapoint
       else if (datum.market === "DAHR") {
         return false;
       }
@@ -71,10 +80,11 @@ module.exports = {
 
     // Utility Data //////////
     var utilities = data.Utility = [];
-    for (var i = 0; i < state.data.Utility.length; i++) {
+    for (i = 0; i < state.data.Utility.length; i++) {
       utilities.push({
         point: parseFloat(state.data.Utility[i].interval_kWh),
-        time: new Date((new Date(state.data.Utility[i].interval_start)).getTime() + timeOffset),
+        // time: new Date((new Date(state.data.Utility[i].interval_start)).getTime()),
+        time: new Date(state.data.Utility[i].interval_start),
         ratio: watts[nearestTimeIndex(watts, state.data.Utility[i])].carbon, 
         id: (new Date(state.data.Utility[i].interval_start)).getTime()
       });
@@ -102,7 +112,7 @@ module.exports = {
   formatFocusDate : function(date) {
     var num = date.getDate();
     var day = Weekdays[date.getDay()];
-    var month = Months[date.getMonth()];
+    // var month = Months[date.getMonth()];
     var fullHour = date.getHours();
     var minutes = date.getMinutes();
     var hours = 12;
@@ -132,4 +142,4 @@ module.exports = {
     return 'translate(' + (x) + ',' + (y) + ')';
   }
 
-}
+};
