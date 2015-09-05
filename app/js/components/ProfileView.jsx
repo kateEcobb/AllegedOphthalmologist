@@ -10,7 +10,7 @@ var ViewActions = require('./../actions/ViewActions');
 var ActionTypes = require('./../constants/Constants').ActionTypes;
 
 //dialog
-var Dialog = require('./dialogWindow.jsx')
+var Dialog = require('./dialogWindow.jsx');
 
 // Form validation
 var Formsy = require('formsy-react');

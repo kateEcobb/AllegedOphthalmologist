@@ -16,7 +16,7 @@ var dialog = React.createClass({
       standardActions: [
       {text: 'cancel', onClick: this.close},
       ]
-    }
+    };
   },
   
   close: function(){
@@ -41,8 +41,8 @@ var dialog = React.createClass({
             </div>
         </Dialog>
       </div>
-    )
+    );
   }
-})
+});
 
 module.exports = dialog;

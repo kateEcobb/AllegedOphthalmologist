@@ -12,7 +12,7 @@ var Dialog = require('./dialogWindow.jsx');
 var DataStore = require('./../stores/DataStore');
 var modalStore = require('./../stores/modalStore');
 
-var ViewActions = require('./../actions/ViewActions')
+var ViewActions = require('./../actions/ViewActions');
 
 var ModalI = React.createClass({
 
@@ -73,7 +73,7 @@ var ModalI = React.createClass({
             
           </Dialog>
         </div>
-      )
+      );
     }else{
       return(
         <div>
@@ -81,7 +81,7 @@ var ModalI = React.createClass({
             <h4>This is a break down of how the grid is being powered</h4> 
           </div>
         </div>
-      )
+      );
     }
   }
 });
