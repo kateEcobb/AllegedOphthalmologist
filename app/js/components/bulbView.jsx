@@ -70,7 +70,7 @@ var BulbView = React.createClass({
   render: function(){ 
     return ( 
       <div className='bulbcontainer'>
-        <div className="bulb" ref='bulb'></div>
+        <div className={this.props.name} ref='bulb'></div>
         <img src={'http://uxrepo.com/static/icon-sets/ionicons/png32/256/000000/ios7-lightbulb-outline-256-000000.png'} 
              id='donutModal' className='img-responsive' onClick={this.showDonutGraph}/>     
       </div> 

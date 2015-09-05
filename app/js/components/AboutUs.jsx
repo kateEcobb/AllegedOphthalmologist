@@ -33,7 +33,7 @@ var AboutUs = React.createClass({
     var modal2 = '.modal2';
     return ( 
       <div>   
-        <h1>something pretty will be here</h1> 
+        <BulbView name={"bulb2"} height={400} width={400} margin={5} cx={50} cy={50} r={50} />
         <div className = {modal1}></div>
         <div className = {modal2}></div>
       </div>

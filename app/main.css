@@ -92,6 +92,14 @@
     display: block;
     position: relative;
 }
+
+.bulb2 img{ 
+  margin: auto;
+  display: block;
+  position: relative;
+  max-width: 500px;
+
+}
 /*Forms*/
 
 div.login {
