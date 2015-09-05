@@ -19,8 +19,11 @@ var AboutUs = React.createClass({
     };
   },
 
-  componentDidMount: function(){ 
-    this.setState({data: DataStore.getData() });
+  componentWillMount: function(){ 
+    this.setState({data: DataStore.getData() })
+    // .then(this.makeGraphs);
+
+
   }, 
 
   makeGraphs: function(){ 
