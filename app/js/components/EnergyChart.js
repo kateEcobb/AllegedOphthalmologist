@@ -67,6 +67,7 @@ var initGraph = function(el, props, parsedState) {
     yMaxRatio: 1.02,
     ratio: props.ratio || false,
     orient: options.overlay ? 'right' : 'left',
+    headerOffset: 10,
   };
 
   // Set up the yRange
@@ -75,7 +76,7 @@ var initGraph = function(el, props, parsedState) {
   }), d3.max(data, function(datum) {
     return datum.point * scale.yMaxRatio * (scale.ratio ? datum.ratio : 1);
   })]).nice()
-  .range([scale.height - scale.axisOffset - scale.axisOffset, 0]);
+  .range([scale.height - scale.axisOffset - scale.headerOffset, 0]);
 
   // Set up the xRange - Time Scale
   scale.xRange = d3.time.scale().domain([ 
@@ -104,7 +105,7 @@ var drawAxis = function(options) {
   var yAxis = d3.svg.axis().scale(scale.yRange).orient(scale.orient);
   graph.append('svg:g')
   .attr('class', 'y axis')
-  .attr('transform', 'translate(' + ( options.overlay ? scale.width - scale.axisOffset : scale.axisOffset ) + ',' + (scale.axisOffset) + ')')
+  .attr('transform', 'translate(' + ( options.overlay ? scale.width - scale.axisOffset : scale.axisOffset ) + ',' + (scale.headerOffset) + ')')
   .call(yAxis);
 
   // Set up and draw the X Axis if this is not a overlay
@@ -138,12 +139,12 @@ var drawLine = function(options) {
   graph.append('svg:path')
   .attr('d', lineFunc(data))
   .attr('class', 'energyPath')
-  .attr('transform', 'translate(' + (scale.axisOffset) + ',' + (scale.axisOffset) + ')')
-  .on('mousemove', function(event) {
-    var mouse = d3.mouse(this);
-    d3.select('.energyPath').select('title').text(mouse[1]);
-  })
-  .append('title');
+  .attr('transform', 'translate(' + (scale.axisOffset) + ',' + (scale.headerOffset) + ')')
+  // .on('mousemove', function(event) {
+  //   var mouse = d3.mouse(this);
+  //   d3.select('.energyPath').select('title').text(mouse[1]);
+  // })
+  // .append('title');
 
   return;
 };
@@ -156,7 +157,7 @@ var drawPoints = function(options) {
   // Define the graph the points will sit in
   var pointGraph = graph.append('svg:g')
                     .attr('class', 'pointGraph')
-                    .attr('transform', 'translate(' + (scale.axisOffset) + ',' + (scale.axisOffset) + ')');
+                    .attr('transform', 'translate(' + (scale.axisOffset) + ',' + (scale.headerOffset) + ')');
 
   // DATA JOIN //
   var points = pointGraph.selectAll('circle')
@@ -212,10 +213,10 @@ var drawTimeBar = function(options) {
   var currentX = scale.xRange(timeNow);
 
   graph.append('svg:g')
-  .attr('transform', 'translate(' + (scale.axisOffset) + ',' + (scale.axisOffset) + ')')
+  .attr('transform', 'translate(' + (scale.axisOffset) + ',' + (scale.headerOffset) + ')')
     .append('svg:rect')
     .attr('class', 'currentTimeBar')
-    .attr('height', scale.height - scale.axisOffset - scale.axisOffset)
+    .attr('height', scale.height - scale.axisOffset - scale.headerOffset)
     .attr('width', scale.barWidth)
     .attr('x', currentX - scale.barWidth / 2)
     .attr('y', 0);
@@ -236,7 +237,7 @@ var drawPredictPoint = function(options) {
   
   graph.append('svg:circle')
   .attr('class', 'predictPoint')
-  .attr('transform', utils.translate(scale.axisOffset, scale.axisOffset))
+  .attr('transform', utils.translate(scale.axisOffset, scale.headerOffset))
   .attr('cx', scale.xRange(data[predictIndex].time))
   .attr('cy', scale.yRange(data[predictIndex].point));
 };
@@ -301,7 +302,7 @@ var drawCapturePad = function(options) {
 
   // Draw the focus
   var focus = graph.append('svg:g')
-  .attr('transform', 'translate(' + (scale.axisOffset) + ',' + (scale.axisOffset) + ')')
+  .attr('transform', 'translate(' + (scale.axisOffset) + ',' + (scale.headerOffset) + ')')
   .style('display', 'none');
 
   // Attach elements to focus ===================================
@@ -314,7 +315,7 @@ var drawCapturePad = function(options) {
   focus.append('svg:line')
   .attr('class', 'focusXLine')
   .attr('y1', 0)
-  .attr('y2', scale.height - scale.axisOffset - scale.axisOffset);
+  .attr('y2', scale.height - scale.axisOffset - scale.headerOffset);
 
   focus.append('svg:line')
   .attr('class', 'focusYLine')
@@ -356,7 +357,7 @@ var drawCapturePad = function(options) {
 
     focus.select('.focusXLine')
     .attr('transform', 'translate(' + (x) + ',' + (y) + ')')
-    .attr('y2', scale.height - scale.axisOffset - scale.axisOffset - y);
+    .attr('y2', scale.height - scale.axisOffset - scale.headerOffset - y);
 
     focus.select('.focusYLine')
     .attr('transform', 'translate(' + (0) + ',' + (y) + ')');  
@@ -385,9 +386,9 @@ var drawCapturePad = function(options) {
 
   // Draw the Surface
   graph.append('svg:rect')
-  .attr('transform', 'translate(' + (scale.axisOffset) + ',' + (scale.axisOffset) + ')')
+  .attr('transform', 'translate(' + (scale.axisOffset) + ',' + (scale.headerOffset) + ')')
   .attr('width', scale.width - scale.axisOffset - scale.axisOffset)
-  .attr('height', scale.height - scale.axisOffset - scale.axisOffset)
+  .attr('height', scale.height - scale.axisOffset - scale.headerOffset)
   .style('fill', 'none')
   .style('pointer-events', 'all')
   .on('mouseover', function() { 
