@@ -20,6 +20,7 @@ var graph = function(el, props, state) {
   if (!options.userDisable) {
     drawLine(options);
     drawMiscData(options);
+    // drawTimeBar(options);
     drawCapturePad(options);
   }
   else {
@@ -32,7 +33,7 @@ var initGraph = function(el, props, parsedState) {
   var options = {};
   var data;
   options.graphType = props.type || GraphTypes.MAIN;
-  console.log(options.graphType);
+
   // DATA ===============================
   switch(options.graphType) {
     case GraphTypes.USER_REQUIRE:
@@ -41,6 +42,7 @@ var initGraph = function(el, props, parsedState) {
       break;
     case GraphTypes.MAIN:
       data = options.data = parsedState.Watt;
+      options.unit = "lbs/Mwh";
       break;
     case GraphTypes.USER_CARBON:
       data = options.data = parsedState.Utility;
@@ -48,11 +50,12 @@ var initGraph = function(el, props, parsedState) {
       break;
     case GraphTypes.USER_MWH:
       data = options.data = parsedState.Utility;
+      options.unit = 'Mwh';
       break;
     default:
       break;
   }
-  console.log(data);
+
   // SCALE ==============================
   var scale = options.scale = {
     height: parseInt(props.height, 10),
@@ -189,17 +192,22 @@ var drawTimeBar = function(options) {
   var timeNow = new Date(Date.now());
 
   // var actualX = scale.xRange(new Date(findActualTime(data).getTime() + timeOffset));
-  var actualTime = new Date(findActualTime(data).getTime() + ((new Date()).getTimezoneOffset() * 1000 * 60));
-  var actualX = scale.xRange(actualTime);
+  // var actualTime = new Date(findActualTime(data).getTime() + ((new Date()).getTimezoneOffset() * 1000 * 60));
+  // var actualX = scale.xRange(actualTime[0]);
 
-  graph.append('svg:g')
-  .attr('transform', 'translate(' + (scale.axisOffset) + ',' + (0) + ')')
-    .append('svg:rect')
-    .attr('class', 'actualTimeBar')
-    .attr('height', scale.height - scale.axisOffset)
-    .attr('width', scale.barWidth)
-    .attr('x', actualX - scale.barWidth / 2)
-    .attr('y', 0);
+  // graph.append('svg:g')
+  // .attr('transform', 'translate(' + (scale.axisOffset) + ',' + (0) + ')')
+  //   .append('svg:rect')
+  //   .attr('class', 'actualTimeBar')
+  //   .attr('height', scale.height - scale.axisOffset)
+  //   .attr('width', scale.barWidth)
+  //   .attr('x', actualX - scale.barWidth / 2)
+  //   .attr('y', 0);
+
+  // graph.append('svg:circle')
+  // .attr('transform', utils.translate(scale.axisOffset, 0))
+  // .attr('class', 'predictPoint')
+  // .attr('x', scale.xRange())
 
   var currentX = scale.xRange(timeNow);
 
@@ -214,34 +222,54 @@ var drawTimeBar = function(options) {
 
 };
 
-var drawActualPredictText = function(options) {
+var drawPredictPoint = function(options) {
 
   var graph = options.graph;
   var scale = options.scale;
   var data = options.data;
 
-  var actualTime = new Date(findActualTime(data).getTime() + ((new Date()).getTimezoneOffset() * 1000 * 60));
-  var actualX = scale.xRange(actualTime);
-
-  // Actual
-  graph.append('svg:g')
-  .attr('transform', 'translate(' + (scale.axisOffset) + ',' + (0) + ')')
-    .append('svg:text')
-    .attr('class', 'actualText')
-    .attr('x', (actualX - scale.axisOffset - scale.axisOffset) / 2)
-    .attr('y', scale.axisOffset / 2)
-    .text('Measured Data');
-
-  // Predicted
-  graph.append('svg:g')
-  .attr('transform', 'translate(' + (actualX + scale.axisOffset) + ',' + (0) + ')')
-    .append('svg:text')
-    .attr('class', 'predictedText')
-    .attr('x', (scale.width - scale.axisOffset - scale.axisOffset - scale.axisOffset - actualX) / 2)
-    .attr('y', scale.axisOffset / 2)
-    .text('Predicted Data');
+  var predictIndex = findDAHRIndex(data);
+  // Test for invalid index, if we have empty dataset
+  if (predictIndex === -1) {
+    throw new Error();
+  }
   
+  graph.append('svg:circle')
+  .attr('class', 'predictPoint')
+  .attr('transform', utils.translate(scale.axisOffset, scale.axisOffset))
+  .attr('cx', scale.xRange(data[predictIndex].time))
+  .attr('cy', scale.yRange(data[predictIndex].point));
 };
+
+// THIS MIGHT BE DEPRECATED //////////////////
+// var drawActualPredictText = function(options) { 
+
+//   var graph = options.graph;
+//   var scale = options.scale;
+//   var data = options.data;
+
+//   var actualTime = new Date(findActualTime(data).getTime() + ((new Date()).getTimezoneOffset() * 1000 * 60));
+//   var actualX = scale.xRange(actualTime[0]);
+
+//   // Actual
+//   graph.append('svg:g')
+//   .attr('transform', 'translate(' + (scale.axisOffset) + ',' + (0) + ')')
+//     .append('svg:text')
+//     .attr('class', 'actualText')
+//     .attr('x', (actualX - scale.axisOffset - scale.axisOffset) / 2)
+//     .attr('y', scale.axisOffset / 2)
+//     .text('Measured Data');
+
+//   // Predicted
+//   graph.append('svg:g')
+//   .attr('transform', 'translate(' + (actualX + scale.axisOffset) + ',' + (0) + ')')
+//     .append('svg:text')
+//     .attr('class', 'predictedText')
+//     .attr('x', (scale.width - scale.axisOffset - scale.axisOffset - scale.axisOffset - actualX) / 2)
+//     .attr('y', scale.axisOffset / 2)
+//     .text('Predicted Data');
+  
+// };
 
 var drawDisablePad = function(options) {
 
@@ -257,16 +285,13 @@ var drawDisablePad = function(options) {
 };
 
 var drawMiscData = function(options) {
-  // console.log(options.GraphType);
-  // console.log(GraphTypes.MAIN);
+
   if (options.graphType === GraphTypes.MAIN) {
     drawTimeBar(options);
-    drawActualPredictText(options);
+    drawPredictPoint(options);
+
   }
-  // if (options.graphType === GraphTypes.USER_REQUIRE) {
-  //   drawCapturePad(options);
-  // }
-}
+};
 
 var drawCapturePad = function(options) {
 
@@ -274,13 +299,12 @@ var drawCapturePad = function(options) {
   var scale = options.scale;
   var data = options.data;
 
-
   // Draw the focus
   var focus = graph.append('svg:g')
   .attr('transform', 'translate(' + (scale.axisOffset) + ',' + (scale.axisOffset) + ')')
   .style('display', 'none');
 
-  // Attach Point to focus
+  // Attach elements to focus ===================================
   focus.append('svg:circle')
   .attr('class', 'focal')
   .style('fill', 'none')
@@ -295,29 +319,38 @@ var drawCapturePad = function(options) {
   focus.append('svg:line')
   .attr('class', 'focusYLine')
   .attr('x1', 0)
-  .attr('x2', scale.width - scale.axisOffset - scale.axisOffset);
+  .attr('x2', scale.width - scale.axisOffset - scale.axisOffset);  
 
   focus.append('svg:text')
-  .attr('class', 'focusInfo')
+  .attr('class', 'focusData highlight')
+  .attr('dy', '-3rem');
+  focus.append('svg:text')
+  .attr('class', 'focusData info')
   .attr('dy', '-3rem');
   
   focus.append('svg:text')
-  .attr('class', 'focusDate')
+  .attr('class', 'focusDate highlight')
+  .attr('dy', '-1rem');
+  focus.append('svg:text')
+  .attr('class', 'focusDate info')
   .attr('dy', '-1rem');
   
   var mouseMove = function() {
-    // console.log('move');
+
     var mouseDate = scale.xRange.invert(d3.mouse(this)[0]);
     var mousePos = d3.mouse(this);
 
-    var bisectTime = d3.bisector(function(datum) { return datum.time; }).left;
-
+    // Calculate get the index right before the mouse date and then find whether left or right is closer
     var index = utils.bisectDateIndex(data, mouseDate);
     var nearestDatum = (mouseDate - data[index].time > data[index + 1].time - mouseDate) ? data[index + 1] : data[index];
 
     var x = scale.xRange(nearestDatum.time);
     var y = scale.yRange(nearestDatum.point * (scale.ratio ? nearestDatum.ratio : 1));
 
+    // Calculate dx based on how far along the graph we are;
+    var textAnchor = (x / (scale.width - scale.axisOffset - scale.axisOffset)) < 0.88 ? 'start' : 'end';
+
+    // Update the position of all the focus elements
     focus.select('.focal')
     .attr('transform', 'translate(' + (x) + ',' + (y) + ')');  
 
@@ -328,12 +361,24 @@ var drawCapturePad = function(options) {
     focus.select('.focusYLine')
     .attr('transform', 'translate(' + (0) + ',' + (y) + ')');  
 
-    focus.select('.focusInfo')
+    focus.select('.focusData.highlight')
     .attr('transform', utils.translate(x, y))
-    .text( (Math.round((nearestDatum.point + 0.00001) * 100) / 100));
+    .attr('text-anchor', textAnchor)
+    .text( (Math.round((nearestDatum.point + 0.00001) * 100) / 100) + ' ' + options.unit);
 
-    focus.select('.focusDate')
+    focus.select('.focusData.info')
     .attr('transform', utils.translate(x, y))
+    .attr('text-anchor', textAnchor)
+    .text( (Math.round((nearestDatum.point + 0.00001) * 100) / 100) + ' ' + options.unit);
+
+    focus.select('.focusDate.highlight')
+    .attr('transform', utils.translate(x, y))
+    .attr('text-anchor', textAnchor)
+    .text( utils.formatFocusDate(nearestDatum.time) );
+
+    focus.select('.focusDate.info')
+    .attr('transform', utils.translate(x, y))
+    .attr('text-anchor', textAnchor)
     .text( utils.formatFocusDate(nearestDatum.time) );
 
   };
@@ -346,10 +391,8 @@ var drawCapturePad = function(options) {
   .style('fill', 'none')
   .style('pointer-events', 'all')
   .on('mouseover', function() { 
-    // console.log('over');
     focus.style('display', null); })
   .on('mouseout', function() { 
-    // console.log('out');
     focus.style('display', 'none'); })
   .on('mousemove', mouseMove);
 
@@ -357,16 +400,17 @@ var drawCapturePad = function(options) {
 
 //////
 
-var findActualTime = function(data) {
-  console.log("Time", data);
+var findDAHRIndex = function(data) {
   if (!data[0].market) {
-    return new Date(Date.now());
+    return -1;
   }
   for (var i = 0; i < data.length; i++) {
     if (data[i].market === 'DAHR') {
-      return data[i - 1].time || null;
+      // return [data[i - 1].time || null, i - 1];
+      return i;
     }
   }
+  return data.length - 1;
 }
 
 module.exports = {

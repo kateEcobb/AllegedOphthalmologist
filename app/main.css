@@ -52,17 +52,9 @@
   opacity: 0.5;
 }
 
-.actualTimeBar {
-  fill: red;
-  opacity: 0.5;
-}
-
-.actualText {
-
-}
-
-.predictedText {
-
+.predictPoint {
+  r: 3;
+  fill: black;
 }
 
 .focusXLine {
@@ -79,6 +71,12 @@
 
 .disablePad {
   fill: grey;
+  opacity: 0.75;
+}
+
+.highlight {
+  stroke: white;
+  stroke-width: 0.33rem;
   opacity: 0.75;
 }
 

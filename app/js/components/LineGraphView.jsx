@@ -1,7 +1,7 @@
 var React = require('react');
 var d3 = require('d3');
-// var lineChart = require('./lineChart.js');
-// var userLineChart = require('./userLineChart.js');
+
+
 var EnergyChart = require('./EnergyChart.js');
 var GraphTypes = require('../constants/Constants.js').GraphTypes;
 
@@ -44,7 +44,7 @@ var LineGraphView = React.createClass({
 
   componentDidMount: function() {
     var that = this;
-
+    console.log(";alskdjf;asldf", this.props);
     // Set Stores
     DataStore.addChangeListener(this.loadData);
     UserStore.addChangeListener(this.loadUser);
@@ -77,9 +77,9 @@ var LineGraphView = React.createClass({
     el.innerHTML = '';
     console.log(this.state.data.Watt[0]);
     EnergyChart.graph(el, {
-      height: 600,
-      width: 900,
-      margin: 5,
+      height: this.props.height,
+      width: this.props.width,
+      margin: this.props.margin,
       type: GraphTypes.MAIN,
     }, this.state);
   },
@@ -90,19 +90,18 @@ var LineGraphView = React.createClass({
     if (this.state.user) {
       if (this.state.data.Utility.length > 1) {
         EnergyChart.graph(el, {
-          height: 500,
-          width: 1000,
-          margin: 10,
+          height: 300,
+          width: 900,
+          margin: 5,
           type: GraphTypes.USER_MWH,
         }, this.state);
       }
     }
     else {
-      console.log("Not logged in");
       EnergyChart.graph(el, {
-        height: 500,
-        width: 1000,
-        margin: 10,
+        height: 300,
+        width: 900,
+        margin: 5,
         type: GraphTypes.USER_REQUIRE,
       }, this.state);
     }
