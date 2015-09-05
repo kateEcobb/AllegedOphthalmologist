@@ -90,18 +90,18 @@ var LineGraphView = React.createClass({
     if (this.state.user) {
       if (this.state.data.Utility.length > 1) {
         EnergyChart.graph(el, {
-          height: 300,
-          width: 900,
-          margin: 5,
+          height: this.props.height,
+          width: this.props.width,
+          margin: this.props.margin,
           type: GraphTypes.USER_MWH,
         }, this.state);
       }
     }
     else {
       EnergyChart.graph(el, {
-        height: 300,
-        width: 900,
-        margin: 5,
+        height: this.props.height,
+        width: this.props.width,
+        margin: this.props.margin,
         type: GraphTypes.USER_REQUIRE,
       }, this.state);
     }

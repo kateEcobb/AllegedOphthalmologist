@@ -62,12 +62,13 @@ var initGraph = function(el, props, parsedState) {
     width: parseInt(props.width, 10),
     margin: props.margin ? parseInt(props.margin, 10) : 10,
     barWidth: parseFloat(props.barWidth) || 3,
+    headerOffset: 10,
+    footerOffset: 25,
     axisOffset: 50, 
     yMinRatio: 0.95,
     yMaxRatio: 1.02,
     ratio: props.ratio || false,
     orient: options.overlay ? 'right' : 'left',
-    headerOffset: 10,
   };
 
   // Set up the yRange
@@ -76,7 +77,7 @@ var initGraph = function(el, props, parsedState) {
   }), d3.max(data, function(datum) {
     return datum.point * scale.yMaxRatio * (scale.ratio ? datum.ratio : 1);
   })]).nice()
-  .range([scale.height - scale.axisOffset - scale.headerOffset, 0]);
+  .range([scale.height - scale.headerOffset - scale.footerOffset, 0]);
 
   // Set up the xRange - Time Scale
   scale.xRange = d3.time.scale().domain([ 
@@ -113,7 +114,7 @@ var drawAxis = function(options) {
     var xAxis = d3.svg.axis().scale(scale.xRange);
     graph.append('svg:g')
     .attr('class', 'x axis')
-    .attr('transform', 'translate(' + (scale.axisOffset) + ',' + (scale.height - scale.axisOffset) + ')')
+    .attr('transform', 'translate(' + (scale.axisOffset) + ',' + (scale.height - scale.footerOffset) + ')')
     .call(xAxis);
   }
 
@@ -216,7 +217,7 @@ var drawTimeBar = function(options) {
   .attr('transform', 'translate(' + (scale.axisOffset) + ',' + (scale.headerOffset) + ')')
     .append('svg:rect')
     .attr('class', 'currentTimeBar')
-    .attr('height', scale.height - scale.axisOffset - scale.headerOffset)
+    .attr('height', scale.height - scale.headerOffset - scale.footerOffset)
     .attr('width', scale.barWidth)
     .attr('x', currentX - scale.barWidth / 2)
     .attr('y', 0);
@@ -280,7 +281,7 @@ var drawDisablePad = function(options) {
   graph.append('svg:rect')
   .attr('transform', utils.translate(-scale.margin, -scale.margin))
   .attr('class', 'disablePad')
-  .attr('width', scale.width + scale.margin + scale.margin)
+  .attr('width', scale.width + scale.margin)
   .attr('height', scale.height + scale.margin + scale.margin);
 
 };
@@ -315,7 +316,7 @@ var drawCapturePad = function(options) {
   focus.append('svg:line')
   .attr('class', 'focusXLine')
   .attr('y1', 0)
-  .attr('y2', scale.height - scale.axisOffset - scale.headerOffset);
+  .attr('y2', scale.height - scale.headerOffset - scale.footerOffset);
 
   focus.append('svg:line')
   .attr('class', 'focusYLine')
@@ -357,7 +358,7 @@ var drawCapturePad = function(options) {
 
     focus.select('.focusXLine')
     .attr('transform', 'translate(' + (x) + ',' + (y) + ')')
-    .attr('y2', scale.height - scale.axisOffset - scale.headerOffset - y);
+    .attr('y2', scale.height - scale.headerOffset - scale.footerOffset - y);
 
     focus.select('.focusYLine')
     .attr('transform', 'translate(' + (0) + ',' + (y) + ')');  
@@ -388,7 +389,7 @@ var drawCapturePad = function(options) {
   graph.append('svg:rect')
   .attr('transform', 'translate(' + (scale.axisOffset) + ',' + (scale.headerOffset) + ')')
   .attr('width', scale.width - scale.axisOffset - scale.axisOffset)
-  .attr('height', scale.height - scale.axisOffset - scale.headerOffset)
+  .attr('height', scale.height - scale.headerOffset - scale.footerOffset)
   .style('fill', 'none')
   .style('pointer-events', 'all')
   .on('mouseover', function() { 
