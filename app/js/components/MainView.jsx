@@ -96,7 +96,7 @@ var MainView = React.createClass({
             <img src={'http://uxrepo.com/static/icon-sets/ionicons/png32/256/000000/ios7-lightbulb-outline-256-000000.png'} id='donutModal' className='img-responsive' onClick={this.showDonutGraph}/>     
           </div>  
             <LineGraphView height={300} width={900} margin={5} /> 
-            <this.state.modal openImmediately={true}/>
+            <this.state.modal openImmediately={true} dialog={true} />
         </div>
       )
     }else{

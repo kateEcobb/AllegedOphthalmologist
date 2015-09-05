@@ -25,8 +25,16 @@ var ModalI = React.createClass({
     };
   },
 
+  dismount: function(){
+    var isOpen = modalStore.getModalState().isOpen;
+    if(!isOpen){
+      window.removeEventListener('resize', this.reSizeGraphs);
+    }
+  },
+
   componentDidMount: function(){
     this.setState({ data: DataStore.getData() });
+    modalStore.addChangeListener(this.dismount);
   },
 
   componentDidUpdate: function(){
@@ -34,7 +42,8 @@ var ModalI = React.createClass({
     window.addEventListener('resize', this.reSizeGraphs);
   },
 
-  componentWillUnmout: function(){
+  componentWillUnmount: function(){
+    // modalStore.removeEventListener(this.dismount);
     window.removeEventListener('resize', this.reSizeGraphs);
   },
 
@@ -52,18 +61,28 @@ var ModalI = React.createClass({
 
   render: function(){
     var modalbody = 'modal-body';
-    return (
-      <div>
-        <Dialog 
-          openImmediately={this.props.openImmediately}>
-          
-          <div style={{'text-align': 'center'}} className={modalbody}>
+    if(this.props.dialog){
+      return (
+        <div>
+          <Dialog 
+            openImmediately={this.props.openImmediately}>
+            
+            <div style={{'textAlign': 'center'}} className={modalbody}>
+              <h4>This is a break down of how the grid is being powered</h4> 
+            </div>
+            
+          </Dialog>
+        </div>
+      )
+    }else{
+      return(
+        <div>
+          <div style={{'textAlign': 'center'}} className={modalbody}>
             <h4>This is a break down of how the grid is being powered</h4> 
           </div>
-          
-        </Dialog>
-      </div>
-    )
+        </div>
+      )
+    }
   }
 });
 

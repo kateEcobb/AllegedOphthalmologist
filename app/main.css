@@ -131,6 +131,10 @@ div.login {
   font-size: 2em;
 }
 
+.test1, .test2{
+  display: inline;
+}
+
 svg {
     display: block;
     position: relative;
