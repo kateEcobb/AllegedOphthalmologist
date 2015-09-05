@@ -25,7 +25,8 @@ var BulbView = React.createClass({
     this.setState({bulbData: BulbStore.getData()});
     if(this.state.bulbData > .5){ 
       var green = Math.floor(((this.state.bulbData-.5)/.5)*255) 
-      this.setState({rgb: 'rgb(255,'+green+',0)'})
+      console.log(green)
+      this.setState({rgb: 'rgb(255,'+(255-green)+',0)'})
 
     } else if(this.state.bulbData < .5){ 
       var red = Math.floor((this.state.bulbData/.5)*255)

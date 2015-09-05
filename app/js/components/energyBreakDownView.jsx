@@ -43,10 +43,6 @@ var ModalI = React.createClass({
   },
 
   componentWillUnmount: function(){
-<<<<<<< HEAD
-    // modalStore.removeEventListener(this.dismount);
-=======
->>>>>>> [fix] Minor styling changes, factored out bulbView + in the process of creating a new homepage
     window.removeEventListener('resize', this.reSizeGraphs);
   },
 
