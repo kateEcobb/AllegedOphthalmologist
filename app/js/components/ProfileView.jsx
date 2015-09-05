@@ -96,6 +96,11 @@ var ProfileView = React.createClass({
 
   render: function (){
     return(
+      <div>
+      <div className="app-title">
+        <h1>GridAware</h1>
+        Compare your Energy Use to Current Grid Conditions
+      </div>
       <div className="container">
         <Tabs>
         <Tab label="Account Summary">
@@ -137,6 +142,7 @@ var ProfileView = React.createClass({
         </Tab>
         </Tabs>
 
+      </div>
       </div>
     );
   }
