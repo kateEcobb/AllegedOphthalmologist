@@ -20,7 +20,7 @@ var BulbStore = require('./../stores/BulbStore');
 // Child Views
 var LineGraphView = require('./LineGraphView.jsx');
 var GraphToolBar = require('./graphToolBar.jsx');
-var BulbView = require('./BulbView.jsx');
+var BulbView = require('./bulbView.jsx');
 
 var MainView = React.createClass({
   
