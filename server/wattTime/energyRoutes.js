@@ -10,4 +10,5 @@ module.exports = function(app){
   else{
     app.get('/api/get24HourAhead', energyController.get24HourAhead);
   } 
+  // app.get('/api/get24HourAhead', energyController.get24HourAhead);
 };

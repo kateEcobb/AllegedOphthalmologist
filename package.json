@@ -6,7 +6,7 @@
   "scripts": {
     "postinstall": "grunt build",
     "start": "node server/server.js",
-    "test": "jest"
+    "test": "./node_modules/karma/bin/karma start"
   },
   "repository": {
     "type": "git",
@@ -53,7 +53,21 @@
     "react-tap-event-plugin": "^0.1.7",
     "react-tools": "^0.13.3",
     "request": "^2.61.0",
-    "webpack": "^1.12.0",
     "webpack-dev-server": "^1.10.1"
-  }
+  },
+  "devDependencies": {
+      "babel-core": "^4.4.5",
+      "babel-loader": "^4.0.0",
+      "jasmine-core": "^2.2.0",
+      "karma-jasmine": "^0.3.5",
+      "karma-webpack": "^1.5.0",
+      "rewire": "^2.3.1",
+      "webpack": "^1.5.3",
+      "karma": "^0.13",
+      "karma-chrome-launcher": "^0.2.0",
+      "karma-cli": "^0.1.0",
+      "karma-mocha": "^0.2.0",
+      "karma-sourcemap-loader": "^0.3.5",
+      "karma-webpack": "^1.6.0"
+    }
 }
