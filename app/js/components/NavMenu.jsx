@@ -73,9 +73,9 @@ var NavMenu = React.createClass({
   handleMenuSelect: function(e, selectedIndex, menuItem){
     console.log(e, selectedIndex, menuItem);
     if(menuItem.text === 'Profile'){
-      this.transitionTo('profile')
+      this.transitionTo('profile');
     }else if(menuItem.text === 'Home'){
-      this.transitionTo('/')
+      this.transitionTo('/');
     }else if(menuItem.text === 'Logout'){
       this.transitionTo('/');
       ViewAction.logoutUser();

@@ -8,7 +8,7 @@ var ThemeManager = new mui.Styles.ThemeManager();
 var FlatButton = mui.FlatButton;
 
 //dialog
-var Dialog = require('./dialogWindow.jsx')
+var Dialog = require('./dialogWindow.jsx');
 
 // Form validation
 var Formsy = require('formsy-react');

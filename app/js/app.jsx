@@ -39,7 +39,7 @@ var App = React.createClass({
   getChildContext: function(){
     return {
       muiTheme: ThemeManager.getCurrentTheme()
-    }
+    };
   },
   
   childContextTypes: {
