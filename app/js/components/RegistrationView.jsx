@@ -55,7 +55,7 @@ var RegistrationView = React.createClass({
     Dispatcher.unregister(this.token);
   },
   redirectHome: function(){
-    this.transitionTo("/");
+    this.transitionTo("graphs");
   },
   enableButton: function () {
     this.setState({
