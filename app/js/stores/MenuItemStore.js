@@ -17,6 +17,7 @@ var menuItems = [
   { route: profile, text: 'Profile', reqLogin: true, disabled: true, display: false },
   { route: login, text: 'Login', display: true },
   { route: 'logout', text: 'Logout', reqLogin: true, display: false },
+  { route: 'graphs', text: 'Current Energy', display: true }
 ]
 
 var MenuStore = assign({}, EventEmitter.prototype, {
@@ -56,7 +57,7 @@ MenuStore.dispatchToken = Dispatcher.register(function(dispatcher){
     menuItems[1],
     menuItems[2],
     menuItems[3],
-    menuItems[4],
+    menuItems[4]
   ];
   if(action.type === ActionTypes.USER_LOGIN || action.type === ActionTypes.USER_LOGOUT){
     itemsToToggle.forEach(function(item){
