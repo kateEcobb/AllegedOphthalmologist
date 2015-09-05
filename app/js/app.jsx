@@ -42,7 +42,7 @@ var App = React.createClass({
     return{
       showModal: modalStore.getModalState().isOpen,
       modal: null
-    }
+    };
 
   },
   
