@@ -20,9 +20,9 @@ var makeCircle = function(el, props, state){
 
   var circle = svgContainer.append('circle')
                           .attr('className', 'bulbGlow')
-                          .attr('cx', 30)
-                          .attr('cy', 30)
-                          .attr('r', 30)
+                          .attr('cx', props.cx)
+                          .attr('cy', props.cy)
+                          .attr('r', props.r)
                           .style('fill', state.toString())
   return;
 };
