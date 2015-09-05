@@ -129,10 +129,7 @@ var App = React.createClass({
   render: function(){
     return (
       <div className="app-container">
-      <div className="app-title">
-        <h1>GridAware</h1>
-        Compare your Energy Use to Current Grid Conditions
-      </div>
+      
         <span className="nav-btn">
           <RaisedButton onClick={this.toggleNav}>Menu</RaisedButton>
         </span>
