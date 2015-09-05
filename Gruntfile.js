@@ -65,19 +65,22 @@ module.exports = function(grunt) {
     watch: {
       server: {
         files: ['server/**/*.js'],
-        tasks: ['test']
+        tasks: ['test'],
       },
       client: {
         files: ['app/**/*.js', 'app/**/*.jsx'],
-        tasks: ['clear', 'test', 'webpack:app']
+        tasks: ['clear', 'test', 'webpack:app'],
       },
       css: {
         files: ['app/main.css'],
-        tasks: ['cssmin']
+        tasks: ['cssmin'],
       },
       index: {
         files: ['app/index.html'],
-        tasks: ['copy']
+        tasks: ['copy'],
+      },
+      options: {
+        debounceDelay: 1000,
       }
     },
 

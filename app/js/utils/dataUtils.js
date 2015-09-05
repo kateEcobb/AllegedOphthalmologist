@@ -53,7 +53,7 @@ module.exports = {
     var index = latestRT5MIndex(watts);
 
     // find latest RT5M and then filter out DAHR to that index 
-    watts = data.Watt = watts.filter(function(datum, i) {
+    watts = data.Watt = watts.filter(function(datum, i, data) {
 
       // ADDON we also need to filter out null value data points
       if (datum.point === null) {
@@ -61,7 +61,7 @@ module.exports = {
       }
 
       // For situation where RT5M and DAHR occur at same time, but DAHR is next index
-      if (watts[i + 1] && datum.time === watts[i + 1].time) {
+      if (data[i - 1] && datum.market ==="DAHR" && datum.time.getTime() === data[i - 1].time.getTime()) {
         return false;
       }
 

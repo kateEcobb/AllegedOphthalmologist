@@ -33,7 +33,7 @@ var MainView = React.createClass({
     return (
       <div>
           <BulbView />   
-          <LineGraphView height={300} width={900} margin={5} />  
+          <LineGraphView height={300} width={900} margin={10} />  
       </div>
     );
   }
