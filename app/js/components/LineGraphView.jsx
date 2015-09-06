@@ -34,12 +34,44 @@ var LineGraphView = React.createClass({
   },
 
   loadData: function() {
-    this.setState({data: DataStore.getData()});
+    var that = this;
+    return new Promise(function(resolve, reject) {
+      that.setState({data: DataStore.getData()});
+      console.log("Data", that.state.data);
+      if (!that.state.data) {
+        ViewActions.loadWatt()
+        .then(function() {
+          console.log("After", that.state.data);
+          resolve();
+        })
+        .catch(function(err) {
+          reject(err);
+        });
+      }
+      else {
+        resolve();
+      }
+    });
   },
 
   loadUser: function() {
-    this.setState({user: UserStore.getUser()});
-    ViewActions.loadUtilityUser();
+    var that = this;
+    return new Promise(function(resolve, reject) {
+      that.setState({user: UserStore.getUser()});
+      console.log("User", that.state.user);
+      if (that.state.user.username) {
+        ViewActions.loadUtilityUser()
+        .then(function() {
+          resolve();
+        })
+        .catch(function(err) {
+          reject(err);
+        });
+      }
+      else {
+        resolve();
+      }
+    });
   },
 
   componentDidMount: function() {
@@ -49,14 +81,16 @@ var LineGraphView = React.createClass({
     DataStore.addChangeListener(this.loadData);
     UserStore.addChangeListener(this.loadUser);
 
-    ViewActions.loadWatt()
+    this.loadData()
+    // ViewActions.loadWatt()
     .then(this.drawMainGraph)
-    .then(function() {
-      if (that.state.user) {
-        ViewActions.loadUtilityUser();
-      }
-      return;
-    })
+    // .then(function() {
+    //   if (that.state.user) {
+    //     ViewActions.loadUtilityUser();
+    //   }
+    //   return;
+    // })
+    .then(this.loadUser)
     .catch(function(err) {
       console.log("ERROR: ", err);
     });
@@ -87,7 +121,7 @@ var LineGraphView = React.createClass({
   drawUserGraph: function() {
     var el = React.findDOMNode(this.refs.graphContainer);
     el.innerHTML = '';
-    if (this.state.user) {
+    if (this.state.user.username) {
       if (this.state.data.Utility.length > 1) {
         EnergyChart.graph(el, {
           height: this.props.height,
