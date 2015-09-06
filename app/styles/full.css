@@ -14,7 +14,7 @@
 }
 
 .image-bg-fixed-height {
-    background: url('http://benjaminfeenstra.com/wp-content/uploads/2012/12/Highway-1-California-4.jpg') no-repeat center center scroll;
+    background: url('http://benjaminfeenstra.com/wp-content/uploads/2012/12/Highway-1-California-4.jpg') no-repeat center bottom scroll;
     height: 450px;
 }
 
@@ -23,7 +23,10 @@
 }
 
 section {
-    padding: 75px 0;
+    padding: 20px 0;
+    position: absolute;
+    width: 100%;
+    background-color: white;
 }
 
 .section-heading {
