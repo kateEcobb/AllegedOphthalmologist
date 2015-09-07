@@ -8,10 +8,14 @@ var Tab = mui.Tab;
 
 //Stores
 var DataStore = require('./../stores/DataStore');
+var modalStore = require('./../stores/modalStore');
 
 //Child Views
 var BulbView = require('./bulbView.jsx');
 var donutModals = require('./energyBreakDownView.jsx');
+
+//Actions
+var ViewActions = require('./../actions/ViewActions');
 
 
 var AboutUs = React.createClass({ 
@@ -24,21 +28,46 @@ var AboutUs = React.createClass({
     };
   },
 
-  componentWillMount: function(){ 
-    this.setState({data: DataStore.getData() })
-    // .then(this.makeGraphs);
+  loadData: function(){ 
+    this.setState({data: DataStore.getData()});
+  },
+
+  componentDidMount: function(){ 
+    DataStore.addChangeListener(this.loadData);
 
 
+    ViewActions.loadWatt()
+    .then(this.makeGraphs)
+    .catch(function(err){ 
+      console.log("ERROR: ");
+      console.trace(err);
+    });
   }, 
 
+  componentDidUpdate: function(){ 
+    // this.makeGraphs();
+    window.addEventListener('resize', this.reSizeGraphs);
+  },
+
+  componentWillUnmount: function(){ 
+    window.removeEventListener('resize', this.reSizeGraphs);
+  },
+
+  reSizeGraphs: function(){ 
+    Donuts.removeGraph('donut1');
+    Donuts.removeGraph('donut2');
+
+    this.makeGraphs();
+  },
+
   makeGraphs: function(){ 
-    Donuts.create('.modal1', this.state.data.Watt[0].genmix.slice(1, 4), 'donut1');
-    Donuts.create('.modal2', this.state.data.Watt[0].genmix, 'donut2');
+    Donuts.create('.donuts', this.state.data.Watt[0].genmix.slice(1, 4), 'donut1');
+    Donuts.create('.donuts', this.state.data.Watt[0].genmix, 'donut2');
   },
 
   render: function(){ 
-    var modal1 = '.modal1';
-    var modal2 = '.modal2';
+    console.log(this.state.data);
+    var donuts = 'donuts';
     return ( 
       <div className="frontPage"> 
 
@@ -54,9 +83,14 @@ var AboutUs = React.createClass({
                     <p className="lead section-lead">Compare your Energy Use to Current Grid Conditions</p>
                     <Tabs>
                       <Tab label="About Us"> 
-                      test!!!
-                      <div className = {modal1}></div>
-                      <div className = {modal2}></div>
+                      <p className='lead section-lead'> All power is not created equal. </p>
+                      <div className={donuts} style={{'maxWidth':'400px'}}></div>
+                      <p className='section-paragraph'> These pie graphs represent the current real-time breakdown of resources used to 
+                      fuel California's power grid. "Other" is a mix of coal, nuclear, natural gas, and other carbon-producing fuels.</p>
+                      <p className='section-paragraph'> GridAware empowers consumers to use energy more intelligently and reduce their carbon footprint by providing 
+                      frictionless access to current grid conditions. We are thrilled to introduce the GridAware Power Bulb -- 
+                      a WiFi-enabled LED bulb that changes color based on energy cleanliness. Put it anywhere in your house or apartment 
+                      and start checking the state of California’s grid at a glance!</p>
                       </Tab>
                       <Tab label="How Does The Grid Work!?">
                         <p className="section-paragraph">Each day, the mix of energy generation resources changes as demand fluctuates. 
