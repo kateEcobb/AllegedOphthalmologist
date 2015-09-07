@@ -40,7 +40,7 @@ var AboutUs = React.createClass({
     var modal1 = '.modal1';
     var modal2 = '.modal2';
     return ( 
-      <div> 
+      <div className="frontPage"> 
 
       <header className="image-bg-fluid-height">
         <BulbView loadModal={false} name={"bulbContainer2"} SVGname={"bulb2"} height={400} width={400} margin={5} cx={75} cy={75} r={75} />
@@ -55,6 +55,8 @@ var AboutUs = React.createClass({
                     <Tabs>
                       <Tab label="About Us"> 
                       test!!!
+                      <div className = {modal1}></div>
+                      <div className = {modal2}></div>
                       </Tab>
                       <Tab label="How Does The Grid Work!?">
                         <p className="section-paragraph">Each day, the mix of energy generation resources changes as demand fluctuates. 
@@ -84,10 +86,7 @@ var AboutUs = React.createClass({
         </div>
       </section>
 
-      <aside className="image-bg-fixed-height"></aside>
-
-        <div className = {modal1}></div>
-        <div className = {modal2}></div>
+        
       </div>
     )
 
