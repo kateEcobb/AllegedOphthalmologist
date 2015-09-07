@@ -3,6 +3,7 @@ var EventEmitter = require('events').EventEmitter;
 var Dispatcher = require('../dispatcher/Dispatcher');
 var ActionTypes = require('../constants/Constants').ActionTypes;
 // console.log(Dispatcher);
+var cookie = require('react-cookie');
 
 var CHANGE_EVENT = 'change';
 
@@ -27,7 +28,7 @@ var UserStore = assign({}, EventEmitter.prototype, {
     this.removeListener(CHANGE_EVENT, callback);
   },
   setUser: function(user_data) {
-    console.log("setting user data in store:", user_data)
+    // console.log("setting user data in store:", user_data)
     user.username = user_data.username;
     user.account_auth = user_data.account_auth;
     user.PGE_username = user_data.PGE_username;
@@ -72,6 +73,7 @@ UserStore.dispatchToken = Dispatcher.register(function (dispatch) {
   var action = dispatch.action;
   if (action.type === ActionTypes.USER_LOGIN) {
     UserStore.setUser(action.payload);
+    cookie.save('token', action.payload.token);
     UserStore.emitChange();
   }
   if (action.type === ActionTypes.USER_LOGOUT){

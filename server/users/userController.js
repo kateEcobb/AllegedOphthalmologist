@@ -154,41 +154,70 @@ var saveUser = function(obj, cb){
  * from the database.
  */
 var signIn = function(req, res){ 
-  User.findOne({ 
-    username: req.body.username.toLowerCase()
-  }).exec(function(err, data){ 
-    if (err) { 
-      console.log("Error in username database query " + err);
-      res.status(500).send("Error in username database query");
-    } else if (!data){ 
-      console.log('Username does not exist. ');
-      res.status(418).send("Username does not exist.");
-    } else { 
-      bcrypt.compare(req.body.password, data.password, function(err, match){ 
-        if (err) { 
-          console.log("Error comparing hash with user input " + err);
-          res.status(500).send("Error comparing hash with user input");
-        } else if (!match){ 
-          console.log("Incorrect password.");
-          res.status(403).send("Incorrect password.");
-        } else { 
-          var newtoken = uuid.v4();
-          data.token = newtoken;
-          data.save(function(err, rawRes){ 
-            res.status(200).send({
-              username: rawRes.username, 
-              account_auth: rawRes.utilityAPIData.account_auth,
-              account_uid: rawRes.utilityAPIData.account_uid, 
-              service_uid: rawRes.utilityAPIData.service_uid, 
-              PGE_username: rawRes.utilityAPIData.PGE_username,
-              utility_service_address: rawRes.utilityAPIData.utility_service_address,
-              token: rawRes.token
+  if(req.body.token){
+    console.log(req.body.token);
+    User.findOne({ 
+      token: req.body.token
+    }).exec(function(err, user){ 
+      if (err) { 
+        console.log("Error in username database query " + err);
+        res.status(500).send("Error in username database query");
+      } else if (!user){ 
+        console.log('Username does not exist. ');
+        res.status(418).send("Username does not exist.");
+      } else{
+        res.status(200).send({
+          username: user.username, 
+          account_auth: user.utilityAPIData.account_auth,
+          account_uid: user.utilityAPIData.account_uid, 
+          service_uid: user.utilityAPIData.service_uid, 
+          PGE_username: user.utilityAPIData.PGE_username,
+          utility_service_address: user.utilityAPIData.utility_service_address,
+          token: user.token
+        });
+      }
+
+    });
+  }
+
+  else{
+    User.findOne({ 
+      username: req.body.username.toLowerCase()
+    }).exec(function(err, data){ 
+      if (err) { 
+        console.log("Error in username database query " + err);
+        res.status(500).send("Error in username database query");
+      } else if (!data){ 
+        console.log('Username does not exist. ');
+        res.status(418).send("Username does not exist.");
+      } else { 
+        bcrypt.compare(req.body.password, data.password, function(err, match){ 
+          if (err) { 
+            console.log("Error comparing hash with user input " + err);
+            res.status(500).send("Error comparing hash with user input");
+          } else if (!match){ 
+            console.log("Incorrect password.");
+            res.status(403).send("Incorrect password.");
+          } else { 
+            var newtoken = uuid.v4();
+            data.token = newtoken;
+            data.save(function(err, rawRes){ 
+              res.status(200).send({
+                username: rawRes.username, 
+                account_auth: rawRes.utilityAPIData.account_auth,
+                account_uid: rawRes.utilityAPIData.account_uid, 
+                service_uid: rawRes.utilityAPIData.service_uid, 
+                PGE_username: rawRes.utilityAPIData.PGE_username,
+                utility_service_address: rawRes.utilityAPIData.utility_service_address,
+                token: data.token
+              });
             });
-          });
-        }
-      });
-    }
-  });
+          }
+        });
+      }
+    });
+  }
+
 };
 
 /* signUp uses checkUsernameAvail, saveUser, and several UtilityAPI helpers
