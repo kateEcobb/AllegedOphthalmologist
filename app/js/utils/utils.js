@@ -38,7 +38,7 @@ var PostReq = function(route, data){
   });
 };
 var GetReq = function(route){
-  console.log("Sending GET to " + route);
+  // console.log("Sending GET to " + route);
   setAuthHeader();  
   return new Promise(function(resolve, reject) {
     $.ajax({
@@ -46,7 +46,7 @@ var GetReq = function(route){
       method: 'GET',
       dataType: 'json',
       success: function(data) {
-        console.log('succuss in ajax');
+        // console.log('succuss in ajax');
         resolve(data);
       },
       error: function(xhr, status, err) {

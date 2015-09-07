@@ -51,6 +51,7 @@ var NavMenu = React.createClass({
       } 
       // Un-disable menu items requiring login when the user logs in
       else if(action.type === ActionTypes.USER_LOGIN){
+        // console.log("NavMenu detected user login");
         var menuItems = context.state.menuItems;
         for(var i = 0; i < menuItems.length; i++){
           if(menuItems[i].reqLogin){

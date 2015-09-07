@@ -1,4 +1,5 @@
 var React = require('react');
+var cookie = require('react-cookie');
 
 // Material UI
 var injectTapEventPlugin = require("react-tap-event-plugin");
@@ -33,6 +34,7 @@ var modalStore = require('./stores/modalStore');
 // Stores -- Load here so Stores can begin listening to Events
 var UserStore = require('./stores/UserStore');
 var DataStore = require('./stores/DataStore');
+var ModalStore = require('./stores/modalStore');
 
 // Actions
 var ViewActions = require('./actions/ViewActions');
@@ -61,6 +63,7 @@ var App = React.createClass({
 
   modalListener: function(){
     var modalSpecs = modalStore.getModalState();
+    console.log(modalSpecs);
     this.setState({showModal: modalSpecs.isOpen, modal: modalSpecs.modal});
   },
 
@@ -91,6 +94,18 @@ var App = React.createClass({
         context.showSnack('Logged Out');
       }
     });
+
+    var token = cookie.load('token');
+    if(token){
+      // console.log('token: ', token);
+      
+      // Need to Toggle the Modal here, otherwise a login event 
+      // Tries to close a modal that doesn't exist, resulting in a 
+      // cascading hell of impossible to track down react error messages.
+      ModalStore.toggleModal();
+      
+      ViewActions.loginUser({token: token});
+    }
   },
 
   componentWillUnmount: function (){
