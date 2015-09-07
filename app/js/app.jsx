@@ -84,8 +84,11 @@ var App = React.createClass({
     var context = this;
     this.token = Dispatcher.register(function (dispatch){
       var action = dispatch.action;
+      if(action.type === ActionTypes.USER_LOGIN){
+        context.showSnack('Logged In');
+      } 
       if(action.type === ActionTypes.SHOW_SNACK){
-        context.showSnack();
+        context.showSnack('Logged Out');
       }
     });
   },
@@ -102,7 +105,8 @@ var App = React.createClass({
     ViewActions.toggleNavMenu();
   },
 
-  showSnack: function(){
+  showSnack: function(message){
+    this.setState({logMes: message});
     this.refs.snackbar.show();
   },
 
@@ -128,7 +132,7 @@ var App = React.createClass({
       </div>
       <SnackBar
           ref='snackbar'
-          message='Logged out'
+          message={this.state.logMes}
           autoHideDuration={2000} />
       </div>
     );
