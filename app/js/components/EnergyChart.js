@@ -15,20 +15,24 @@ var GraphTypes = require('../constants/Constants.js').GraphTypes;
 */
 var graph = function(el, props, state) {
   var parsedState = utils.parseState(state);
-  var options = initGraph(el, props, parsedState);
-  drawAxis(options);
-  if (!options.userDisable) {
-    drawLine(options);
-    drawMiscData(options);
-    drawCapturePad(options);
-  }
-  else {
-    drawDisablePad(options);
-  }
+  var options = initGraph(el, props, parsedState, state);
+
+  // drawAxis(options);
+  // if (!options.userDisable) {
+  //   drawLine(options);
+  //   drawMiscData(options);
+  //   drawCapturePad(options);
+  // }
+  // else {
+  //   drawDisablePad(options);
+  // }
+  options.tasks.forEach(function(task) {
+    task(options);
+  });
 };
 //////////////////////////////////////////////////////////////
 
-var initGraph = function(el, props, parsedState) {
+var initGraph = function(el, props, parsedState, state) {
   var options = {};
   var data;
   options.graphType = props.type || GraphTypes.MAIN;
@@ -36,21 +40,31 @@ var initGraph = function(el, props, parsedState) {
   // DATA ===============================
   switch(options.graphType) {
     case GraphTypes.USER_REQUIRE:
-      data = options.data = parsedState.Watt;
+      data = options.data = utils.parseWattData(state);
       options.userDisable = true;
+      options.tasks = [drawAxis, drawDisablePad];
       break;
     case GraphTypes.MAIN:
-      data = options.data = parsedState.Watt;
+      data = options.data = utils.parseWattData(state);
       options.unit = "lbs/Mwh";
+      options.tasks = [drawAxis, drawLine, drawMiscData, drawCapturePad];
       break;
     case GraphTypes.USER_CARBON:
-      data = options.data = parsedState.Utility;
-      options.overlay = 'Watt';
+      data = options.data = utils.parseUserCarbonData(state);
+      options.overlay = props.overlay ? 'Watt' : false;
+      options.unit = 'lbs';
+      options.tasks = [drawAxis, drawLine, drawCapturePad];
       break;
-    case GraphTypes.USER_MWH:
-      data = options.data = parsedState.Utility;
-      options.unit = 'Mwh';
+    case GraphTypes.USER_KWH:
+      data = options.data = utils.parseUserKwhData(state);
+      options.unit = 'Kwh';
+      options.tasks = [drawAxis, drawLine, drawCapturePad];
       break;
+    case GraphTypes.DANGER_ZONE:
+      data = options.data = utils.parseUserKwhData(state);
+      options.data2 = utils.parseWattData(state, false);
+      // options.overlay = 'Watt'
+      options.tasks = [drawDangerZone];
     default:
       break;
   }
@@ -82,6 +96,8 @@ var initGraph = function(el, props, parsedState) {
   scale.xRange = d3.time.scale().domain([ 
     (options.overlay ? parsedState[options.overlay][0].time : data[0].time), 
     (options.overlay ? parsedState[options.overlay][parsedState[options.overlay].length - 1].time : data[data.length - 1].time)
+    // data[0].time,
+    // data[data.length - 1].time
   ])
   .range([0, scale.width - scale.axisOffset - scale.axisOffset]);
 
@@ -286,6 +302,32 @@ var drawMiscData = function(options) {
     drawPredictPoint(options);
 
   }
+};
+
+var drawDangerZone = function(options) {
+
+  var graph = options.graph;
+  var scale = options.scale;
+  var data = options.data;
+
+  var zone = graph.append('svg:g')
+  .attr('transform', utils.translate(scale.axisOffset, scale.headerOffset))
+  .attr('class', 'dangerZone');
+
+  var dangerArray = utils.findDangerZones(options.data2, [data[0].time, data[data.length - 1].time]);
+  console.log(options.data2);
+  console.log(dangerArray);
+  dangerArray.forEach(function(datum) {
+    var x1 = scale.xRange(datum[0]);
+    var x2 = scale.xRange(datum[1]);
+    var width = x2 - x1;
+    zone.append('svg:rect')
+    .attr('class', 'dangerBlock')
+    .attr('x', x1)
+    .attr('y', 0)
+    .attr('width', width)
+    .attr('height', scale.height - scale.headerOffset - scale.footerOffset);
+  });
 };
 
 var drawCapturePad = function(options) {
