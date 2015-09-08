@@ -2,6 +2,7 @@ var request = require('request');
 var UtilityAPI = require('./UtilityAPI');
 var mongoose = require('mongoose');
 var MeterReading = require('./MeterReadingModel');
+var meterReadingCache = require('./meterReadingCache');
 var debounce = require('debounce');
 
 // Query UtilityAPI for all active users
@@ -48,13 +49,17 @@ var populateDB = function(intervals){
   });
 }
 
-var getAllReadings = function(cb){
+var getAllReadings = function(service_uid, cb){
   
   // 604800000 is 7 days in milliseconds
-  var lastWeek = new Date(Date.now()-604800000);
+  var twoWksMs = 1209600000;
+  var now = new Date(Date.now());
+  var twoWksAgo = new Date(Date.now()-twoWksMs);
 
-  MeterReading.find({'interval_end': {$gt: lastWeek}}, function(err, docs) {
-    if (!err){ 
+  MeterReading.find({'interval_end': {$gt: twoWksAgo}, 'service_uid': service_uid}, function(err, docs) {
+    if (!err){
+      meterReadingCache[service_uid] = docs;
+      meterReadingCache[service_uid].lastPopulated = now;
       cb(docs);
     } else {throw err;}
   });
