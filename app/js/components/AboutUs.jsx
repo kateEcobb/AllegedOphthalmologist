@@ -78,11 +78,10 @@ var AboutUs = React.createClass({
       <section id='about' className='pad-section'>
         <div className='container'>
           <div className="row">
-            <div className='col-sm-7'>
+            <div className='col-lg-12'>
               <h1 className="section-heading">GridAware</h1>
-              <p className="lead section-lead">Compare your Energy Use to Current Grid Conditions</p>
-            </div>
-            <div className='col-sm-7'>
+              <p className='lead section-lead' id='powernotcreated'> All power is not created equal. </p>
+            <hr></hr>
             </div>
           </div>
         </div>
@@ -93,9 +92,7 @@ var AboutUs = React.createClass({
             <div className="row">
                 <div className="col-lg-12">
 
-                      <p className='lead section-lead' id='powernotcreated'> All power is not created equal. </p>
-                      <hr></hr>
-                      <div className={donuts} style={{'maxWidth':'400px', 'margin': 'auto','paddingLeft':'23px'}}></div>
+                      <div className={donuts} style={{'maxWidth':'600px', 'margin': 'auto','paddingLeft':'23px'}}></div>
               
                       <p className='section-paragraph'> GridAware empowers consumers to use energy more intelligently and reduce their carbon footprint by providing 
                       frictionless access to current grid conditions. We are thrilled to introduce the GridAware Power Bulb -- 
