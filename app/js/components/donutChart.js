@@ -1,7 +1,6 @@
 var d3Chart = {};
 
 
-
 d3Chart.create = function(el, data, className){
 
   //el is modal-body
@@ -51,7 +50,7 @@ d3Chart.create = function(el, data, className){
     .data(pie)
     .enter()
       .append('svg:g')
-        .attr('class', 'slice');
+        .attr('className', 'slice');
 
   arcs.append('svg:path')
     .attr('fill', function(d, i){return specs.color(i)})
