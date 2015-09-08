@@ -37,11 +37,10 @@ var LineGraphView = React.createClass({
     var that = this;
     return new Promise(function(resolve, reject) {
       that.setState({data: DataStore.getData()});
-      console.log("Data", that.state.data);
+
       if (!that.state.data) {
         ViewActions.loadWatt()
         .then(function() {
-          console.log("After", that.state.data);
           resolve();
         })
         .catch(function(err) {
@@ -58,7 +57,7 @@ var LineGraphView = React.createClass({
     var that = this;
     return new Promise(function(resolve, reject) {
       that.setState({user: UserStore.getUser()});
-      console.log("User", that.state.user);
+
       if (that.state.user.username) {
         ViewActions.loadUtilityUser()
         .then(function() {
@@ -82,14 +81,7 @@ var LineGraphView = React.createClass({
     UserStore.addChangeListener(this.loadUser);
 
     this.loadData()
-    // ViewActions.loadWatt()
     .then(this.drawMainGraph)
-    // .then(function() {
-    //   if (that.state.user) {
-    //     ViewActions.loadUtilityUser();
-    //   }
-    //   return;
-    // })
     .then(this.loadUser)
     .catch(function(err) {
       console.log("ERROR: ", err);
@@ -106,10 +98,10 @@ var LineGraphView = React.createClass({
   },
 
   drawMainGraph: function() {
-    // console.log(this.state.data.Utility);
+
     var el = React.findDOMNode(this.refs.graphContainer);
     el.innerHTML = '';
-    console.log(this.state.data.Watt[0]);
+
     EnergyChart.graph(el, {
       height: this.props.height,
       width: this.props.width,
@@ -121,13 +113,20 @@ var LineGraphView = React.createClass({
   drawUserGraph: function() {
     var el = React.findDOMNode(this.refs.graphContainer);
     el.innerHTML = '';
+    // console.log("Utility", this.state.data.Utility);
     if (this.state.user.username) {
       if (this.state.data.Utility.length > 1) {
         EnergyChart.graph(el, {
           height: this.props.height,
           width: this.props.width,
           margin: this.props.margin,
-          type: GraphTypes.USER_MWH,
+          type: GraphTypes.DANGER_ZONE,
+        }, this.state);
+        EnergyChart.graph(el.children[0], {
+          height: this.props.height,
+          width: this.props.width,
+          margin: this.props.margin,
+          type: GraphTypes.USER_KWH,
         }, this.state);
       }
     }
@@ -147,7 +146,7 @@ var LineGraphView = React.createClass({
       case GraphTypes.MAIN:
         this.drawMainGraph();
         break;
-      case GraphTypes.USER_MWH:
+      case GraphTypes.USER_KWH:
         this.drawUserGraph();
         break;
       default:

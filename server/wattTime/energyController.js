@@ -102,7 +102,7 @@ var loadTestData = function(){
 };
 
 var get24HourBehind = function(req, res){ 
-  var twoDaysAgo = new Date(new Date().setDate(new Date().getDate()-2)).toISOString().slice(0,-5);
+  var twoDaysAgo = new Date(new Date().setDate(new Date().getDate()-30)).toISOString().slice(0,-5);
   WattEnergy.find({ 
     timestamp: {$lt: new Date(), $gt: twoDaysAgo}
   }).exec(function(err, data){ 
@@ -134,7 +134,7 @@ var updateWattData = function() {
 debounce(updateWattData, 180000)();
 setInterval(updateWattData, 900000);
 
-// loadTestData();
+loadTestData();
 module.exports = { 
   get24HourBehind: get24HourBehind, 
   get24HourAhead: get24HourAhead, 

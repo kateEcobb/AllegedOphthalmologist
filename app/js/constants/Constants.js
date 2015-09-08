@@ -37,8 +37,9 @@ module.exports = {
   GraphTypes: keyMirror({
     USER_REQUIRE: null,
     MAIN: null,
-    USER_MWH: null,
+    USER_KWH: null,
     USER_CARBON: null,
+    DANGER_ZONE: null,
   }),
 
   Weekdays: {

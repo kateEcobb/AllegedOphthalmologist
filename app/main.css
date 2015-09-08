@@ -80,6 +80,11 @@
   opacity: 0.75;
 }
 
+.dangerBlock {
+  fill: red;
+  opacity: 0.18;
+}
+
 /*Light Bulb*/
 .bulb {
     max-width: 100px;

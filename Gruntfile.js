@@ -113,7 +113,8 @@ module.exports = function(grunt) {
     var nodemon = grunt.util.spawn({
       cmd: 'grunt',
       grunt: true,
-      args: 'nodemon'
+      args: 'nodemon',
+      opts: {maxBuffer: 500*1024},
     });
 
     nodemon.stdout.pipe(process.stdout);
