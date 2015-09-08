@@ -32,6 +32,9 @@ var engergyBreakDown = require('./components/energyBreakDownView.jsx');
 var AboutUs = require('./components/AboutUs.jsx');
 
 
+//FOR TESTING
+var UserPieChart = require('./components/UserPieChartView.jsx');
+
 // Stores -- Load here so Stores can begin listening to Events
 var UserStore = require('./stores/UserStore');
 var DataStore = require('./stores/DataStore');
