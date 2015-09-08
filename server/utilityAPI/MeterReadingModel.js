@@ -15,6 +15,8 @@ var meterReadingSchema = new mongoose.Schema({
   utility_tariff_name: String 
 });
 
+meterReadingSchema.index({service_uid: 1, interval_end: -1});
+
 var MeterReading = mongoose.model('MeterReading', meterReadingSchema);
 
 module.exports = MeterReading;
