@@ -14,7 +14,7 @@ var loadNewReadings = function() {
   var now = new Date(Date.now());
   var year = now.getUTCFullYear();
   var month = ("0" + (now.getUTCMonth() + 1)).slice(-2)
-  var start_day = ("0" + (now.getUTCDate() - 2)).slice(-2);
+  var start_day = ("0" + (now.getUTCDate() - 15)).slice(-2);
   var end_day = ("0" + (now.getUTCDate())).slice(-2);
 
   // Put start and end dates in the format expected by UtilityAPI
@@ -22,6 +22,7 @@ var loadNewReadings = function() {
   var end_date = year + '-' + month + '-' + end_day;
 
   UtilityAPI.getActiveUsers(function(accounts){
+    // console.log("Active accounts: ", accounts);
     if(Array.isArray(accounts)){
       accounts.forEach(function(account){
         if(account.bill_count > 0){
@@ -59,6 +60,7 @@ var getAllReadings = function(cb){
   });
 }
 
+// loadNewReadings();
 debounce(loadNewReadings, 180000)();
 // // Run once an hour
 setInterval(loadNewReadings, 3600000);
