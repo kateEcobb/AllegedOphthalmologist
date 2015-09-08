@@ -3,7 +3,6 @@ var d3Chart = {};
 
 
 d3Chart.create = function(el, data, className){
-  // console.log('you made it');
 
   //el is modal-body
   var modal = d3.select(el)
@@ -17,10 +16,8 @@ d3Chart.create = function(el, data, className){
     h: modalSpec.width/2 - 15,
     r: modalSpec.width/4 - 20,
     innerR: (modalSpec.width/4 - 20)*0.75,
-    color: d3.scale.ordinal().range(['#A60F2B', '#648C85', '#B3F2C9', '#528C18']),
+    color: d3.scale.ordinal().range(['#528C18', '#648C85', '#B3F2C9', '#A60F2B']),
     data: processData(data),
-    legendRectSize: 18,
-    legendSpacing: 4,
   };
   
 
@@ -69,18 +66,21 @@ d3Chart.create = function(el, data, className){
     d3.select('.toooltip')
       .remove()
   })
-
-  legend(className, specs.legendRectSize, specs.legendSpacing, specs.color, specs.data);
+  legend(className, specs.color, specs.data);
 }
 
 d3Chart.removeGraph = function(className){
   d3.select('.'+className+'div').remove();
 }
 
-var legend = function(className, RectSize, Spacing, color, data){
-  // console.log(d3.select(className).node().getBoundingClientRect());
+var legend = function(className, color, data){
+  // console.log(d3.select('.'+className).node().getBoundingClientRect());
 
   var elSpecs = d3.select("."+className).node().getBoundingClientRect();
+
+  var RectSize = elSpecs.width/15.2;
+  var Spacing = elSpecs.width/72.75;
+
 
   var legend = d3.select("."+className).selectAll('.legend')
     .data(color.domain())
@@ -90,7 +90,7 @@ var legend = function(className, RectSize, Spacing, color, data){
     .attr('transform', function(d, i){
       var height = RectSize + Spacing;
       var offset = color.domain().length / 2;
-      var horz = (elSpecs.width / 2) - 30;
+      var horz = (elSpecs.width / 2) - 40;
       var vert = (elSpecs.height / 2) + (i - offset) * height;
       return "translate(" + horz + "," + vert + ")";
     });
@@ -104,6 +104,7 @@ var legend = function(className, RectSize, Spacing, color, data){
   legend.append('text')
     .attr('x', RectSize + Spacing)
     .attr('y', RectSize - Spacing)
+    .attr('font-size', 'smaller')
     .text(function(d){return data[d].type; })
 
 }
@@ -157,10 +158,15 @@ var processData = function(data){
   });
 
   data.forEach(function(element){
-    var type= element.fuel;
+    var type = element.fuel;
     var percentage = Math.round((element.gen_MW / totalMW)*100, 2);
     breakDown.push({type: type, percentage: percentage});
   })
+
+  if(breakDown[0].type === 'other'){
+    var temp = breakDown.shift();
+    breakDown.push(temp);
+  }
   return breakDown;
 }
 
