@@ -112,7 +112,7 @@ var toolTip = function(className, data, specs){
 
   var svg = d3.select('.'+className).select('svg').node().getBoundingClientRect();
   var svgParent = d3.select('.'+className).node().getBoundingClientRect();
-  // console.log('toooltip',svgParent, 'svg ', svg);
+  console.log('toooltip',svgParent, 'svg ', svg);
 
   position = {
     top: (specs.h/6) - (svg.height - svgParent.height),
@@ -129,16 +129,19 @@ var toolTip = function(className, data, specs){
       'left': position.left +'px',
       'height': 'auto',
       'width': '100px',
-      'background-color': 'black',
+      'background-color': '#636363',
       'z-index': '10',
-      'opacity': '0.95',
       'color': 'white',
-      'textAlign': 'center',
-      'font-size': '11pt',
+      'text-align': 'center',
+      'font-size': '9pt',
+      'padding': '4px',
+      'border-radius': '4px'
     })
 
+
   textBox
-    .text('energy type: ' + data.data.type  + '\n'  +'percentage: ' + data.data.percentage)
+    .text(data.data.type  + ': \n'  + data.data.percentage +'%')
+
 }
 
 d3Chart.title = function(className, title){
