@@ -88,6 +88,23 @@ body {
   opacity: 0.18;
 }
 
+.source1 *:not(text), path.source1{ 
+  fill: #F6BB42;
+  stroke: #F6BB42;
+}
+.source2 *:not(text), path.source2{ 
+  fill: #FFDE55;
+  stroke: #FFDE55;
+}
+.source3 *:not(text), path.source3{ 
+  fill: #94D9BB;
+  stroke: #94D9BB;
+}
+.source4 *:not(text), path.source4{ 
+  fill: #58C1BE;
+  stroke: #58C1BE;
+}
+
 /*Light Bulb*/
 .bulb1 {
     max-width: 100px;
@@ -197,7 +214,6 @@ svg {
 
 #registerClick{ 
   cursor: pointer;
-
 }
 
 .tick text{ 

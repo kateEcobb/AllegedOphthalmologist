@@ -16,6 +16,7 @@ d3Chart.create = function(el, data, className){
     r: modalSpec.width/4 - 20,
     innerR: (modalSpec.width/4 - 20)*0.75,
     color: d3.scale.ordinal().range(['#528C18', '#648C85', '#B3F2C9', '#A60F2B']),
+    names: d3.scale.ordinal().range(['source1','source2','source3','source4']),
     data: processData(data),
   };
   
@@ -54,6 +55,7 @@ d3Chart.create = function(el, data, className){
 
   arcs.append('svg:path')
     .attr('fill', function(d, i){return specs.color(i)})
+    .attr('class', function(d, i){return specs.names(i)})
     .attr('d', arc)
     .style('stroke', 'white')
     .style('stroke-width', '5')
@@ -65,14 +67,14 @@ d3Chart.create = function(el, data, className){
     d3.select('.toooltip')
       .remove()
   })
-  legend(className, specs.color, specs.data);
+  legend(className, specs.color, specs.data, specs.names);
 }
 
 d3Chart.removeGraph = function(className){
   d3.select('.'+className+'div').remove();
 }
 
-var legend = function(className, color, data){
+var legend = function(className, color, data, names){
   // console.log(d3.select('.'+className).node().getBoundingClientRect());
 
   var elSpecs = d3.select("."+className).node().getBoundingClientRect();
@@ -85,7 +87,7 @@ var legend = function(className, color, data){
     .data(color.domain())
     .enter()
     .append('g')
-    .attr('class', 'legend')
+    .attr('class', function(d, i){return specs.names(i)})
     .attr('transform', function(d, i){
       var height = RectSize + Spacing;
       var offset = color.domain().length / 2;
@@ -97,8 +99,6 @@ var legend = function(className, color, data){
   legend.append('rect')
     .attr('width', RectSize)
     .attr('height', RectSize)
-    .style('fill', color)
-    .style('stroke', color)
 
   legend.append('text')
     .attr('x', RectSize + Spacing)
@@ -112,7 +112,6 @@ var toolTip = function(className, data, specs){
 
   var svg = d3.select('.'+className).select('svg').node().getBoundingClientRect();
   var svgParent = d3.select('.'+className).node().getBoundingClientRect();
-  console.log('toooltip',svgParent, 'svg ', svg);
 
   position = {
     top: (specs.h/6) - (svg.height - svgParent.height),
@@ -166,10 +165,11 @@ var processData = function(data){
     breakDown.push({type: type, percentage: percentage});
   })
 
-  if(breakDown[0].type === 'other'){
+  if(breakDown[0].type === 'Other'){
     var temp = breakDown.shift();
     breakDown.push(temp);
   }
+
   return breakDown;
 }
 
