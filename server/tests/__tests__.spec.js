@@ -56,7 +56,7 @@ describe('Routes', function(){
   });
 
   it('should have POST route for changing PG&E info', function(done){
-    userController.changePGEData = jasmine.createSpy('changePGEData');
+    userController.changePGEData = jasmine.createSpy('test');
 
 
     request.post({
