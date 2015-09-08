@@ -81,19 +81,6 @@ var changePGEData = function(req, res){
   });
 };
 
-//getUserMeterReadings gets all interval data by user UID.
-var getUserMeterReadings = function(req, res, next){ 
-  MeterReadings.find({ 
-    service_uid: req.service_uid
-  }).exec(function(err, data){ 
-    if(err){ 
-      console.log('Error in meterreading database query ' + err);
-      res.status(500).send("Error in meterreading database query");
-    } else { 
-      res.status(200).send(data)
-    }
-  });
-};
 
 /* checkUsernameAvail checks to see if the username exists in the 
  * database already. If the username exists, server responds with a 418. 
@@ -324,7 +311,6 @@ var logOut = function(req, res){
 module.exports = { 
   signUp: signUp, 
   signIn: signIn, 
-  getUserMeterReadings: getUserMeterReadings, 
   changePGEData: changePGEData, 
   logOut: logOut, 
   deleteInactiveUsers: deleteInactiveUsers 
