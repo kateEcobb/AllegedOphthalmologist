@@ -5,12 +5,20 @@
     -moz-background-size: cover;
     background-size: cover;
     -o-background-size: cover;
-    height: 1000px;
     padding-top: 100px;
 }
 
+#information { 
+    background: url('http://41.media.tumblr.com/aa5c6ce33067f5fe4e486cec203694c7/tumblr_ngyipteoMA1u0oggmo1_1280.jpg') no-repeat center center fixed;
+    height: 700px;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    background-size: cover;
+    -o-background-size: cover;
+}
+
 .image-bg-fluid-height {
-    margin-bottom: 70px;
+    margin-bottom: 172px;
 }
 
 .img-center {
@@ -18,10 +26,12 @@
 }
 
 section {
-    padding: 20px 0;
     background-color: white;
-    min-height: 468px;
+    margin: 50px 0;
+    padding: 10px 0;
 }
+
+
 
 .section-heading {
     margin: 30px 0;
