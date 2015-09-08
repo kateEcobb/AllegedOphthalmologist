@@ -52,10 +52,11 @@ var populateDB = function(intervals){
 var getAllReadings = function(service_uid, cb){
   
   // 604800000 is 7 days in milliseconds
+  var twoWksMs = 1209600000;
   var now = new Date(Date.now());
-  var lastWeek = new Date(Date.now()-604800000);
+  var twoWksAgo = new Date(Date.now()-twoWksMs);
 
-  MeterReading.find({'interval_end': {$gt: lastWeek}, 'service_uid': service_uid}, function(err, docs) {
+  MeterReading.find({'interval_end': {$gt: twoWksAgo}, 'service_uid': service_uid}, function(err, docs) {
     if (!err){
       meterReadingCache[service_uid] = docs;
       meterReadingCache[service_uid].lastPopulated = now;
