@@ -195,7 +195,10 @@ svg {
     overflow: hidden;
 }
 
+#registerClick{ 
+  cursor: pointer;
 
+}
 
 .tick text{ 
   fill: black;

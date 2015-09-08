@@ -13,6 +13,7 @@ var modalStore = require('./../stores/modalStore');
 //Child Views
 var BulbView = require('./bulbView.jsx');
 var donutModals = require('./energyBreakDownView.jsx');
+var register = require('./RegistrationView.jsx');
 
 //Actions
 var ViewActions = require('./../actions/ViewActions');
@@ -65,6 +66,11 @@ var AboutUs = React.createClass({
     Donuts.create('.donuts', this.state.data.Watt[0].genmix, 'donut2');
   },
 
+  handleRegister: function(){
+    ViewActions.loadModal(register);
+  },
+
+
   render: function(){ 
     var donuts = 'donuts';
     return ( 
@@ -103,6 +109,18 @@ var AboutUs = React.createClass({
             </div>
         </div>
       </section>
+    
+
+    <section id="leaf">
+      <div className='container'>
+        <div className='row'>
+          <div className='col-lg-12'>
+            <span className='glyphicon glyphicon-leaf'></span>
+          </div>
+        </div>
+      </div>
+    </section>
+
     <div id='information' className='pad-section'>
       <section id='cont2'> 
         <div className="container">
@@ -126,7 +144,7 @@ var AboutUs = React.createClass({
             <div className="row">
                 <div className="col-lg-12">
                     <h2>Get Started!</h2> 
-                      <p className="section-paragraph">To get started, use our Registration page to signup for GridAware, 
+                      <p className="section-paragraph">To get started, use our <a id='registerClick' onClick={this.handleRegister}>Registration</a> page to signup for GridAware, 
                       and link  your SmartMeter at the same time! All you need is your PG&E login.</p>
 
                       <p className="section-paragraph">Don't have an online account with PG&E yet? 

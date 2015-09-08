@@ -16,6 +16,18 @@
     background-size: cover;
     -o-background-size: cover;
 }
+.glyphicon{
+  border: 2px solid #FFFFFF;
+  border-radius: 50%;
+  display: block;
+  margin: auto;
+  font-size: 60px;
+  height: 140px;
+  line-height: 140px;
+  text-align: center;
+  vertical-align: middle;
+  width: 140px;
+}
 
 .image-bg-fluid-height {
     margin-bottom: 187px;
@@ -25,21 +37,19 @@
     margin: 0 auto;
 }
 
-section {
-    background-color: white;
-}
-
 #about { 
-
+  background-color: white;
 }
 
 #cont1{ 
-    padding: 10px 0;
+  background-color: white;
+  padding: 10px 0;
   margin-bottom: 50px
 }
 
 #cont2, #cont3 { 
-padding: 10px 0;
+  background-color: white;
+  padding: 10px 0;
   margin: 50px 0;
 }
 
@@ -67,6 +77,7 @@ hr {
 
 .section-paragraph {
     margin: 30px 0;
+    font-size: 16px;
 }
 
 footer {
@@ -84,5 +95,8 @@ footer {
     }
     #powernotcreated { 
         font-size: 15px;
+    }
+    .section-paragraph { 
+        font-size: 10px;
     }
 }
