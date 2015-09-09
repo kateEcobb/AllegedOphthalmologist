@@ -1,6 +1,6 @@
 
 .frontPage {
-    background: url(./images/down-the-line-desktop.jpg) no-repeat center center fixed;
+    background: url(./images/resizedBG.jpg) no-repeat center center fixed;
     -webkit-background-size: cover;
     -moz-background-size: cover;
     background-size: cover;
@@ -9,7 +9,7 @@
 }
 
 body { 
-    background: url(./images/down-the-line-desktopOP.png) no-repeat center center fixed;
+    background: url(./images/down-the-line-desktopOP.jpg) no-repeat center center fixed;
     -webkit-background-size: cover;
     -moz-background-size: cover;
     background-size: cover;

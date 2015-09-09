@@ -62,6 +62,7 @@ module.exports = function(grunt) {
       }
     },
 
+
     watch: {
       server: {
         files: ['server/**/*.js'],
@@ -109,6 +110,7 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-webpack');
   grunt.loadNpmTasks('grunt-services');
   grunt.loadNpmTasks('grunt-clear');
+  grunt.loadNpmTasks('grunt-contrib-imagemin');
 
   grunt.registerTask('server-dev', function(target) {
     var nodemon = grunt.util.spawn({
