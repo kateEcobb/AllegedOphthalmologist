@@ -78,6 +78,7 @@ var makeWattTimeRequest = function(){
   var formattedDate = getNearestHour();
   var url = base_url + '&start_at=' + formattedDate;
 
+  console.log(url)
   var options = { 
      url: base_url + '&start_at=' + formattedDate,
      headers: { 

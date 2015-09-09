@@ -63,7 +63,7 @@ var AboutUs = React.createClass({
   componentDidMount: function(){ 
     DataStore.addChangeListener(this.loadData);
     BulbStore.addChangeListener(this.gridState);
-
+    console.log(this.state.data.Watt[0]);
 
     ViewActions.loadWatt()
     .then(this.makeGraphs)
