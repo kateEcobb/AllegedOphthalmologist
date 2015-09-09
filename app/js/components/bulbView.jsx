@@ -60,7 +60,7 @@ var BulbView = React.createClass({
       cy: this.props.cy,
       cx: this.props.cx,
       r: this.props.r
-    }, this.state.rgb)
+    }, this.state.rgb);
   },
 
   showDonutGraph: function(){

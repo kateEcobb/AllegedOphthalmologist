@@ -192,7 +192,7 @@ var AboutUs = React.createClass({
       </section>
         </div>
       </div>
-    )
+    );
 
   }
 
