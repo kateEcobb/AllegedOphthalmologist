@@ -37,7 +37,7 @@ var graphToolBar = React.createClass({
   render: function() {
     return (
       <div className="graphToolBar">
-        <Tabs onChange={this.handleTabChange} style={{width:this.props.width}}>
+        <Tabs value={this.props.value} onChange={this.handleTabChange} style={{width:this.props.width}}>
           <Tab label="Main" value={GraphTypes.MAIN}></Tab>
           <Tab label="User" value={GraphTypes.USER_KWH}></Tab>
         </Tabs>
