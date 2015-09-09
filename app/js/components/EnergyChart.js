@@ -2,36 +2,37 @@ var d3 = require('d3');
 var utils = require('../utils/dataUtils.js');
 var GraphTypes = require('../constants/Constants.js').GraphTypes;
 
-// MAIN CHARTS ///////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////
+// MAIN CHARTS /////////////////////////////////////////////////////////////////////////////////
 /*
-  Values to pass to props
+  == Values to pass to props object ===================================
   type:     String  - Optional - type of graph you want, defaults to main watt emissions, check Constants for names
   height:   Number  - Required - Height of the graph element
   width:    Number  - Required - Width of the graph element
   margin:   Number  - Optional - Margin around the graph element
-  barWidth: Number  - Optional - Width of any Time Bars, defaults to 10
-  ratio:    boolean - Optional - Specific case of whether you want to ratio user power by watt carbon emissions 
+  barWidth: Number  - Optional - Width of any Time Bars, defaults to 10 
+  --DEPRECATED---------------
   overlay:  String  - Optional - Name of state data that you want to overlay on top of
+  =====================================================================
+
+  Call graph function to utilize
 */
 var graph = function(el, props, state) {
   // var parsedState = utils.parseState(state);
   var options = initGraph(el, props, state);
 
-  // drawAxis(options);
-  // if (!options.userDisable) {
-  //   drawLine(options);
-  //   drawMiscData(options);
-  //   drawCapturePad(options);
-  // }
-  // else {
-  //   drawDisablePad(options);
-  // }
+  // Run the Tasks needed to draw each function
   options.tasks.forEach(function(task) {
     task(options);
   });
 };
-//////////////////////////////////////////////////////////////
 
+module.exports = {
+  graph: graph, 
+};
+
+// Uses the given element, props object and react state to initialize the graph element and create the options
+// object that must be passed to a draw function.
 var initGraph = function(el, props, state) {
   var options = {};
   var data;
@@ -44,25 +45,25 @@ var initGraph = function(el, props, state) {
     case GraphTypes.MAIN:
       data = options.data = utils.parseWattData(state);
       options.unit = "lbs/Mwh";
-      options.tasks = [drawAxis, drawLine, drawMiscData, drawCapturePad];
+      options.tasks = [drawLine, drawAxis, drawMiscData, drawAxisScale, drawCapturePad];
       break;
 
     case GraphTypes.USER_CARBON:
       data = options.data = utils.parseUserCarbonData(state);
       options.unit = 'lbs';
-      options.tasks = [drawAxis, drawLine, drawCapturePad];
+      options.tasks = [drawLine, drawAxis, drawAxisScale, drawCapturePad];
       break;
 
     case GraphTypes.USER_KWH:
       data = options.data = utils.parseUserKwhData(state);
       options.unit = 'Kwh';
-      options.tasks = [drawAxis, drawLine, drawCapturePad];
+      options.tasks = [drawLine, drawAxis, drawAxisScale, drawCapturePad];
       break;
 
     // Supplemental Graph Types
     case GraphTypes.USER_REQUIRE:
       data = options.data = utils.parseWattData(state);
-      options.tasks = [drawAxis, drawDisablePad];
+      options.tasks = [drawAxis, drawAxisScale, drawDisablePad];
       break;
 
     case GraphTypes.DANGER_ZONE:
@@ -86,7 +87,6 @@ var initGraph = function(el, props, state) {
     axisOffset: 50, 
     yMinRatio: 0.95,
     yMaxRatio: 1.02,
-    // ratio: props.ratio || false,
     orient: options.overlay ? 'right' : 'left',
   };
 
@@ -120,6 +120,9 @@ var initGraph = function(el, props, state) {
   return options;
 };
 
+/////////////////////////////////////////////////////////////////////////////////////////////////
+// Drawing Functions ///////////////////////////////////////////////////////////////////////////
+
 var drawAxis = function(options) {
 
   var graph = options.graph;
@@ -140,7 +143,6 @@ var drawAxis = function(options) {
     .attr('transform', utils.translate(scale.axisOffset, scale.height - scale.footerOffset))
     .call(xAxis);
   }
-
 };
 
 var drawLine = function(options) {
@@ -203,6 +205,19 @@ var drawPoints = function(options) {
   return;
 };
 
+var drawAxisScale = function(options) {
+
+  var graph = options.graph;
+  var scale = options.scale;
+
+  graph.append('svg:text')
+  .attr('class', 'axisScale')
+  // .attr('transform', 'rotate(-90) ' + utils.translate(-10, scale.height / 2))
+  .attr('text-rendering', 'optimizeLegibility')
+  .attr('transform', utils.translate(3, scale.height / 2) + ' rotate(-90)')
+  .text(options.unit);
+};
+
 var drawTimeBar = function(options) {
 
   var graph = options.graph;
@@ -220,7 +235,6 @@ var drawTimeBar = function(options) {
     .attr('width', scale.barWidth)
     .attr('x', currentX - scale.barWidth / 2)
     .attr('y', 0);
-
 };
 
 var drawPredictPoint = function(options) {
@@ -252,7 +266,6 @@ var drawDisablePad = function(options) {
   .attr('class', 'disablePad')
   .attr('width', scale.width + scale.margin)
   .attr('height', scale.height + scale.margin + scale.margin);
-
 };
 
 var drawMiscData = function(options) {
@@ -419,9 +432,4 @@ var drawCapturePad = function(options) {
   .on('mouseout', function() { 
     focus.style('display', 'none'); })
   .on('mousemove', mouseMove);
-
-};
-
-module.exports = {
-  graph: graph,
 };

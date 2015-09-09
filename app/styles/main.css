@@ -22,17 +22,20 @@ body {
 
 
 /* Energy Charts */
-.axis { 
-  fill: none
+.axis path,
+.axis line { 
+  fill: none;
+  stroke: black;
+  shape-rendering: geometricPrecision;
 }
 
-.x.axis {
+/*.x.axis {
   stroke: black; 
 }
 
 .y.axis {
   stroke: black;
-}
+}*/
 
 .linePath {
   fill: none;
@@ -87,6 +90,13 @@ body {
   fill: red;
   opacity: 0.18;
 }
+
+.axisScale {
+  font-weight: bold;
+  font-size: 1.1rem;
+}
+
+///////////////////////////////////
 
 .source1 *:not(text), path.source1{ 
   fill: #F6BB42;
