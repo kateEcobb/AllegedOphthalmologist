@@ -38,7 +38,7 @@ var UserStore = assign({}, EventEmitter.prototype, {
     user.token = user_data.token;
   },
   logoutUser: function() {
-    for(i in user){
+    for(var i in user){
       user[i] = null;
     }
   },
@@ -77,9 +77,9 @@ UserStore.dispatchToken = Dispatcher.register(function (dispatch) {
     UserStore.emitChange();
   }
   if (action.type === ActionTypes.USER_LOGOUT){
-    // console.log('logging out');
     UserStore.logoutUser();
   } 
+
 });
 
 module.exports = UserStore;

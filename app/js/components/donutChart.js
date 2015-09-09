@@ -4,10 +4,11 @@ var d3Chart = {};
 d3Chart.create = function(el, data, className){
 
   //el is modal-body
-  var modal = d3.select(el)
+  var modal = d3.select(el);
+  var modalSpec;
 
   if(modal.node() !== null){
-    var modalSpec = modal.node().getBoundingClientRect();
+    modalSpec = modal.node().getBoundingClientRect();
   }
 
   specs = {
@@ -36,7 +37,7 @@ d3Chart.create = function(el, data, className){
     .attr("class", className)
     .attr('display', 'inline-block')
     .append('svg:g')
-    .attr("transform", "translate("+specs.r+","+specs.r+")")
+    .attr("transform", "translate("+specs.r+","+specs.r+")");
 
 
   var arc = d3.svg.arc()
@@ -44,7 +45,7 @@ d3Chart.create = function(el, data, className){
     .outerRadius(specs.r);
 
   var pie = d3.layout.pie()
-    .value(function(d){return d.percentage});
+    .value(function(d){return d.percentage; });
 
 
   var arcs = vis.selectAll('g.slice')
@@ -54,28 +55,28 @@ d3Chart.create = function(el, data, className){
         .attr('className', 'slice');
 
   arcs.append('svg:path')
-    .attr('fill', function(d, i){return specs.color(i)})
-    .attr('class', function(d, i){return specs.names(i)})
+    .attr('fill', function(d, i){return specs.color(i); })
+    .attr('class', function(d, i){return specs.names(i); })
     .attr('d', arc)
     .style('stroke', 'white')
-    .style('stroke-width', '5')
+    .style('stroke-width', '5');
 
   arcs.on('mouseover', function(d){
     toolTip(className+'div', d, specs);
 
   }).on('mouseout', function(d){
     d3.select('.toooltip')
-      .remove()
-  })
+      .remove();
+  });
+
   legend(className, specs.color, specs.data, specs.names);
-}
+};
 
 d3Chart.removeGraph = function(className){
   d3.select('.'+className+'div').remove();
-}
+};
 
 var legend = function(className, color, data, names){
-  // console.log(d3.select('.'+className).node().getBoundingClientRect());
 
   var elSpecs = d3.select("."+className).node().getBoundingClientRect();
 
@@ -87,7 +88,7 @@ var legend = function(className, color, data, names){
     .data(color.domain())
     .enter()
     .append('g')
-    .attr('class', function(d, i){return specs.names(i)})
+    .attr('class', function(d, i){return specs.names(i); })
     .attr('transform', function(d, i){
       var height = RectSize + Spacing;
       var offset = color.domain().length / 2;
@@ -98,15 +99,15 @@ var legend = function(className, color, data, names){
 
   legend.append('rect')
     .attr('width', RectSize)
-    .attr('height', RectSize)
+    .attr('height', RectSize);
 
   legend.append('text')
     .attr('x', RectSize + Spacing)
     .attr('y', RectSize - Spacing)
     .attr('font-size', 'smaller')
-    .text(function(d){return data[d].type; })
+    .text(function(d){return data[d].type; });
 
-}
+};
 
 var toolTip = function(className, data, specs){
 
@@ -135,13 +136,13 @@ var toolTip = function(className, data, specs){
       'font-size': '9pt',
       'padding': '4px',
       'border-radius': '4px'
-    })
+    });
 
 
   textBox
-    .text(data.data.type  + ': \n'  + data.data.percentage +'%')
+    .text(data.data.type  + ': \n'  + data.data.percentage +'%');
 
-}
+};
 
 d3Chart.title = function(className, title){
   d3.select('.' + className + 'div')
@@ -150,7 +151,7 @@ d3Chart.title = function(className, title){
       'display':'inline-block',
     })
     .text(title);
-}
+};
 
 var processData = function(data){
   var totalMW = 0, breakDown = [];
@@ -160,10 +161,10 @@ var processData = function(data){
 
   data.forEach(function(element){
     var type = element.fuel;
-    type = type.substr(0,1).toUpperCase() + type.substr(1).toLowerCase()
+    type = type.substr(0,1).toUpperCase() + type.substr(1).toLowerCase();
     var percentage = Math.round((element.gen_MW / totalMW)*100, 2);
     breakDown.push({type: type, percentage: percentage});
-  })
+  });
 
   if(breakDown[0].type === 'Other'){
     var temp = breakDown.shift();
@@ -171,6 +172,6 @@ var processData = function(data){
   }
 
   return breakDown;
-}
+};
 
 module.exports = d3Chart;

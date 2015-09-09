@@ -18,7 +18,7 @@ var DataStore = assign({}, EventEmitter.prototype, {
     this.removeListener(CHANGE_EVENT, callback);
   },
   logoutUser: function(){
-    data['Utility'] = [{}];
+    data.Utility = [{}];
   },
   setData: function(newData, key){
     data[key] = newData;

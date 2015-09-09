@@ -8,7 +8,7 @@ var CHANGE_EVENT = 'change';
 var modalStats = {
   isOpen: false,
   modal: null,
-}
+};
 
 var ModalStore = assign({}, EventEmitter.prototype, {
   emitChange: function(){
@@ -38,7 +38,7 @@ ModalStore.dispatchToken = Dispatcher.register(function(dispatcher){
     USER_LOGIN: 'dismiss dailog box when user login in',
     LOAD_MODAL: 'load dialog box if payload is provided',
     register: 'dismiss dialog box when user registers',
-  }
+  };
   if(actions.hasOwnProperty(action.type)){
     ModalStore.toggleModal();
     if(modalStats.isOpen){
