@@ -69,6 +69,15 @@ module.exports = function(grunt) {
     },
 
 
+    jasmine_node: {
+      options: {
+        forceExit: true,
+        extentions: 'js',
+        includeStackTrace: true,
+      },
+      all: ['server/tests/']
+    },
+
     watch: {
       server: {
         files: ['server/**/*.js'],
@@ -115,6 +124,11 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-nodemon');
   grunt.loadNpmTasks('grunt-webpack');
   grunt.loadNpmTasks('grunt-services');
+<<<<<<< HEAD
+=======
+  grunt.loadNpmTasks('grunt-clear');
+  grunt.loadNpmTasks('grunt-jasmine-node-new');
+>>>>>>> (tests) added server tests to grunt file
 
   grunt.registerTask('server-dev', function(target) {
     var nodemon = grunt.util.spawn({
@@ -146,6 +160,8 @@ module.exports = function(grunt) {
   grunt.registerTask('test', [
     'jshint'
   ]);
+
+  grunt.registerTask('jasTest', ['jasmine_node']);
 
   grunt.registerTask('upload', function(n) {
     if (grunt.option('prod')) {
