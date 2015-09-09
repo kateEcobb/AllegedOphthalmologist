@@ -32,6 +32,9 @@ var Tab = mui.Tab;
 // D3 React Pie Chart
 var Pie = require('./pieChart');
 
+var GraphView = require('./EnergyGraphView.jsx'); 
+var GraphTypes = require('./../constants/Constants').GraphTypes;  
+
 //Stores
 var UserStore = require('./../stores/UserStore');
 var DataStore = require('./../stores/DataStore');
@@ -144,8 +147,11 @@ var ProfileView = React.createClass({
             <CardText zDepth={2}>
               <div className="user-summary">
                 {this.state.showPieChart ?  
+                <div>
                 <Pie colorRange={this.state.data.pieChart.colorRange} data={this.state.chartData} 
                     width={this.state.data.pieChart.width} height={this.state.data.pieChart.height} />
+                <GraphView height={300} width={900} margin={10} tabs={false} value={GraphTypes.USER_KWH} />
+                </div>
                 : null
                 }
                 <p>

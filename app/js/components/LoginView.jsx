@@ -41,8 +41,12 @@ var LoginView = React.createClass({
     this.token = Dispatcher.register(function (dispatch) {
       var action = dispatch.action;
       if (action.type === ActionTypes.USER_LOGIN_FAILURE) {
-        console.log('login failure');
+        //console.log('login failure');
         context.failedLogin();
+      } 
+      if (action.type === ActionTypes.USER_LOGIN) {
+        //console.log('login failure');
+        context.transitionTo('profile');
       } 
     });
   },
@@ -69,7 +73,6 @@ var LoginView = React.createClass({
     this.disableButton();
     // console.log('Logging in with: ', data);
     ViewActions.loginUser(data);
-    this.transitionTo('profile');
   },
 
   handleRegister: function(){

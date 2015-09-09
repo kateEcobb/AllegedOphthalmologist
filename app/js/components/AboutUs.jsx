@@ -79,6 +79,8 @@ var AboutUs = React.createClass({
 
   componentWillUnmount: function(){ 
     window.removeEventListener('resize', this.reSizeGraphs);
+    DataStore.removeChangeListener(this.loadData);
+    BulbStore.removeChangeListener(this.gridState);
   },
 
   reSizeGraphs: function(){ 

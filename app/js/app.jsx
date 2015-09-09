@@ -44,7 +44,8 @@ var App = React.createClass({
   getInitialState: function(){
     return{
       showModal: ModalStore.getModalState().isOpen,
-      modal: null
+      modal: null,
+      logMes: ""
     };
 
   },
@@ -123,6 +124,7 @@ var App = React.createClass({
   showSnack: function(message){
     this.setState({logMes: message});
     this.refs.snackbar.show();
+
   },
 
   render: function(){
@@ -147,6 +149,7 @@ var App = React.createClass({
           message={this.state.logMes}
           autoHideDuration={2000} />
       </div>
+
     );
   }
 });
