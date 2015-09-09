@@ -69,6 +69,7 @@ var LoginView = React.createClass({
     this.disableButton();
     // console.log('Logging in with: ', data);
     ViewActions.loginUser(data);
+    this.transitionTo('graphs')
   },
 
   handleRegister: function(){

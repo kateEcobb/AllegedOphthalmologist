@@ -29,7 +29,8 @@ var LoginView = require('./components/LoginView.jsx');
 var ProfileView = require('./components/ProfileView.jsx');
 var RegistrationView = require('./components/RegistrationView.jsx');
 var engergyBreakDown = require('./components/energyBreakDownView.jsx');
-var modalStore = require('./stores/modalStore');
+var AboutUs = require('./components/AboutUs.jsx');
+
 
 // Stores -- Load here so Stores can begin listening to Events
 var UserStore = require('./stores/UserStore');
@@ -43,7 +44,7 @@ var ActionTypes = require('./constants/Constants').ActionTypes;
 var App = React.createClass({
   getInitialState: function(){
     return{
-      showModal: modalStore.getModalState().isOpen,
+      showModal: ModalStore.getModalState().isOpen,
       modal: null
     };
 
@@ -62,7 +63,7 @@ var App = React.createClass({
   },
 
   modalListener: function(){
-    var modalSpecs = modalStore.getModalState();
+    var modalSpecs = ModalStore.getModalState();
     console.log(modalSpecs);
     this.setState({showModal: modalSpecs.isOpen, modal: modalSpecs.modal});
   },
@@ -83,7 +84,7 @@ var App = React.createClass({
   },
 
   componentDidMount: function() {
-    modalStore.addChangeListener(this.modalListener);
+    ModalStore.addChangeListener(this.modalListener);
     var context = this;
     this.token = Dispatcher.register(function (dispatch){
       var action = dispatch.action;
@@ -109,7 +110,7 @@ var App = React.createClass({
   },
 
   componentWillUnmount: function (){
-    modalStore.removeChangeListener(this.modalListener);
+    ModalStore.removeChangeListener(this.modalListener);
   },
   
   componentDidUnmount: function(){
@@ -128,10 +129,7 @@ var App = React.createClass({
   render: function(){
     return (
       <div className="app-container">
-      <div className="app-title">
-        <h1>GridAware</h1>
-        Compare your Energy Use to Current Grid Conditions
-      </div>
+      
         <span className="nav-btn">
           <RaisedButton onClick={this.toggleNav}>Menu</RaisedButton>
         </span>
@@ -158,7 +156,8 @@ var App = React.createClass({
 var routes = (
   <Route name="app" path="/" handler={App}>
   <Route name="profile" path="/profile" handler={ProfileView} />
-  <DefaultRoute name="default" handler={MainView} />
+  <Route name='graphs' path='/currentEnergy' handler={MainView} />
+  <DefaultRoute name="default" handler={AboutUs} />
   </Route>
 );
 

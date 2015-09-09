@@ -49,24 +49,30 @@ var BulbView = React.createClass({
     });    
   }, 
 
-  drawBulbGlow: function(){ 
+  drawBulbGlow: function(){
     var el = React.findDOMNode(this.refs.bulb); 
     el.innerHTML = '';
     BulbGlow.makeCircle(el, { 
-      height: 100,
-      width: 100,
-      margin: 5
-    }, this.state.rgb);
+
+      height: this.props.height,
+      width: this.props.width,
+      margin: this.props.margin, 
+      cy: this.props.cy,
+      cx: this.props.cx,
+      r: this.props.r
+    }, this.state.rgb)
   },
 
   showDonutGraph: function(){
-    ViewActions.loadModal(donutGraphWindow);
+    if(this.props.loadModal){ 
+      ViewActions.loadModal(donutGraphWindow);
+    }
   },
 
   render: function(){ 
     return ( 
-      <div className='bulbcontainer'>
-        <div className="bulb" ref='bulb'></div>
+      <div className={this.props.name}>
+        <div className={this.props.SVGname} ref='bulb'></div>
         <img src={'http://uxrepo.com/static/icon-sets/ionicons/png32/256/000000/ios7-lightbulb-outline-256-000000.png'} 
              id='donutModal' className='img-responsive' onClick={this.showDonutGraph}/>     
       </div> 
@@ -75,3 +81,4 @@ var BulbView = React.createClass({
 }); 
 
 module.exports = BulbView;
+

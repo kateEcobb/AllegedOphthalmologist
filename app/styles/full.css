@@ -1,0 +1,110 @@
+
+.frontPage {
+    background: url(./images/resizedBG.jpg) no-repeat center center fixed;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    background-size: cover;
+    -o-background-size: cover;
+    padding-top: 100px;
+}
+
+body { 
+    background: url(./images/down-the-line-desktopOP.jpg) no-repeat center center fixed;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    background-size: cover;
+    -o-background-size: cover;
+}
+
+#information { 
+    background: url('http://41.media.tumblr.com/aa5c6ce33067f5fe4e486cec203694c7/tumblr_ngyipteoMA1u0oggmo1_1280.jpg') no-repeat center center fixed;
+    height: 800px;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    background-size: cover;
+    -o-background-size: cover;
+}
+.glyphicon{
+  border: 2px solid #FFFFFF;
+  border-radius: 50%;
+  display: block;
+  margin: auto;
+  font-size: 60px;
+  height: 140px;
+  line-height: 140px;
+  text-align: center;
+  vertical-align: middle;
+  width: 140px;
+  color: #2ECC71;
+}
+
+.image-bg-fluid-height {
+    margin-bottom: 187px;
+}
+
+.img-center {
+    margin: 0 auto;
+}
+
+#about { 
+  background-color: white;
+}
+
+#cont1{ 
+  background-color: white;
+  padding: 10px 0;
+  margin-bottom: 50px
+}
+
+#cont2, #cont3 { 
+  background-color: white;
+  padding: 10px 0;
+  margin: 50px 0;
+}
+
+.section-heading {
+    margin: 30px 0;
+    font-size: 4em;
+    width:300px;
+    float: left;
+}
+
+hr { 
+ clear: both;
+}
+
+.section-lead {
+    margin: 30px 0;
+}
+
+#powernotcreated { 
+  float: right;
+  margin-top: 45px;
+  font-size: 29px;
+}
+
+.section-paragraph {
+    margin: 30px 0;
+    font-size: 1.25em;
+}
+
+footer {
+    margin: 50px 0;
+}
+
+@media(max-width:768px) {
+    section {
+        padding-top: 25px;
+        padding-bottom: 25px;
+    }
+
+    .section-heading {
+        font-size: 2em;
+    }
+    #powernotcreated { 
+        font-size: 15px;
+    }
+    .section-paragraph { 
+        font-size: 10px;
+    }
+}

@@ -6,9 +6,6 @@ var makeCircle = function(el, props, state){
                     .attr('className', 'bulbGlowContainer')
                     .attr('width', props.width)
                     .attr('height', props.height)
-                    .style('left', '20px')
-                    .style('top', '3px')
-                    .style('-webkit-filter', 'blur(3px)')
 
   var defs = svgContainer.append('defs')
   var filter = defs.append('filter')
@@ -20,9 +17,9 @@ var makeCircle = function(el, props, state){
 
   var circle = svgContainer.append('circle')
                           .attr('className', 'bulbGlow')
-                          .attr('cx', 30)
-                          .attr('cy', 30)
-                          .attr('r', 30)
+                          .attr('cx', props.cx)
+                          .attr('cy', props.cy)
+                          .attr('r', props.r)
                           .style('fill', state.toString())
   return;
 };

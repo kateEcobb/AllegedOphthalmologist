@@ -1,5 +1,8 @@
 /*Nav Button*/
 
+body { 
+  margin-top: 0px;
+}
 .nav-btn {
   position: absolute;
   top: 1em;
@@ -85,13 +88,74 @@
   opacity: 0.18;
 }
 
+.source1 *:not(text), path.source1{ 
+  fill: #F6BB42;
+  stroke: #F6BB42;
+}
+.source2 *:not(text), path.source2{ 
+  fill: #FFDE55;
+  stroke: #FFDE55;
+}
+.source3 *:not(text), path.source3{ 
+  fill: #94D9BB;
+  stroke: #94D9BB;
+}
+.source4 *:not(text), path.source4{ 
+  fill: #58C1BE;
+  stroke: #58C1BE;
+}
+
 /*Light Bulb*/
-.bulb {
+.bulb1 {
     max-width: 100px;
     margin: auto;
     display: block;
     position: relative;
 }
+
+.bulb2 { 
+  margin: auto;
+  display: block;
+  position: relative;
+  max-width: 500px;
+}
+
+.bulb2 > svg { 
+  left: 50px;
+  top: 9px;
+  -webkit-filter: blur(5px);
+}
+
+.bulb1 > svg { 
+  left: 20px;
+  top: 3px;
+  -webkit-filter: blur(3px);  
+}
+
+.bulbContainer1{ 
+  width: 100px;
+  height: 100px;
+  position: relative;
+  display: block;
+  margin: auto;
+}
+
+.bulbContainer2{ 
+  width: 250px;
+  height: 250px;
+  position: relative;
+  display: block;
+  margin: auto;
+}
+
+.bulb, #donutModal{ 
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
 /*Forms*/
 
 div.login {
@@ -136,7 +200,7 @@ div.login {
   font-size: 2em;
 }
 
-.test1, .test2{
+.popup1, .popup2 { 
   display: inline;
 }
 
@@ -148,29 +212,15 @@ svg {
     overflow: hidden;
 }
 
+#registerClick{ 
+  cursor: pointer;
+}
+
 .tick text{ 
   fill: black;
 }
 
-.bulbcontainer{ 
-  width: 100px;
-  height: 100px;
-  position: relative;
-  display: block;
-  margin: auto;
-}
-
-
-
-.bulb, .img-responsive{ 
-  width: 100%;
-  height: 100%;
-  position: absolute;
-  top: 0;
-  left: 0;
-}
-
-.img-responsive{ 
+#donutModal { 
   z-index: 10;
 }
 

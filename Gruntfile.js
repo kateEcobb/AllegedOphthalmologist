@@ -32,7 +32,7 @@ module.exports = function(grunt) {
       },
       target: {
         files: {
-          './build/main.min.css': ['./app/main.css']
+          './build/main.min.css': ['./app/styles/main.css', './app/styles/full.css']
         }
       }
     },
@@ -62,6 +62,7 @@ module.exports = function(grunt) {
       }
     },
 
+
     watch: {
       server: {
         files: ['server/**/*.js'],
@@ -72,8 +73,9 @@ module.exports = function(grunt) {
         tasks: ['test', 'webpack:app'],
       },
       css: {
-        files: ['app/main.css'],
-        tasks: ['cssmin'],
+
+        files: ['app/styles/main.css','app/styles/full.css'],
+        tasks: ['cssmin']
       },
       index: {
         files: ['app/index.html'],

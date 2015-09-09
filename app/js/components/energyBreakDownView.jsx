@@ -43,22 +43,21 @@ var ModalI = React.createClass({
   },
 
   componentWillUnmount: function(){
-    // modalStore.removeEventListener(this.dismount);
     window.removeEventListener('resize', this.reSizeGraphs);
   },
 
   reSizeGraphs: function(){
-    chart.removeGraph('test1');
-    chart.removeGraph('test2');
+    chart.removeGraph('popup1');
+    chart.removeGraph('popup2');
 
     this.makeGraphs();
   },
 
   makeGraphs: function(){
-    chart.create('.modal-body', this.state.data.Watt[0].genmix.slice(1, 4), 'test1');
-    chart.title('test1', 'This is break down of renewable energy');
-    chart.create('.modal-body', this.state.data.Watt[0].genmix, 'test2');
-    chart.title('test2', 'This is break down of all energy on the grid');
+    chart.create('.modal-body', this.state.data.Watt[0].genmix.slice(1, 4), 'popup1');
+      chart.title('popup1', 'This is break down of renewable energy');
+    chart.create('.modal-body', this.state.data.Watt[0].genmix, 'popup2');
+      chart.title('popup2', 'This is break down of all energy on the grid');
   },
 
   render: function(){
@@ -69,7 +68,8 @@ var ModalI = React.createClass({
           <Dialog 
             openImmediately={this.props.openImmediately}>
             
-            <div style={{'textAlign': 'center'}} className={modalbody}>
+
+            <div style={{'textAlign': 'center', 'minWidth':'500px'}} className={modalbody}>
               <h3>This is a break down of how the grid is being powered</h3> 
             </div>
             
@@ -85,6 +85,7 @@ var ModalI = React.createClass({
         </div>
       );
     }
+
   }
 });
 

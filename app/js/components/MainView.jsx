@@ -23,7 +23,6 @@ var GraphToolBar = require('./graphToolBar.jsx');
 var BulbView = require('./bulbView.jsx');
 
 var MainView = React.createClass({
-  
 
   showDonutModal: function(){
     ViewActions.loadModal(donutGraphWindow);
@@ -31,8 +30,12 @@ var MainView = React.createClass({
 
   render: function() {
     return (
-      <div>
-          <BulbView />   
+      <div className='MainView'>
+      <div className="app-title">
+        <h1>GridAware</h1>
+        Compare your Energy Use to Current Grid Conditions
+      </div>
+          <BulbView loadModal={true} name={"bulbContainer1"} SVGname={'bulb1'} height={100} width={100} margin={5} cy={30} cx={30} r={30} />   
           <LineGraphView height={300} width={900} margin={10} />  
       </div>
     );

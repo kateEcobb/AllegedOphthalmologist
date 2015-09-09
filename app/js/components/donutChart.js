@@ -1,7 +1,6 @@
 var d3Chart = {};
 
 
-
 d3Chart.create = function(el, data, className){
 
   //el is modal-body
@@ -17,6 +16,7 @@ d3Chart.create = function(el, data, className){
     r: modalSpec.width/4 - 20,
     innerR: (modalSpec.width/4 - 20)*0.75,
     color: d3.scale.ordinal().range(['#528C18', '#648C85', '#B3F2C9', '#A60F2B']),
+    names: d3.scale.ordinal().range(['source1','source2','source3','source4']),
     data: processData(data),
   };
   
@@ -51,10 +51,11 @@ d3Chart.create = function(el, data, className){
     .data(pie)
     .enter()
       .append('svg:g')
-        .attr('class', 'slice');
+        .attr('className', 'slice');
 
   arcs.append('svg:path')
     .attr('fill', function(d, i){return specs.color(i)})
+    .attr('class', function(d, i){return specs.names(i)})
     .attr('d', arc)
     .style('stroke', 'white')
     .style('stroke-width', '5')
@@ -66,14 +67,14 @@ d3Chart.create = function(el, data, className){
     d3.select('.toooltip')
       .remove()
   })
-  legend(className, specs.color, specs.data);
+  legend(className, specs.color, specs.data, specs.names);
 }
 
 d3Chart.removeGraph = function(className){
   d3.select('.'+className+'div').remove();
 }
 
-var legend = function(className, color, data){
+var legend = function(className, color, data, names){
   // console.log(d3.select('.'+className).node().getBoundingClientRect());
 
   var elSpecs = d3.select("."+className).node().getBoundingClientRect();
@@ -86,7 +87,7 @@ var legend = function(className, color, data){
     .data(color.domain())
     .enter()
     .append('g')
-    .attr('class', 'legend')
+    .attr('class', function(d, i){return specs.names(i)})
     .attr('transform', function(d, i){
       var height = RectSize + Spacing;
       var offset = color.domain().length / 2;
@@ -98,8 +99,6 @@ var legend = function(className, color, data){
   legend.append('rect')
     .attr('width', RectSize)
     .attr('height', RectSize)
-    .style('fill', color)
-    .style('stroke', color)
 
   legend.append('text')
     .attr('x', RectSize + Spacing)
@@ -113,7 +112,6 @@ var toolTip = function(className, data, specs){
 
   var svg = d3.select('.'+className).select('svg').node().getBoundingClientRect();
   var svgParent = d3.select('.'+className).node().getBoundingClientRect();
-  // console.log('toooltip',svgParent, 'svg ', svg);
 
   position = {
     top: (specs.h/6) - (svg.height - svgParent.height),
@@ -130,16 +128,19 @@ var toolTip = function(className, data, specs){
       'left': position.left +'px',
       'height': 'auto',
       'width': '100px',
-      'background-color': 'black',
+      'background-color': '#636363',
       'z-index': '10',
-      'opacity': '0.95',
       'color': 'white',
-      'textAlign': 'center',
-      'font-size': '11pt',
+      'text-align': 'center',
+      'font-size': '9pt',
+      'padding': '4px',
+      'border-radius': '4px'
     })
 
+
   textBox
-    .text('energy type: ' + data.data.type  + '\n'  +'percentage: ' + data.data.percentage)
+    .text(data.data.type  + ': \n'  + data.data.percentage +'%')
+
 }
 
 d3Chart.title = function(className, title){
@@ -159,14 +160,16 @@ var processData = function(data){
 
   data.forEach(function(element){
     var type = element.fuel;
+    type = type.substr(0,1).toUpperCase() + type.substr(1).toLowerCase()
     var percentage = Math.round((element.gen_MW / totalMW)*100, 2);
     breakDown.push({type: type, percentage: percentage});
   })
 
-  if(breakDown[0].type === 'other'){
+  if(breakDown[0].type === 'Other'){
     var temp = breakDown.shift();
     breakDown.push(temp);
   }
+
   return breakDown;
 }
 

@@ -7,16 +7,17 @@ var ActionTypes = require('../constants/Constants').ActionTypes;
 var register = require('../components/RegistrationView.jsx');
 var profile = require('../components/ProfileView.jsx');
 var login = require('../components/LoginView.jsx');
-
+var graphs = require('../components/MainView.jsx')
 
 var CHANGE_EVENT = 'change';
 
 var menuItems = [
-  { route: 'home', text: 'Home', display: false },
+  { route: 'home', text: 'Home', display: true },
   { route: register, text: 'Register', display: true },
   { route: profile, text: 'Profile', reqLogin: true, disabled: true, display: false },
   { route: login, text: 'Login', display: true },
-  { route: 'logout', text: 'Logout', reqLogin: true, display: false },
+  { route: graphs, text: 'Current Energy', display: true },
+  { route: 'logout', text: 'Logout', reqLogin: true, display: false }
 ]
 
 var MenuStore = assign({}, EventEmitter.prototype, {
@@ -52,11 +53,10 @@ MenuStore.dispatchToken = Dispatcher.register(function(dispatcher){
 
   var action = dispatcher.action;
   var itemsToToggle = [
-    menuItems[0],
     menuItems[1],
     menuItems[2],
     menuItems[3],
-    menuItems[4],
+    menuItems[5]
   ];
   if(action.type === ActionTypes.USER_LOGIN || action.type === ActionTypes.USER_LOGOUT){
     itemsToToggle.forEach(function(item){
