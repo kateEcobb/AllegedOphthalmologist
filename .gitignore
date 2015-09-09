@@ -22,9 +22,7 @@ coverage
 .grunt
 
 # Compiled Dirs (http://nodejs.org/api/addons.html)
-build/index.html
-build/main.min.css
-build/production.js
+build/
 dist/
 
 # Dependency directorys
