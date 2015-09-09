@@ -54,7 +54,10 @@
   margin: 50px 0;
 }
 
+p { 
+    text-indent: 50px;
 
+}
 .section-heading {
     margin: 30px 0;
     font-size: 4em;

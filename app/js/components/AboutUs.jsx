@@ -100,11 +100,13 @@ var AboutUs = React.createClass({
 
                       <div className={donuts} style={{'maxWidth':'600px', 'margin': 'auto','paddingLeft':'23px'}}></div>
               
-                      <p className='section-paragraph'> GridAware empowers consumers to use energy more intelligently and reduce their carbon footprint by providing 
-                      frictionless access to current grid conditions. We are thrilled to introduce the GridAware Power Bulb -- 
+                      <p className='section-paragraph'> GridAware empowers consumers to use energy more intelligently and to reduce 
+                      their carbon footprint by providing 
+                      frictionless access to current grid conditions. We are thrilled to introduce the GridAware Power Bulb —
                       a WiFi-enabled LED bulb that changes color based on energy cleanliness. Put it anywhere in your house or apartment 
-                      and start checking the state of California’s grid at a glance!</p>
+                     and start checking the state of California’s grid at a glance!</p>
 
+                    
                 </div>
             </div>
         </div>
@@ -129,11 +131,13 @@ var AboutUs = React.createClass({
                   <h2>How Does The Grid Work!?</h2>
                         <p className="section-paragraph">Each day, the mix of energy generation resources changes as demand fluctuates. 
                         The grid operator must efficiently balance power generation and consumer electricity demand, 
-                        using renewable resources whenever possible as conditions allow.</p>
+                        using renewable resources whenever possible. Periods of high demand and low availability of renewable resources translate to more pollution 
+                        per unit of energy consumed. </p>
 
-                        <p className="section-paragraph">Periods of high demand and low availability of renewable generation resources translate to more pollution 
-                        associated with each unit of energy consumed. Periods of low demand and high availability of 
-                        renewable resources mean less pollution is associated with the same unit of energy.</p>
+                        <p className='section-paragraph'> Our web-based analytics platform analyzes data collected from your PG&E SmartMeter 
+                     and compares your consumption data to the cleanliness of the grid. 
+                     GridAware gives you easy to understand feedback on how your consumption patterns are associated with electricity generation pollution. Combine the
+                      GridAware Power Bulb with our application to raise your EnergyIQ and reduce your carbon footprint! </p>
               </div>
             </div>
         </div>
@@ -145,9 +149,9 @@ var AboutUs = React.createClass({
                 <div className="col-lg-12">
                     <h2>Get Started!</h2> 
                       <p className="section-paragraph">To get started, use our <a id='registerClick' onClick={this.handleRegister}>Registration</a> page to signup for GridAware, 
-                      and link  your SmartMeter at the same time! All you need is your PG&E login.</p>
+                      and link  your SmartMeter at the same time! All you need is your PG&E login.
 
-                      <p className="section-paragraph">Don't have an online account with PG&E yet? 
+                      Don't have an online account with PG&E yet? 
                       Sign up <a href="https://www.pge.com/myenergyweb/appmanager/pge/register">here!</a></p>
 
                       <p className="section-paragraph">Once you register, our robots will analyze your energy consumption.
