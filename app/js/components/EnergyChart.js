@@ -14,8 +14,8 @@ var GraphTypes = require('../constants/Constants.js').GraphTypes;
   overlay:  String  - Optional - Name of state data that you want to overlay on top of
 */
 var graph = function(el, props, state) {
-  var parsedState = utils.parseState(state);
-  var options = initGraph(el, props, parsedState, state);
+  // var parsedState = utils.parseState(state);
+  var options = initGraph(el, props, state);
 
   // drawAxis(options);
   // if (!options.userDisable) {
@@ -32,39 +32,45 @@ var graph = function(el, props, state) {
 };
 //////////////////////////////////////////////////////////////
 
-var initGraph = function(el, props, parsedState, state) {
+var initGraph = function(el, props, state) {
   var options = {};
   var data;
   options.graphType = props.type || GraphTypes.MAIN;
 
   // DATA ===============================
   switch(options.graphType) {
-    case GraphTypes.USER_REQUIRE:
-      data = options.data = utils.parseWattData(state);
-      options.userDisable = true;
-      options.tasks = [drawAxis, drawDisablePad];
-      break;
+
+    // Main Graph Types
     case GraphTypes.MAIN:
       data = options.data = utils.parseWattData(state);
       options.unit = "lbs/Mwh";
       options.tasks = [drawAxis, drawLine, drawMiscData, drawCapturePad];
       break;
+
     case GraphTypes.USER_CARBON:
       data = options.data = utils.parseUserCarbonData(state);
-      options.overlay = props.overlay ? 'Watt' : false;
       options.unit = 'lbs';
       options.tasks = [drawAxis, drawLine, drawCapturePad];
       break;
+
     case GraphTypes.USER_KWH:
       data = options.data = utils.parseUserKwhData(state);
       options.unit = 'Kwh';
       options.tasks = [drawAxis, drawLine, drawCapturePad];
       break;
+
+    // Supplemental Graph Types
+    case GraphTypes.USER_REQUIRE:
+      data = options.data = utils.parseWattData(state);
+      options.tasks = [drawAxis, drawDisablePad];
+      break;
+
     case GraphTypes.DANGER_ZONE:
       data = options.data = utils.parseUserKwhData(state);
       options.data2 = utils.parseWattData(state, false);
-      // options.overlay = 'Watt'
       options.tasks = [drawDangerZone];
+      break;
+
     default:
       break;
   }
@@ -80,24 +86,26 @@ var initGraph = function(el, props, parsedState, state) {
     axisOffset: 50, 
     yMinRatio: 0.95,
     yMaxRatio: 1.02,
-    ratio: props.ratio || false,
+    // ratio: props.ratio || false,
     orient: options.overlay ? 'right' : 'left',
   };
 
   // Set up the yRange
   scale.yRange = d3.scale.linear().domain([d3.min(data, function(datum) {
-    return datum.point * scale.yMinRatio * (scale.ratio ? datum.ratio : 1);
+    // return datum.point * scale.yMinRatio * (scale.ratio ? datum.ratio : 1);
+    return datum.point * scale.yMinRatio;
   }), d3.max(data, function(datum) {
-    return datum.point * scale.yMaxRatio * (scale.ratio ? datum.ratio : 1);
+    // return datum.point * scale.yMaxRatio * (scale.ratio ? datum.ratio : 1);
+    return datum.point * scale.yMaxRatio;
   })]).nice()
   .range([scale.height - scale.headerOffset - scale.footerOffset, 0]);
 
   // Set up the xRange - Time Scale
   scale.xRange = d3.time.scale().domain([ 
-    (options.overlay ? parsedState[options.overlay][0].time : data[0].time), 
-    (options.overlay ? parsedState[options.overlay][parsedState[options.overlay].length - 1].time : data[data.length - 1].time)
-    // data[0].time,
-    // data[data.length - 1].time
+    // (options.overlay ? parsedState[options.overlay][0].time : data[0].time), 
+    // (options.overlay ? parsedState[options.overlay][parsedState[options.overlay].length - 1].time : data[data.length - 1].time)
+    data[0].time,
+    data[data.length - 1].time
   ])
   .range([0, scale.width - scale.axisOffset - scale.axisOffset]);
 
@@ -147,7 +155,8 @@ var drawLine = function(options) {
                     return scale.xRange( datum.time );
                   })
                   .y(function(datum) {
-                    return scale.yRange( datum.point * (scale.ratio ? datum.ratio : 1) );
+                    // return scale.yRange( datum.point * (scale.ratio ? datum.ratio : 1) );
+                    return scale.yRange( datum.point );
                   })
                   .interpolate('linear');
 
@@ -201,25 +210,6 @@ var drawTimeBar = function(options) {
   var data = options.data;
 
   var timeNow = new Date(Date.now());
-
-  // var actualX = scale.xRange(new Date(findActualTime(data).getTime() + timeOffset));
-  // var actualTime = new Date(findActualTime(data).getTime() + ((new Date()).getTimezoneOffset() * 1000 * 60));
-  // var actualX = scale.xRange(actualTime[0]);
-
-  // graph.append('svg:g')
-  // .attr('transform', 'translate(' + (scale.axisOffset) + ',' + (0) + ')')
-  //   .append('svg:rect')
-  //   .attr('class', 'actualTimeBar')
-  //   .attr('height', scale.height - scale.axisOffset)
-  //   .attr('width', scale.barWidth)
-  //   .attr('x', actualX - scale.barWidth / 2)
-  //   .attr('y', 0);
-
-  // graph.append('svg:circle')
-  // .attr('transform', utils.translate(scale.axisOffset, 0))
-  // .attr('class', 'predictPoint')
-  // .attr('x', scale.xRange())
-
   var currentX = scale.xRange(timeNow);
 
   graph.append('svg:g')
@@ -239,7 +229,7 @@ var drawPredictPoint = function(options) {
   var scale = options.scale;
   var data = options.data;
 
-  var predictIndex = findDAHRIndex(data);
+  var predictIndex = utils.findDAHRIndex(data);
   // Test for invalid index, if we have empty dataset
   if (predictIndex === -1) {
     throw new Error();
@@ -251,36 +241,6 @@ var drawPredictPoint = function(options) {
   .attr('cx', scale.xRange(data[predictIndex].time))
   .attr('cy', scale.yRange(data[predictIndex].point));
 };
-
-// THIS MIGHT BE DEPRECATED //////////////////
-// var drawActualPredictText = function(options) { 
-
-//   var graph = options.graph;
-//   var scale = options.scale;
-//   var data = options.data;
-
-//   var actualTime = new Date(findActualTime(data).getTime() + ((new Date()).getTimezoneOffset() * 1000 * 60));
-//   var actualX = scale.xRange(actualTime[0]);
-
-//   // Actual
-//   graph.append('svg:g')
-//   .attr('transform', 'translate(' + (scale.axisOffset) + ',' + (0) + ')')
-//     .append('svg:text')
-//     .attr('class', 'actualText')
-//     .attr('x', (actualX - scale.axisOffset - scale.axisOffset) / 2)
-//     .attr('y', scale.axisOffset / 2)
-//     .text('Measured Data');
-
-//   // Predicted
-//   graph.append('svg:g')
-//   .attr('transform', 'translate(' + (actualX + scale.axisOffset) + ',' + (0) + ')')
-//     .append('svg:text')
-//     .attr('class', 'predictedText')
-//     .attr('x', (scale.width - scale.axisOffset - scale.axisOffset - scale.axisOffset - actualX) / 2)
-//     .attr('y', scale.axisOffset / 2)
-//     .text('Predicted Data');
-  
-// };
 
 var drawDisablePad = function(options) {
 
@@ -315,19 +275,41 @@ var drawDangerZone = function(options) {
   .attr('class', 'dangerZone');
 
   var dangerArray = utils.findDangerZones(options.data2, [data[0].time, data[data.length - 1].time]);
-  console.log(options.data2);
-  console.log(dangerArray);
-  dangerArray.forEach(function(datum) {
-    var x1 = scale.xRange(datum[0]);
-    var x2 = scale.xRange(datum[1]);
-    var width = x2 - x1;
-    zone.append('svg:rect')
-    .attr('class', 'dangerBlock')
-    .attr('x', x1)
-    .attr('y', 0)
-    .attr('width', width)
-    .attr('height', scale.height - scale.headerOffset - scale.footerOffset);
-  });
+  // console.log(options.data2);
+  // console.log(dangerArray);
+  // dangerArray.forEach(function(datum) {
+  //   var x1 = scale.xRange(datum[0]);
+  //   var x2 = scale.xRange(datum[1]);
+  //   var width = x2 - x1;
+  //   zone.append('svg:rect')
+  //   .attr('class', 'dangerBlock')
+  //   .attr('x', x1)
+  //   .attr('y', 0)
+  //   .attr('width', width)
+  //   .attr('height', scale.height - scale.headerOffset - scale.footerOffset);
+  // });
+
+  // DATA JOIN
+  var zoneRects = zone.selectAll('rect')
+                  .data(dangerArray, function(datum) { return datum[0].getTime() + datum[1].getTime(); });
+  // UPDATE
+
+  // ENTER
+  zoneRects.enter().append('rect')
+  .attr('class', 'dangerBlock')
+  .attr('x', function(datum) {
+    return scale.xRange(datum[0]);
+  })
+  .attr('y', 0)
+  .attr('width', function(datum) {
+    return scale.xRange(datum[1]) - scale.xRange(datum[0]);
+  })
+  .attr('height', scale.height - scale.headerOffset - scale.footerOffset);
+
+  // UPDATE & ENTER
+
+  // EXIT
+  zoneRects.exit().remove();
 };
 
 var drawCapturePad = function(options) {
@@ -384,10 +366,10 @@ var drawCapturePad = function(options) {
     var x = scale.xRange(nearestDatum.time);
     var y = scale.yRange(nearestDatum.point * (scale.ratio ? nearestDatum.ratio : 1));
 
-    // Calculate dx based on how far along the graph we are;
+    // Calculate dx and dy based on how far along the graph we are. This is for moving the tooltip around 
     var textAnchor = (x / (scale.width - scale.axisOffset - scale.axisOffset)) < 0.88 ? 'start' : 'end';
-    var dataInvert = (y / (scale.height - scale.headerOffset - scale.footerOffset)) < 0.1 ? '4rem' : '-3rem';
-    var dateInvert = (y / (scale.height - scale.headerOffset - scale.footerOffset)) < 0.1 ? '2rem' : '-1rem';
+    var dy = (y / (scale.height - scale.headerOffset - scale.footerOffset)) < 0.1 ? ['4rem', '2rem'] : ['-3rem', '-1rem'];
+
     // Update the position of all the focus elements
     focus.select('.focal')  
     .attr('transform', utils.translate(x, y));  
@@ -402,25 +384,25 @@ var drawCapturePad = function(options) {
     focus.select('.focusData.highlight')
     .attr('transform', utils.translate(x, y))
     .attr('text-anchor', textAnchor)
-    .attr('dy', dataInvert)
+    .attr('dy', dy[0])
     .text( (Math.round((nearestDatum.point + 0.00001) * 100) / 100) + ' ' + options.unit);
 
     focus.select('.focusData.info')
     .attr('transform', utils.translate(x, y))
     .attr('text-anchor', textAnchor)
-    .attr('dy', dataInvert)
+    .attr('dy', dy[0])
     .text( (Math.round((nearestDatum.point + 0.00001) * 100) / 100) + ' ' + options.unit);
 
     focus.select('.focusDate.highlight')
     .attr('transform', utils.translate(x, y))
     .attr('text-anchor', textAnchor)
-    .attr('dy', dateInvert)
+    .attr('dy', dy[1])
     .text( utils.formatFocusDate(nearestDatum.time) );
 
     focus.select('.focusDate.info')
     .attr('transform', utils.translate(x, y))
     .attr('text-anchor', textAnchor)
-    .attr('dy', dateInvert)
+    .attr('dy', dy[1])
     .text( utils.formatFocusDate(nearestDatum.time) );
 
   };
@@ -438,21 +420,6 @@ var drawCapturePad = function(options) {
     focus.style('display', 'none'); })
   .on('mousemove', mouseMove);
 
-};
-
-//////
-
-var findDAHRIndex = function(data) {
-  if (!data[0].market) {
-    return -1;
-  }
-  for (var i = 0; i < data.length; i++) {
-    if (data[i].market === 'DAHR') {
-
-      return i;
-    }
-  }
-  return data.length - 1;
 };
 
 module.exports = {
