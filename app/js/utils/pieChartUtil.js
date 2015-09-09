@@ -22,7 +22,7 @@ module.exports = function(wattTimeData, utilityData){
       return 1;
     return 0;
   };
-
+  
   var getCarbonRange = function(wattTimeData){
     var min = Number.POSITIVE_INFINITY;
     var max = Number.NEGATIVE_INFINITY;
