@@ -30,7 +30,7 @@ var MainView = React.createClass({
 
   render: function() {
     return (
-      <div>
+      <div className='MainView'>
       <div className="app-title">
         <h1>GridAware</h1>
         Compare your Energy Use to Current Grid Conditions
