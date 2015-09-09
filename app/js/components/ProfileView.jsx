@@ -53,7 +53,7 @@ var ProfileView = React.createClass({
       data: {
         utilityData: DataStore.getData('Utility'),
         wattTimeData: DataStore.getData('Watt'),
-        pieChart: {colorRange: ['#A60F2B','#e6e600','#528C18']},
+        pieChart: {colorRange: ['#A60F2B','#e6e600','#528C18'], width: 200, height: 200},
       },
       chartData: [{},{},{}],
       showPieChart: false
@@ -143,12 +143,15 @@ var ProfileView = React.createClass({
             </CardHeader>
             <CardText zDepth={2}>
               <div className="user-summary">
-                <p>Service Address: {this.state.user.address}</p>
-                <p>PG&E Username:   {this.state.user.pgeLogin}</p>
                 {this.state.showPieChart ?  
-                <Pie colorRange={this.state.data.pieChart.colorRange} data={this.state.chartData} width={500} height={500} />
+                <Pie colorRange={this.state.data.pieChart.colorRange} data={this.state.chartData} 
+                    width={this.state.data.pieChart.width} height={this.state.data.pieChart.height} />
                 : null
                 }
+                <p>
+                Your energy use breakdown for high (green), average (yellow),
+                and below average (red) presence of renewables on the grid.
+                </p>
               </div>
             </CardText>
           </Card>

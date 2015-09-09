@@ -9,6 +9,10 @@ module.exports = function(wattTimeData, utilityData){
   var yellowCount = 0;
   var redCount = 0;
 
+  var greenKwh = 0;
+  var yellowKwh = 0;
+  var redKwh = 0;
+
   function sortByTimestamp(a,b) {
     var dateA = new Date(a.timestamp)
     var dateB = new Date(b.timestamp)
@@ -81,6 +85,7 @@ module.exports = function(wattTimeData, utilityData){
 
           if(intervalTime > greenStartTime && intervalTime < greenEndTime){
             greenCount++;
+            greenKwh += utlityApiData[i].interval_kWh
             foundTime = true;
           }
         }
@@ -91,15 +96,22 @@ module.exports = function(wattTimeData, utilityData){
           var yellowEndTime = new Date(yellowTimes[j][1]);
           if(intervalTime > yellowStartTime && intervalTime < yellowEndTime){
             yellowCount++;
+            yellowKwh += utlityApiData[i].interval_kWh
             foundTime = true;
           }
         }
       }
       else {
         redCount++;
+        redKwh += utlityApiData[i].interval_kWh
       }
       
     }
+
+    // Round here to avoid ridiculous numbers because JavaScript
+    redKwh = Math.round(redKwh * 100) / 100;
+    yellowKwh = Math.round(yellowKwh * 100) / 100;
+    greenKwh = Math.round(greenKwh * 100) / 100;
   };
 
   var range = getCarbonRange(wattTimeData);
@@ -112,8 +124,8 @@ module.exports = function(wattTimeData, utilityData){
   computeBrackets(sortedWattTime, greenBound, yellowBound);
   countUtilityApiPoints(utilityData);
 
-  return ([{text: 'Red', quantity: redCount},
-                            {text: 'Yellow', quantity: yellowCount},
-                            {text: 'Green', quantity: greenCount}
+  return ([{text: redKwh + ' kWh', quantity: redCount},
+                            {text: yellowKwh + ' kWh', quantity: yellowCount},
+                            {text: greenKwh + ' kWh', quantity: greenCount}
                             ]);
 }

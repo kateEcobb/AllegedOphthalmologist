@@ -99,7 +99,7 @@ var LoginView = React.createClass({
           </div>
           <div className="login-failure">
             <p>Login Failure.</p>
-            <p>Have you <span style={{color:'blue', 'text-decoration': 'underline'}} onClick={this.handleRegister}>Registered</span>?</p>
+            <p>Have you <span style={{color:'blue', 'textDecoration': 'underline'}} onClick={this.handleRegister}>Registered</span>?</p>
           </div>
         </div>
       </Dialog>
