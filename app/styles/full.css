@@ -16,6 +16,23 @@ body {
     -o-background-size: cover;
 }
 
+#gridstate, #cali{ 
+    text-align: center;
+    font-size:1.35em;
+    width: 400px;
+    display: block;
+    margin: auto;
+    font-weight: bold;
+}
+
+#gridstate { 
+    background-color: rgba(255,255,255,0.5);
+    width: 160px;
+    padding-bottom: 1px;
+    border-radius: 15px;
+}
+
+
 #information { 
     background: url('http://41.media.tumblr.com/aa5c6ce33067f5fe4e486cec203694c7/tumblr_ngyipteoMA1u0oggmo1_1280.jpg') no-repeat center center fixed;
     height: 800px;

@@ -9,6 +9,8 @@ var Tab = mui.Tab;
 //Stores
 var DataStore = require('./../stores/DataStore');
 var modalStore = require('./../stores/modalStore');
+var BulbStore = require('./../stores/BulbStore');
+
 
 //Child Views
 var BulbView = require('./bulbView.jsx');
@@ -26,15 +28,37 @@ var AboutUs = React.createClass({
         "Watt": [{}],
         "Utility": [{}]
       },
+      bulbData: null, 
+      gridState: null
     };
   },
 
   loadData: function(){ 
     this.setState({data: DataStore.getData()});
+    this.setState({bulbData: BulbStore.getData()});
+  },
+
+  gridState: function(){ 
+    this.setState({bulbData: BulbStore.getData()});
+
+    if(this.state.bulbData >= 0.75){ 
+      this.setState({gridState: 'dirty'});
+
+    } else if(0.75 > this.state.bulbData >= 0.5){ 
+      this.setState({gridState: 'semi-dirty'});
+
+    } else if (0.5 > this.state.bulbData > 0.25){ 
+      this.setState({gridState: 'semi-clean'});
+
+    } else if (0.25 >= this.state.bulbData){ 
+      this.setState({gridState: 'clean'});
+    }
+
   },
 
   componentDidMount: function(){ 
     DataStore.addChangeListener(this.loadData);
+    BulbStore.addChangeListener(this.gridState);
 
 
     ViewActions.loadWatt()
@@ -78,8 +102,8 @@ var AboutUs = React.createClass({
 
       <header className="image-bg-fluid-height" id='home'>
         <BulbView loadModal={false} name={"bulbContainer2"} SVGname={"bulb2"} height={400} width={400} margin={5} cx={75} cy={75} r={75} />
+        <div id='cali'>California's power grid is currently <span id='gridstate'>{this.state.gridState}.</span></div>
       </header>
-
 
       <section id='about' className='pad-section'>
         <div className='container'>
