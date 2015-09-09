@@ -62,6 +62,7 @@
   "devDependencies": {
     "babel-core": "^4.4.5",
     "babel-loader": "^4.0.0",
+    "grunt-jasmine-node-new": "^0.3.2",
     "jasmine-core": "^2.2.0",
     "karma": "^0.13",
     "karma-chrome-launcher": "^0.2.0",

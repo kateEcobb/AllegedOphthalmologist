@@ -73,13 +73,13 @@ describe('Routes', function(){
   });
 
   it('should have POST route for signin', function(done){
-      console.log(token, 'signin');
+      // console.log(token, 'signin');
       expect(token).toBeDefined();
       done();
   }); 
 
   it('should handle incorrect credintials', function(done){
-    console.log('bad creds');
+    // console.log('bad creds');
     signout(function(){
       request.post(
       {
@@ -95,7 +95,7 @@ describe('Routes', function(){
   });
 
   it('should have GET route for users meterreadings', function(done){
-    console.log(token, 'meterreadings');
+    // console.log(token, 'meterreadings');
     request.get({
       header: {'content-type': 'application/x-www-form-urlencoded'},
       headers: {'Authorization': 'Bearer ' + token},
