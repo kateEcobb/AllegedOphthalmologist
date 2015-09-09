@@ -69,7 +69,7 @@ module.exports = function(grunt) {
       },
       client: {
         files: ['app/**/*.js', 'app/**/*.jsx'],
-        tasks: ['clear', 'test', 'webpack:app'],
+        tasks: ['test', 'webpack:app'],
       },
       css: {
         files: ['app/main.css'],
@@ -107,7 +107,6 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-nodemon');
   grunt.loadNpmTasks('grunt-webpack');
   grunt.loadNpmTasks('grunt-services');
-  grunt.loadNpmTasks('grunt-clear');
 
   grunt.registerTask('server-dev', function(target) {
     var nodemon = grunt.util.spawn({
