@@ -21,8 +21,17 @@ var UserStore = require('./../stores/UserStore');
 // Child Views
 var GraphToolBar = require('./graphToolBar.jsx');
 
-// Root View
-var LineGraphView = React.createClass({
+// Root View //////////////////////////////////////////////////////
+/*
+  Exposed Properties
+
+  width   - Integer  - width of the graphContainer
+  height  - Integer  - height of the graphContainer
+  margin  - Integer  - margin around the chartContainer
+  tabs    - Boolean  - Choose whether or not to show the tabs bar
+  value   - Constant - Taken from Constants.js GraphTypes, choose which graph to show initially
+*/
+var EnergyGraphView = React.createClass({
 
   // React Functions /////////////////////////////////
 
@@ -81,8 +90,11 @@ var LineGraphView = React.createClass({
     UserStore.addChangeListener(this.loadUser);
 
     this.loadData()
-    .then(this.drawMainGraph)
     .then(this.loadUser)
+    // .then(this.drawMainGraph)
+    .then(function() {
+      that.handleTabChange(that);
+    })
     .catch(function(err) {
       console.log("ERROR: ", err);
     });
@@ -113,7 +125,7 @@ var LineGraphView = React.createClass({
   drawUserGraph: function() {
     var el = React.findDOMNode(this.refs.graphContainer);
     el.innerHTML = '';
-    // console.log("Utility", this.state.data.Utility);
+
     if (this.state.user.username) {
       if (this.state.data.Utility.length > 1) {
         EnergyChart.graph(el, {
@@ -142,7 +154,10 @@ var LineGraphView = React.createClass({
   },
 
   handleTabChange: function(tab) {
-    switch(tab.props.value) {
+
+    var props = tab.props || {value: GraphTypes.MAIN};
+
+    switch(props.value) {
       case GraphTypes.MAIN:
         this.drawMainGraph();
         break;
@@ -157,10 +172,11 @@ var LineGraphView = React.createClass({
   },
 
   render: function () {
+    var tabs = this.props.tabs ? <GraphToolBar handleTabChange={this.handleTabChange} ref='graphToolBar' value={this.props.value || GraphTypes.MAIN} /> : "";
     return (
 
       <Paper className="mainGraphView" style={{margin: '50px', minWidth:"900px"}}>
-        <GraphToolBar handleTabChange={this.handleTabChange} />
+        {tabs}
         <div className='graphOuterContainer'>
           <div className ="graphContainer" ref="graphContainer"></div>
         </div>
@@ -171,4 +187,4 @@ var LineGraphView = React.createClass({
 
 });
 
-module.exports = LineGraphView;
+module.exports = EnergyGraphView;

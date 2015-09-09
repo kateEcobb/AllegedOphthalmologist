@@ -12,13 +12,14 @@ var ViewActions = require('./../actions/ViewActions');
 
 // Constants
 var Modals = require('./../constants/Constants').ModalTypes;
+var GraphTypes = require('./../constants/Constants').GraphTypes;
 
 //Store
 var DataStore = require('./../stores/DataStore');
 var BulbStore = require('./../stores/BulbStore');
 
 // Child Views
-var LineGraphView = require('./LineGraphView.jsx');
+var EnergyGraphView = require('./EnergyGraphView.jsx');
 var GraphToolBar = require('./graphToolBar.jsx');
 var BulbView = require('./bulbView.jsx');
 
@@ -36,7 +37,7 @@ var MainView = React.createClass({
         Compare your Energy Use to Current Grid Conditions
       </div>
           <BulbView loadModal={true} name={"bulbContainer1"} SVGname={'bulb1'} height={100} width={100} margin={5} cy={30} cx={30} r={30} />   
-          <LineGraphView height={300} width={900} margin={10} />  
+          <EnergyGraphView height={300} width={900} margin={10} tabs={true} value={GraphTypes.MAIN} />  
       </div>
     );
   }
