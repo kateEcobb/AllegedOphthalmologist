@@ -37,7 +37,7 @@ var MainView = React.createClass({
         Compare your Energy Use to Current Grid Conditions
       </div>
           <BulbView loadModal={true} name={"bulbContainer1"} SVGname={'bulb1'} height={100} width={100} margin={5} cy={30} cx={30} r={30} />   
-          <EnergyGraphView height={300} width={900} margin={10} tabs={true} value={GraphTypes.MAIN} />  
+          <EnergyGraphView height={300} width={900} margin={10} tabs={true} /*value={GraphTypes.USER_MAIN}*/ />  
       </div>
     );
   }
