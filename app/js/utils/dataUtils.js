@@ -240,7 +240,7 @@ module.exports = {
 
   parseUserKwhData: function(state) {
     var userKwh = [];
-    var weekTime = 24 * 60 * 60 * 1000 * 12;
+    var weekTime = 24 * 60 * 60 * 1000 * 10;
     var weekDate = new Date(Date.now() - weekTime);
 
     for (var i = 0; i < state.data.Utility.length; i++) {
@@ -314,7 +314,8 @@ module.exports = {
         inZone = !inZone;
       }
       else if (datum.point <= 1250 && inZone) {
-        zone.push(datum.time);
+        // zone.push(datum.time);
+        zone.push(watts[i - 1].time);
         dangerZones.push(zone);
         zone = [];
         inZone = !inZone;

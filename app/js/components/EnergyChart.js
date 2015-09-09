@@ -386,7 +386,8 @@ var drawCapturePad = function(options) {
 
     // Calculate dx based on how far along the graph we are;
     var textAnchor = (x / (scale.width - scale.axisOffset - scale.axisOffset)) < 0.88 ? 'start' : 'end';
-
+    var dataInvert = (y / (scale.height - scale.headerOffset - scale.footerOffset)) < 0.1 ? '4rem' : '-3rem';
+    var dateInvert = (y / (scale.height - scale.headerOffset - scale.footerOffset)) < 0.1 ? '2rem' : '-1rem';
     // Update the position of all the focus elements
     focus.select('.focal')  
     .attr('transform', utils.translate(x, y));  
@@ -401,21 +402,25 @@ var drawCapturePad = function(options) {
     focus.select('.focusData.highlight')
     .attr('transform', utils.translate(x, y))
     .attr('text-anchor', textAnchor)
+    .attr('dy', dataInvert)
     .text( (Math.round((nearestDatum.point + 0.00001) * 100) / 100) + ' ' + options.unit);
 
     focus.select('.focusData.info')
     .attr('transform', utils.translate(x, y))
     .attr('text-anchor', textAnchor)
+    .attr('dy', dataInvert)
     .text( (Math.round((nearestDatum.point + 0.00001) * 100) / 100) + ' ' + options.unit);
 
     focus.select('.focusDate.highlight')
     .attr('transform', utils.translate(x, y))
     .attr('text-anchor', textAnchor)
+    .attr('dy', dateInvert)
     .text( utils.formatFocusDate(nearestDatum.time) );
 
     focus.select('.focusDate.info')
     .attr('transform', utils.translate(x, y))
     .attr('text-anchor', textAnchor)
+    .attr('dy', dateInvert)
     .text( utils.formatFocusDate(nearestDatum.time) );
 
   };
