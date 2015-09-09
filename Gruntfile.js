@@ -42,13 +42,19 @@ module.exports = function(grunt) {
         files: [
           {expand: true, flatten: true, src: './app/index.html', dest: './build/'}
         ]
+      },
+      images: {
+        files: [
+          {expand: true, flatten: true, src: './app/assets/*.jpg', dest: './build/images'}
+        ]
       }
     },
 
     clean: {
       js: ['./build/*.js'],
       css: ['./build/*.css'],
-      index: ['./build/*.html']
+      index: ['./build/*.html'],
+      images: ['./build/images/']
     },
 
     jshint: {

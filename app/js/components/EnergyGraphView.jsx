@@ -33,12 +33,30 @@ var GraphToolBar = require('./graphToolBar.jsx');
 */
 var EnergyGraphView = React.createClass({
 
+  propTypes: {
+    width: React.PropTypes.number,
+    height: React.PropTypes.number,
+    margin: React.PropTypes.number,
+    tabs: React.PropTypes.bool,
+    value: React.PropTypes.string,
+  },
+
   // React Functions /////////////////////////////////
 
   getInitialState: function() {
     return {
       data: null,
       user: null,
+    };
+  },
+
+  getDefaultProps: function() {
+    return {
+      width: 900,
+      height: 300,
+      margin: 10,
+      tabs: false,
+      value: GraphTypes.MAIN,
     };
   },
 
@@ -155,24 +173,28 @@ var EnergyGraphView = React.createClass({
 
   handleTabChange: function(tab) {
 
-    var props = tab.props || {value: GraphTypes.MAIN};
+    // var props = tab.props || {value: GraphTypes.MAIN};
 
-    switch(props.value) {
+    switch(tab.props.value) {
+
       case GraphTypes.MAIN:
         this.drawMainGraph();
         break;
+
       case GraphTypes.USER_KWH:
         this.drawUserGraph();
         break;
+
       default:
         var el = React.findDOMNode(this.refs.graphContainer);
+        console.log("TAB ERROR");
         el.innerHTML = '';
         break;
     }
   },
 
   render: function () {
-    var tabs = this.props.tabs ? <GraphToolBar handleTabChange={this.handleTabChange} ref='graphToolBar' value={this.props.value || GraphTypes.MAIN} /> : "";
+    var tabs = this.props.tabs ? <GraphToolBar handleTabChange={this.handleTabChange} ref='graphToolBar' value={this.props.value} /> : "";
     return (
 
       <Paper className="mainGraphView" style={{margin: '50px', minWidth:"900px"}}>
