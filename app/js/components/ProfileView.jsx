@@ -29,12 +29,21 @@ var Paper = mui.Paper;
 var Tabs = mui.Tabs;
 var Tab = mui.Tab;
 
+// D3 React Pie Chart
+var Pie = require('./pieChart');
+
 //Stores
 var UserStore = require('./../stores/UserStore');
+var DataStore = require('./../stores/DataStore');
+
+// utils
+var computePieData = require('./../utils/pieChartUtil');
 
 var ProfileView = React.createClass({
 
   getInitialState: function() {
+    // We can assume that these stores have data because
+    // this view is only accessible to a logged in user
     return {
       user: {
         name: UserStore.getAccountAuth(),
@@ -42,8 +51,12 @@ var ProfileView = React.createClass({
         pgeLogin: UserStore.getPGEUsername()
       },
       data: {
-        utilityData: null
-      }
+        utilityData: DataStore.getData('Utility'),
+        wattTimeData: DataStore.getData('Watt'),
+        pieChart: {colorRange: ['#A60F2B','#e6e600','#528C18']},
+      },
+      chartData: [{},{},{}],
+      showPieChart: false
     };
   },
 
@@ -58,17 +71,35 @@ var ProfileView = React.createClass({
         context.updateFailure();
       } 
     });
+
+    // Create Pie chart from WattTime and UtilityAPI Data
+    if(this.state.data.utilityData && this.state.data.wattTimeData){
+      // console.log("WattTime Data: ", this.state.data.wattTimeData)
+      this.processPieData();
+    }
+  },
+
+  componentDidUnmount: function(){
+    Dispatcher.unregister(this.token);
+  },
+
+  processPieData: function(){
+
+    this.state.chartData = computePieData(this.state.data.wattTimeData, 
+                                          this.state.data.utilityData);
+    this.setState({showPieChart: true});
+
   },
 
   updateSuccess: function(){
-    console.log('update sucess');
+    // console.log('update sucess');
     this.enableButton();
     $('.spinner-container').css('visibility', 'hidden');
     $('.pge-update-success').css('visibility', 'visible');
   },
 
   updateFailure: function(){
-    console.log('update failure');
+    // console.log('update failure');
     this.enableButton();
     $('.spinner-container').css('visibility', 'hidden');
     $('.pge-update-failure').css('visibility', 'visible');
@@ -79,7 +110,7 @@ var ProfileView = React.createClass({
     $('.pge-update-success').css('visibility', 'hidden');
     $('.pge-update-failure').css('visibility', 'hidden');
     this.disableButton();
-    console.log("Form submitted with: ", data);
+    // console.log("Form submitted with: ", data);
     ViewActions.updateUserPGE(data);
   },
 
@@ -114,6 +145,10 @@ var ProfileView = React.createClass({
               <div className="user-summary">
                 <p>Service Address: {this.state.user.address}</p>
                 <p>PG&E Username:   {this.state.user.pgeLogin}</p>
+                {this.state.showPieChart ?  
+                <Pie colorRange={this.state.data.pieChart.colorRange} data={this.state.chartData} width={500} height={500} />
+                : null
+                }
               </div>
             </CardText>
           </Card>
