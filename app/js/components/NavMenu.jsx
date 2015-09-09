@@ -81,8 +81,6 @@ var NavMenu = React.createClass({
       this.transitionTo('/');
       ViewAction.logoutUser();
       ViewAction.showSnack();
-    }else if(menuItem.text === "Current Energy"){ 
-      this.transitionTo('graphs')
     }else{
       ViewAction.loadModal(menuItem.route);
     }

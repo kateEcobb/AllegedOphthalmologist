@@ -16,7 +16,6 @@ var menuItems = [
   { route: register, text: 'Register', display: true },
   { route: profile, text: 'Profile', reqLogin: true, disabled: true, display: false },
   { route: login, text: 'Login', display: true },
-  { route: graphs, text: 'Current Energy', display: true },
   { route: 'logout', text: 'Logout', reqLogin: true, display: false }
 ]
 
@@ -56,7 +55,7 @@ MenuStore.dispatchToken = Dispatcher.register(function(dispatcher){
     menuItems[1],
     menuItems[2],
     menuItems[3],
-    menuItems[5]
+    menuItems[4]
   ];
   if(action.type === ActionTypes.USER_LOGIN || action.type === ActionTypes.USER_LOGOUT){
     itemsToToggle.forEach(function(item){

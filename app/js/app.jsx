@@ -156,7 +156,6 @@ var App = React.createClass({
 var routes = (
   <Route name="app" path="/" handler={App}>
   <Route name="profile" path="/profile" handler={ProfileView} />
-  <Route name='graphs' path='/currentEnergy' handler={MainView} />
   <DefaultRoute name="default" handler={AboutUs} />
   </Route>
 );

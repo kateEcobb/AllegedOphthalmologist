@@ -16,9 +16,13 @@ var BulbStore = require('./../stores/BulbStore');
 var BulbView = require('./bulbView.jsx');
 var donutModals = require('./energyBreakDownView.jsx');
 var register = require('./RegistrationView.jsx');
+var GraphView = require('./EnergyGraphView.jsx');
 
 //Actions
 var ViewActions = require('./../actions/ViewActions');
+
+//Constants
+var GraphTypes = require('./../constants/Constants').GraphTypes;
 
 
 var AboutUs = React.createClass({ 
@@ -153,6 +157,7 @@ var AboutUs = React.createClass({
             <div className="row">
                 <div className="col-lg-12">
                   <h2>How Does The Grid Work!?</h2>
+          <GraphView height={300} width={900} margin={10} tabs={false} value={GraphTypes.MAIN} />  
                         <p className="section-paragraph">Each day, the mix of energy generation resources changes as demand fluctuates. 
                         The grid operator must efficiently balance power generation and consumer electricity demand, 
                         using renewable resources whenever possible. Periods of high demand and low availability of renewable resources translate to more pollution 
