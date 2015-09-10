@@ -1,8 +1,4 @@
 /*Nav Button*/
-
-body { 
-  margin-top: 0px;
-}
 .nav-btn {
   position: absolute;
   top: 1em;
@@ -97,8 +93,18 @@ body {
   font-weight: bold;
   font-size: 1.1rem;
 }
+svg {
+  display: block;
+  position: relative;
+  margin: auto;
+  vertical-align: top;
+  overflow: hidden;
+}
+.tick text{ 
+  fill: black;
+}
 
-
+/*Energy Modals*/
 .source1 *:not(text), path.source1{ 
   fill: #F6BB42;
   stroke: #F6BB42;
@@ -114,6 +120,17 @@ body {
 .source4 *:not(text), path.source4{ 
   fill: #58C1BE;
   stroke: #58C1BE;
+}
+
+#donutModal { 
+  z-index: 10;
+}
+
+.svg-content-responsive {
+    display: inline-block;
+    position: absolute;
+    top: 10px;
+    left: 0;
 }
 
 /*Light Bulb*/
@@ -169,6 +186,14 @@ body {
 
 /*Forms*/
 
+.loginDialog { 
+  min-width: 304px;
+}
+
+.LoginContainer{ 
+  text-align: center;
+}
+
 div.login {
   width: 500px;
 }
@@ -176,6 +201,7 @@ div.login {
 .spinner-container {
   text-align: center;
   visibility: hidden;
+  margin: 9px;
 }
 
 .login-failure {
@@ -187,10 +213,6 @@ div.login {
   position: relative;
   width: 100%;
 }
-
-/*.form-group, #loginTitle, #signupTitle { 
-  text-align: center;
-}*/
 
 .pge-update-failure {
   position: absolute;
@@ -212,35 +234,4 @@ div.login {
   right: 50px;
   color: lightblue;
   font-size: 2em;
-}
-
-.popup1, .popup2 { 
-  display: inline;
-}
-
-svg {
-    display: block;
-    position: relative;
-    margin: auto;
-    vertical-align: top;
-    overflow: hidden;
-}
-
-#registerClick{ 
-  cursor: pointer;
-}
-
-.tick text{ 
-  fill: black;
-}
-
-#donutModal { 
-  z-index: 10;
-}
-
-.svg-content-responsive {
-    display: inline-block;
-    position: absolute;
-    top: 10px;
-    left: 0;
 }

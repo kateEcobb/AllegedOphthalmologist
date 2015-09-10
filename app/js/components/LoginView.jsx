@@ -82,7 +82,7 @@ var LoginView = React.createClass({
 
   render: function() {
     return (
-      <Dialog openImmediately={true}>
+      <Dialog contentClassName={'loginDialog'} openImmediately={true}>
       <div className="LoginContainer">
         <h2 id='loginTitle'>Login</h2>
           
@@ -101,7 +101,7 @@ var LoginView = React.createClass({
           </div>
           <div className="login-failure">
             <p>Login Failure.</p>
-            <p>Have you <span style={{color:'blue', 'textDecoration': 'underline'}} onClick={this.handleRegister}>Registered</span>?</p>
+            <p>Have you <a onClick={this.handleRegister} className='registerClick'>Registered</a>?</p>
           </div>
         </div>
       </Dialog>
