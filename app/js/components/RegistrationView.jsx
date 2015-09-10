@@ -75,7 +75,7 @@ var RegistrationView = React.createClass({
   },
   render: function() {
     return (
-      <Dialog openImmediately={true} >
+      <Dialog contentClassName={'signupDialog'} openImmediately={true} >
         <div className="SignupContainer">
           <h2 id='signupTitle'>Register</h2>
             <Formsy.Form onSubmit={this.submitForm} className="registration" onValid={this.enableButton} onInvalid={this.disableButton}>
@@ -92,7 +92,7 @@ var RegistrationView = React.createClass({
             </Formsy.Form>
             
         </div>
-        <div className='spinnerFailure'>
+        <div id='SignUpFailure'>
           <div className="spinner-container">
             <div className="spinner-loader">
               Loading…

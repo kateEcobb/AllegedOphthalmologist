@@ -186,12 +186,21 @@ svg {
 
 /*Forms*/
 
-.loginDialog { 
+.loginDialog, .signupDialog { 
   min-width: 304px;
 }
 
 .LoginContainer{ 
   text-align: center;
+}
+
+.SignupContainer { 
+  float: left;
+}
+
+#SignUpFailure{ 
+  float:right;
+  margin-top: 140px;
 }
 
 div.login {
@@ -235,3 +244,13 @@ div.login {
   color: lightblue;
   font-size: 2em;
 }
+
+@media(max-width:768px) {
+  #SignUpFailure{ 
+    float: right;
+    margin-top: 0px;
+  }
+}
+
+
+
