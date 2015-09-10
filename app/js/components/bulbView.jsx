@@ -26,9 +26,10 @@ var BulbView = React.createClass({
 
   bulbListener: function(){ 
     this.setState({bulbData: BulbStore.getData()});
+    
     if(this.state.bulbData > 0.5){ 
       var green = Math.floor(((this.state.bulbData-0.5)/0.5)*255); 
-      console.log(green);
+      // console.log(green);
       this.setState({rgb: 'rgb(255,'+(255-green)+',0)'});
 
     } else if(this.state.bulbData < 0.5){ 
@@ -37,17 +38,19 @@ var BulbView = React.createClass({
 
     } else { 
       this.setState({rgb: 'rgb(255,255,0)'});
-    }    
+    }
+
+    this.drawBulbGlow();    
   },
 
-  componentDidMount: function(){ 
-    BulbStore.addChangeListener(this.bulbListener);
-    ViewActions.getBulbColor()
-    .then(this.drawBulbGlow)
-    .catch(function(err){ 
-      console.log("Error: " + err);
-    });    
-  }, 
+  componentDidMount: function(){
+    BulbStore.addChangeListener(this.bulbListener); 
+    ViewActions.getBulbColor();
+  },
+
+  componentWillUnmount: function(){
+    BulbStore.removeChangeListener(this.bulbListener);
+  },
 
   drawBulbGlow: function(){
     var el = React.findDOMNode(this.refs.bulb); 

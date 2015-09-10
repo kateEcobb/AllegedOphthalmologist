@@ -41,8 +41,12 @@ var LoginView = React.createClass({
     this.token = Dispatcher.register(function (dispatch) {
       var action = dispatch.action;
       if (action.type === ActionTypes.USER_LOGIN_FAILURE) {
-        console.log('login failure');
+        //console.log('login failure');
         context.failedLogin();
+      } 
+      if (action.type === ActionTypes.USER_LOGIN) {
+        //console.log('login failure');
+        context.transitionTo('profile');
       } 
     });
   },
@@ -69,7 +73,6 @@ var LoginView = React.createClass({
     this.disableButton();
     // console.log('Logging in with: ', data);
     ViewActions.loginUser(data);
-    this.transitionTo('profile');
   },
 
   handleRegister: function(){
@@ -99,7 +102,7 @@ var LoginView = React.createClass({
           </div>
           <div className="login-failure">
             <p>Login Failure.</p>
-            <p>Have you <span style={{color:'blue', 'text-decoration': 'underline'}} onClick={this.handleRegister}>Registered</span>?</p>
+            <p>Have you <span style={{color:'blue', 'textDecoration': 'underline'}} onClick={this.handleRegister}>Registered</span>?</p>
           </div>
         </div>
       </Dialog>

@@ -11,6 +11,8 @@ var DataStore = require('./../stores/DataStore');
 var modalStore = require('./../stores/modalStore');
 var BulbStore = require('./../stores/BulbStore');
 
+//Dispatcher
+var Dispatcher = require('./../dispatcher/Dispatcher');
 
 //Child Views
 var BulbView = require('./bulbView.jsx');
@@ -20,6 +22,7 @@ var GraphView = require('./EnergyGraphView.jsx');
 
 //Actions
 var ViewActions = require('./../actions/ViewActions');
+var ActionTypes = require('./../constants/Constants').ActionTypes;
 
 //Constants
 var GraphTypes = require('./../constants/Constants').GraphTypes;
@@ -59,16 +62,19 @@ var AboutUs = React.createClass({
     }
 
   },
-
-  componentDidMount: function(){ 
+  componentWillMount: function(){
     DataStore.addChangeListener(this.loadData);
     BulbStore.addChangeListener(this.gridState);
-
-    ViewActions.loadWatt()
-    .then(this.makeGraphs)
-    .catch(function(err){ 
-      console.log("ERROR: ");
-      console.trace(err);
+  },
+  
+  componentDidMount: function(){ 
+    var context = this;
+    this.token = Dispatcher.register(function (dispatch) {
+      var action = dispatch.action;
+      if (action.type === ActionTypes.WATT_LOADED) {
+        //console.log('login failure');
+        context.makeGraphs();
+      } 
     });
   }, 
 
@@ -79,6 +85,9 @@ var AboutUs = React.createClass({
 
   componentWillUnmount: function(){ 
     window.removeEventListener('resize', this.reSizeGraphs);
+    DataStore.removeChangeListener(this.loadData);
+    BulbStore.removeChangeListener(this.gridState);
+    Dispatcher.unregister(this.token);
   },
 
   reSizeGraphs: function(){ 

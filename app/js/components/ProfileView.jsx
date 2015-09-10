@@ -29,22 +29,46 @@ var Paper = mui.Paper;
 var Tabs = mui.Tabs;
 var Tab = mui.Tab;
 
+// D3 React Pie Chart
+var Pie = require('./pieChart');
+
+var GraphView = require('./EnergyGraphView.jsx'); 
+var GraphTypes = require('./../constants/Constants').GraphTypes;  
+
 //Stores
 var UserStore = require('./../stores/UserStore');
+var DataStore = require('./../stores/DataStore');
+
+// utils
+var computePieData = require('./../utils/pieChartUtil');
 
 var ProfileView = React.createClass({
 
   getInitialState: function() {
+    // We can assume that these stores have data because
+    // this view is only accessible to a logged in user
     return {
       user: {
-        name: UserStore.getAccountAuth(),
-        address: UserStore.getServiceAddress(),
-        pgeLogin: UserStore.getPGEUsername()
+        name: null,
+        address: null,
+        pgeLogin: null
       },
       data: {
-        utilityData: null
-      }
+        utilityData: null,
+        wattTimeData: null,
+        pieChart: {colorRange: ['#A60F2B','#e6e600','#528C18'], width: 200, height: 200},
+      },
+      chartData: [{},{},{}],
+      showPieChart: false
     };
+  },
+
+  componentWillMount: function(){
+    this.state.user.name = UserStore.getAccountAuth();
+    this.state.user.address = UserStore.getServiceAddress();
+    this.state.user.pgeLogin = UserStore.getPGEUsername();
+    this.state.data.utilityData = DataStore.getData('Utility');
+    this.state.data.wattTimeData = DataStore.getData('Watt');
   },
 
   componentDidMount: function(){
@@ -58,17 +82,35 @@ var ProfileView = React.createClass({
         context.updateFailure();
       } 
     });
+
+    // Create Pie chart from WattTime and UtilityAPI Data
+    // if(this.state.data.utilityData && this.state.data.wattTimeData){
+    //   // console.log("WattTime Data: ", this.state.data.wattTimeData)
+    //   this.processPieData();
+    // }
+  },
+
+  componentDidUnmount: function(){
+    Dispatcher.unregister(this.token);
+  },
+
+  processPieData: function(){
+
+    this.state.chartData = computePieData(this.state.data.wattTimeData, 
+                                          this.state.data.utilityData);
+    this.setState({showPieChart: true});
+
   },
 
   updateSuccess: function(){
-    console.log('update sucess');
+    // console.log('update sucess');
     this.enableButton();
     $('.spinner-container').css('visibility', 'hidden');
     $('.pge-update-success').css('visibility', 'visible');
   },
 
   updateFailure: function(){
-    console.log('update failure');
+    // console.log('update failure');
     this.enableButton();
     $('.spinner-container').css('visibility', 'hidden');
     $('.pge-update-failure').css('visibility', 'visible');
@@ -79,7 +121,7 @@ var ProfileView = React.createClass({
     $('.pge-update-success').css('visibility', 'hidden');
     $('.pge-update-failure').css('visibility', 'hidden');
     this.disableButton();
-    console.log("Form submitted with: ", data);
+    // console.log("Form submitted with: ", data);
     ViewActions.updateUserPGE(data);
   },
 
@@ -112,8 +154,18 @@ var ProfileView = React.createClass({
             </CardHeader>
             <CardText zDepth={2}>
               <div className="user-summary">
-                <p>Service Address: {this.state.user.address}</p>
-                <p>PG&E Username:   {this.state.user.pgeLogin}</p>
+                {this.state.showPieChart ?  
+                <div>
+                <Pie colorRange={this.state.data.pieChart.colorRange} data={this.state.chartData} 
+                    width={this.state.data.pieChart.width} height={this.state.data.pieChart.height} />
+                <p>
+                Your energy use breakdown for high (green), average (yellow),
+                and below average (red) presence of renewables on the grid.
+                </p>
+                </div>
+                : null
+                }
+              <GraphView height={300} width={900} margin={10} tabs={false} value={GraphTypes.USER_KWH} />
               </div>
             </CardText>
           </Card>
