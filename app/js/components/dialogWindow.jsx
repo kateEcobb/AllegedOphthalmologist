@@ -26,21 +26,16 @@ var dialog = React.createClass({
   
   render: function(){
     return (
-      <div>
         <Dialog
           actions={this.state.standardActions}
           modal={true}
           ref='dialogBox'
           autoDetectWindowHeight={true} 
           autoScrollBodyContent={true}
+          contentClassName={this.props.contentClassName}
           openImmediately={this.props.openImmediately}>
-            <div style={{'height': '400px'}}>
-
               {this.props.children}
-            
-            </div>
         </Dialog>
-      </div>
     );
   }
 });

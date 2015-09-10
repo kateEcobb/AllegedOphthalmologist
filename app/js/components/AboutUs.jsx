@@ -185,7 +185,7 @@ var AboutUs = React.createClass({
             <div className="row">
                 <div className="col-lg-12">
                     <h2>Get Started!</h2> 
-                      <p className="section-paragraph">To get started, use our <a id='registerClick' onClick={this.handleRegister}>Registration</a> page to signup for GridAware, 
+                      <p className="section-paragraph">To get started, use our <a className='registerClick' onClick={this.handleRegister}>Registration</a> page to signup for GridAware, 
                       and link  your SmartMeter at the same time! All you need is your PG&E login.
 
                       Don't have an online account with PG&E yet? 
