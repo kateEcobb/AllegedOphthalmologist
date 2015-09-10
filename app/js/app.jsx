@@ -29,6 +29,7 @@ var ProfileView = require('./components/ProfileView.jsx');
 var RegistrationView = require('./components/RegistrationView.jsx');
 var engergyBreakDown = require('./components/energyBreakDownView.jsx');
 var AboutUs = require('./components/AboutUs.jsx');
+var MainView = require('./components/MainView.jsx');
 
 // Stores -- Load here so Stores can begin listening to Events
 var UserStore = require('./stores/UserStore');
@@ -45,6 +46,10 @@ var App = React.createClass({
       showModal: ModalStore.getModalState().isOpen,
       modal: null,
       logMes: "",
+<<<<<<< HEAD
+=======
+      triedTokenLogin: false
+>>>>>>> fixes all console bugs and the double-login bug
     };
 
   },
@@ -108,6 +113,10 @@ var App = React.createClass({
       }
     });
     ModalStore.toggleModal();
+<<<<<<< HEAD
+=======
+    // console.log("Modal state: ",ModalStore.getModalState());
+>>>>>>> fixes all console bugs and the double-login bug
   },
 
   componentWillUnmount: function (){
