@@ -29,6 +29,9 @@ body {
   shape-rendering: geometricPrecision;
 }
 
+.axis text {
+  font-size: 1rem;
+}
 /*.x.axis {
   stroke: black; 
 }
