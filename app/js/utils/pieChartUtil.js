@@ -14,14 +14,14 @@ module.exports = function(wattTimeData, utilityData){
   var redKwh = 0;
 
   function sortByTimestamp(a,b) {
-    var dateA = new Date(a.timestamp)
-    var dateB = new Date(b.timestamp)
+    var dateA = new Date(a.timestamp);
+    var dateB = new Date(b.timestamp);
     if (dateA < dateB)
       return -1;
     if (dateA > dateB)
       return 1;
     return 0;
-  };
+  }
   
   var getCarbonRange = function(wattTimeData){
     var min = Number.POSITIVE_INFINITY;
@@ -51,9 +51,10 @@ module.exports = function(wattTimeData, utilityData){
 
   var computeBrackets = function(wattTimeData, greenBound, yellowBound){
     var currentBin = null;
+    var currentBracket = null;
     for(var i = 0; i < wattTimeData.length; i++){
       if(currentBin === null){
-        var currentBracket = [null, null];
+        currentBracket = [null, null];
         currentBracket[0] = wattTimeData[i].timestamp;
         currentBin = getBin(wattTimeData[i].carbon);
       }
@@ -66,7 +67,7 @@ module.exports = function(wattTimeData, utilityData){
           yellowTimes.push(currentBracket);
         }
         else{
-          redTimes.push(currentBracket)
+          redTimes.push(currentBracket);
         }
         currentBin = null;
       }
@@ -85,7 +86,7 @@ module.exports = function(wattTimeData, utilityData){
 
           if(intervalTime > greenStartTime && intervalTime < greenEndTime){
             greenCount++;
-            greenKwh += utlityApiData[i].interval_kWh
+            greenKwh += utlityApiData[i].interval_kWh;
             foundTime = true;
           }
         }
@@ -96,14 +97,14 @@ module.exports = function(wattTimeData, utilityData){
           var yellowEndTime = new Date(yellowTimes[j][1]);
           if(intervalTime > yellowStartTime && intervalTime < yellowEndTime){
             yellowCount++;
-            yellowKwh += utlityApiData[i].interval_kWh
+            yellowKwh += utlityApiData[i].interval_kWh;
             foundTime = true;
           }
         }
       }
       else {
         redCount++;
-        redKwh += utlityApiData[i].interval_kWh
+        redKwh += utlityApiData[i].interval_kWh;
       }
       
     }
@@ -128,4 +129,4 @@ module.exports = function(wattTimeData, utilityData){
                             {text: yellowKwh + ' kWh', quantity: yellowCount},
                             {text: greenKwh + ' kWh', quantity: greenCount}
                             ]);
-}
+};

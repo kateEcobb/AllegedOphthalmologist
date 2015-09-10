@@ -165,6 +165,7 @@ var ProfileView = React.createClass({
                 </div>
                 : null
                 }
+                
               <GraphView height={300} width={900} margin={10} tabs={false} value={GraphTypes.USER_KWH} />
               </div>
             </CardText>
