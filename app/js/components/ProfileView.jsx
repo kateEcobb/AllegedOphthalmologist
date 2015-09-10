@@ -84,10 +84,10 @@ var ProfileView = React.createClass({
     });
 
     // Create Pie chart from WattTime and UtilityAPI Data
-    if(this.state.data.utilityData && this.state.data.wattTimeData){
-      // console.log("WattTime Data: ", this.state.data.wattTimeData)
-      this.processPieData();
-    }
+    // if(this.state.data.utilityData && this.state.data.wattTimeData){
+    //   // console.log("WattTime Data: ", this.state.data.wattTimeData)
+    //   this.processPieData();
+    // }
   },
 
   componentDidUnmount: function(){
@@ -162,11 +162,10 @@ var ProfileView = React.createClass({
                 Your energy use breakdown for high (green), average (yellow),
                 and below average (red) presence of renewables on the grid.
                 </p>
-                <GraphView height={300} width={900} margin={10} tabs={false} value={GraphTypes.USER_KWH} />
                 </div>
                 : null
                 }
-
+              <GraphView height={300} width={900} margin={10} tabs={false} value={GraphTypes.USER_KWH} />
               </div>
             </CardText>
           </Card>
