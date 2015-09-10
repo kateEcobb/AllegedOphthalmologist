@@ -259,7 +259,7 @@ module.exports = {
       minutes = "00";
     }
 
-    return day + ' ' + num + '/' + month  + ', ' + hours + ':' + minutes + ' ' + latin;
+    return day + ' ' + month + '/' + num  + ', ' + hours + ':' + minutes + ' ' + latin;
   },
 
   // For a sorted array and date return left bisect index
