@@ -46,10 +46,6 @@ var App = React.createClass({
       showModal: ModalStore.getModalState().isOpen,
       modal: null,
       logMes: "",
-<<<<<<< HEAD
-=======
-      triedTokenLogin: false
->>>>>>> fixes all console bugs and the double-login bug
     };
 
   },

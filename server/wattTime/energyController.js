@@ -108,7 +108,7 @@ var WattBehindUpdater = function(cb){
   console.log('Grabbing 24Hour Behind cache...');
   console.log('lastWBUpdate before query '+ new Date(lastWBUpdate));
 
-  var twoDaysAgo = new Date(new Date().setDate(new Date().getDate()-2)).toISOString().slice(0,-5);
+  var twoDaysAgo = new Date(new Date().setDate(new Date().getDate()-30)).toISOString().slice(0,-5);
   var difference = Date.now() - lastWBUpdate;
   
   if(difference > 3600000){ 

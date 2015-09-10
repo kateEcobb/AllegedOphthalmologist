@@ -54,13 +54,8 @@ var ProfileView = React.createClass({
         pgeLogin: null
       },
       data: {
-<<<<<<< HEAD
         utilityData: null,
         wattTimeData: null,
-=======
-        utilityData: DataStore.getData('Utility'),
-        wattTimeData: DataStore.getData('Watt'),
->>>>>>> adds basic pie chart
         pieChart: {colorRange: ['#A60F2B','#e6e600','#528C18'], width: 200, height: 200},
       },
       chartData: [{},{},{}],
@@ -170,6 +165,7 @@ var ProfileView = React.createClass({
                 </div>
                 : null
                 }
+                
               <GraphView height={300} width={900} margin={10} tabs={false} value={GraphTypes.USER_KWH} />
               </div>
             </CardText>
