@@ -46,7 +46,6 @@ var App = React.createClass({
       showModal: ModalStore.getModalState().isOpen,
       modal: null,
       logMes: "",
-      triedTokenLogin: false
     };
 
   },
@@ -86,7 +85,6 @@ var App = React.createClass({
     var token = cookie.load('token');
     if(token){
       ViewActions.loginUser({token: token});
-      this.state.triedTokenLogin = true;
     }
   },
 
@@ -111,7 +109,6 @@ var App = React.createClass({
       }
     });
     ModalStore.toggleModal();
-    // console.log("Modal state: ",ModalStore.getModalState());
   },
 
   componentWillUnmount: function (){
