@@ -29,16 +29,15 @@ body {
   shape-rendering: geometricPrecision;
 }
 
+.graphOuterContainer { 
+  width: auto !important;
+  height: auto !important;
+  padding: 12px;
+}
+
 .axis text {
   font-size: 1rem;
 }
-/*.x.axis {
-  stroke: black; 
-}
-
-.y.axis {
-  stroke: black;
-}*/
 
 .linePath {
   fill: none;
@@ -99,7 +98,6 @@ body {
   font-size: 1.1rem;
 }
 
-///////////////////////////////////
 
 .source1 *:not(text), path.source1{ 
   fill: #F6BB42;
