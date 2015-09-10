@@ -24,12 +24,12 @@ var SnackBar = mui.Snackbar;
 
 // Components
 var NavMenu = require('./components/NavMenu.jsx');
-var MainView = require('./components/MainView.jsx');
 var LoginView = require('./components/LoginView.jsx');
 var ProfileView = require('./components/ProfileView.jsx');
 var RegistrationView = require('./components/RegistrationView.jsx');
 var engergyBreakDown = require('./components/energyBreakDownView.jsx');
 var AboutUs = require('./components/AboutUs.jsx');
+var MainView = require('./components/MainView.jsx');
 
 // Stores -- Load here so Stores can begin listening to Events
 var UserStore = require('./stores/UserStore');
@@ -45,7 +45,8 @@ var App = React.createClass({
     return{
       showModal: ModalStore.getModalState().isOpen,
       modal: null,
-      logMes: ""
+      logMes: "",
+      triedTokenLogin: false
     };
 
   },
@@ -64,7 +65,7 @@ var App = React.createClass({
 
   modalListener: function(){
     var modalSpecs = ModalStore.getModalState();
-    console.log(modalSpecs);
+    // console.log(modalSpecs);
     this.setState({showModal: modalSpecs.isOpen, modal: modalSpecs.modal});
   },
 
@@ -81,6 +82,12 @@ var App = React.createClass({
       borderColor: '#B6B6B6'
     };
     ThemeManager.setPalette(appPalette);
+
+    var token = cookie.load('token');
+    if(token){
+      ViewActions.loginUser({token: token});
+      this.state.triedTokenLogin = true;
+    }
   },
 
   componentDidMount: function() {
@@ -89,31 +96,26 @@ var App = React.createClass({
     this.token = Dispatcher.register(function (dispatch){
       var action = dispatch.action;
       if(action.type === ActionTypes.USER_LOGIN){
+        
+        if(context.state.triedTokenLogin){
+          ModalStore.toggleModal();
+        }
         context.showSnack('Logged In');
+      }
+      if(action.type === ActionTypes.USER_LOGIN_FAILURE){
+        ModalStore.toggleModal();
       } 
       if(action.type === ActionTypes.SHOW_SNACK){
         context.showSnack('Logged Out');
+        ModalStore.toggleModal();
       }
     });
-
-    var token = cookie.load('token');
-    if(token){
-      // console.log('token: ', token);
-      
-      // Need to Toggle the Modal here, otherwise a login event 
-      // Tries to close a modal that doesn't exist, resulting in a 
-      // cascading hell of impossible to track down react error messages.
-      ModalStore.toggleModal();
-      
-      ViewActions.loginUser({token: token});
-    }
+    ModalStore.toggleModal();
+    // console.log("Modal state: ",ModalStore.getModalState());
   },
 
   componentWillUnmount: function (){
     ModalStore.removeChangeListener(this.modalListener);
-  },
-  
-  componentDidUnmount: function(){
     Dispatcher.unregister(this.token);
   },
 

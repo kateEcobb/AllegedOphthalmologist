@@ -63,8 +63,9 @@ var NavMenu = React.createClass({
     });
   },
 
-  componentWillUnMount: function(){
+  componentWillUnmount: function(){
     menuStore.removeChangeListener(this.changeMenuItems);
+    Dispatcher.unregister(this.token);
   },
 
   toggleNav: function(){

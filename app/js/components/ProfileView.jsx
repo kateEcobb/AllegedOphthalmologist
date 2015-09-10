@@ -150,14 +150,15 @@ var ProfileView = React.createClass({
                 <div>
                 <Pie colorRange={this.state.data.pieChart.colorRange} data={this.state.chartData} 
                     width={this.state.data.pieChart.width} height={this.state.data.pieChart.height} />
-                <GraphView height={300} width={900} margin={10} tabs={false} value={GraphTypes.USER_KWH} />
-                </div>
-                : null
-                }
                 <p>
                 Your energy use breakdown for high (green), average (yellow),
                 and below average (red) presence of renewables on the grid.
                 </p>
+                <GraphView height={300} width={900} margin={10} tabs={false} value={GraphTypes.USER_KWH} />
+                </div>
+                : null
+                }
+
               </div>
             </CardText>
           </Card>
