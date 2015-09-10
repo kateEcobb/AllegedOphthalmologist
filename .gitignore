@@ -32,5 +32,4 @@ dist/
 node_modules/
 bower_components/
 build/app.js
-s
 .DS_Store
