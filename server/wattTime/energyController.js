@@ -101,16 +101,37 @@ var loadTestData = function(){
 
 };
 
+var WattBehindCache = null;
+var lastWBUpdate = Date.parse(new Date(1992,06,08));
+
+var WattBehindUpdater = function(cb){ 
+  console.log('Grabbing 24Hour Behind cache...');
+  console.log('lastWBUpdate before query '+ new Date(lastWBUpdate));
+
+  var twoDaysAgo = new Date(new Date().setDate(new Date().getDate()-2)).toISOString().slice(0,-5);
+  var difference = Date.now() - lastWBUpdate;
+  
+  if(difference > 3600000){ 
+    WattEnergy.find({ 
+      timestamp: {$lt: new Date(), $gt: twoDaysAgo}
+    }).exec(function(err, data){ 
+      if(err){ 
+        res.status(500).send("Error in querying Watt database.");
+      } else { 
+        console.log("Updating 24 Hour Behind Cache.");
+        WattBehindCache = data;
+        lastWBUpdate = Date.now();
+        cb(WattBehindCache);
+      }
+    });
+  } else { 
+    cb(WattBehindCache);
+  }
+};
+
 var get24HourBehind = function(req, res){ 
-  var twoDaysAgo = new Date(new Date().setDate(new Date().getDate()-30)).toISOString().slice(0,-5);
-  WattEnergy.find({ 
-    timestamp: {$lt: new Date(), $gt: twoDaysAgo}
-  }).exec(function(err, data){ 
-    if(err){ 
-      res.status(500).send("Error in querying Watt database.");
-    } else { 
-      res.json(data);
-    }
+  WattBehindUpdater(function(cache){ 
+    return res.json(cache);
   });
 };
 

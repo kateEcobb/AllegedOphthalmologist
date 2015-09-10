@@ -29,27 +29,26 @@ body {
   shape-rendering: geometricPrecision;
 }
 
+.graphOuterContainer { 
+  width: auto !important;
+  height: auto !important;
+  padding: 12px;
+}
+
 .axis text {
   font-size: 1rem;
 }
-/*.x.axis {
-  stroke: black; 
-}
-
-.y.axis {
-  stroke: black;
-}*/
 
 .linePath {
   fill: none;
   stroke-width: 2;
-  stroke: steelblue;
+  stroke: #58C1BE;
 }
 
 .energyPath {
   fill: none;
   stroke-width: 2;
-  stroke: steelblue;
+  stroke: #58C1BE;
 }
 
 .linePoint {
@@ -63,7 +62,7 @@ body {
 
 .predictPoint {
   r: 3;
-  fill: black;
+  fill: #8080FF;
 }
 
 .focusXLine {
@@ -99,7 +98,6 @@ body {
   font-size: 1.1rem;
 }
 
-///////////////////////////////////
 
 .source1 *:not(text), path.source1{ 
   fill: #F6BB42;
@@ -188,8 +186,11 @@ div.login {
 .form-status {
   position: relative;
   width: 100%;
-
 }
+
+/*.form-group, #loginTitle, #signupTitle { 
+  text-align: center;
+}*/
 
 .pge-update-failure {
   position: absolute;

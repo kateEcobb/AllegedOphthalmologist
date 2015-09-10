@@ -76,9 +76,8 @@ var RegistrationView = React.createClass({
   render: function() {
     return (
       <Dialog openImmediately={true} >
-        <div className="container">
-          <div /*className="login jumbotron center-block"*/>
-          <h2>Register</h2>
+        <div className="SignupContainer">
+          <h2 id='signupTitle'>Register</h2>
             <Formsy.Form onSubmit={this.submitForm} className="registration" onValid={this.enableButton} onInvalid={this.disableButton}>
               <FormInput name="pgeFullName" title="Full Name" type="text" 
                 validations="isWords" validationError="Please enter your name"/>
@@ -92,15 +91,16 @@ var RegistrationView = React.createClass({
             <FlatButton className="btn btn-submit" type="submit" disabled={!this.state.canSubmit}>Register</FlatButton>
             </Formsy.Form>
             
-            <div className="spinner-container">
-              <div className="spinner-loader">
-                Loading…
-              </div>
+        </div>
+        <div className='spinnerFailure'>
+          <div className="spinner-container">
+            <div className="spinner-loader">
+              Loading…
             </div>
-            <div className="login-failure">
-              <p>Failed to Register.</p>
-              <p>Is your PG&E Login Information Correct?</p>
-            </div>
+          </div>
+          <div className="login-failure">
+            <p>Failed to Register.</p>
+            <p>Is your PG&E Login Information Correct?</p>
           </div>
         </div>
       </Dialog>

@@ -76,24 +76,24 @@ var getCarbonReading = function(wattimeArray, datestring, cb){
 var makeWattTimeRequest = function(){
   var base_url = 'https://api.watttime.org/api/v1/datapoints/?ba=CAISO&market=DAHR'
   var formattedDate = getNearestHour();
-  var url = base_url + '&start_at=' + formattedDate;
+  var url = base_url + '&start_at=' + formattedDate.replace(/:/g, '%3A');
 
   var options = { 
-     url: base_url + '&start_at=' + formattedDate,
+     url: url,
      headers: { 
        'Authorization' : wattTimeToken
      }
    };
 
-  request(url, function (error, response, body) {
+  request(options, function (error, response, body) {
     if (!error && response.statusCode == 200) {
-      //console.log(JSON.parse(body).results);
       getCarbonReading(JSON.parse(body).results, formattedDate, 
         function(carbon){
           setColorCode(carbon);
         });
     }
     else {
+      console.log(JSON.parse(body));
       console.log("Error getting data from WattTime");
     }
   })
@@ -106,6 +106,7 @@ var setColorCode = function(carbon){
   if(percentMax < 0){percentMax = 0};
 
   colorValue = parseFloat(percentMax.toFixed(2));
+  console.log('colorValue now is ',colorValue)
 };
 
 // Check for new bulb color every hour
@@ -116,6 +117,8 @@ setInterval(findMaxCarbonThisWeek, 10800000)
 
 // findMaxCarbonThisWeek()
 setTimeout(makeWattTimeRequest, 15000);
+//Update max carbon on server restart.
+setTimeout(findMaxCarbonThisWeek, 15000);
 
 module.exports = {
   getColor: getColor

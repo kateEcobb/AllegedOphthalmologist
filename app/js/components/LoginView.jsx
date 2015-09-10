@@ -81,9 +81,8 @@ var LoginView = React.createClass({
   render: function() {
     return (
       <Dialog openImmediately={true}>
-      <div className="container">
-        <div>
-        <h2>Login</h2>
+      <div className="LoginContainer">
+        <h2 id='loginTitle'>Login</h2>
           
           <Formsy.Form onSubmit={this.submitForm} className="login" onValid={this.enableButton} onInvalid={this.disableButton}>
             <FormInput name="username" title="Email" type="text" 
@@ -92,7 +91,9 @@ var LoginView = React.createClass({
               validations="minLength:6" validationError="Password must be at least 6 characters in length"/>
           <FlatButton className="btn btn-submit" type="submit" disabled={!this.state.canSubmit}>Login</FlatButton>
           </Formsy.Form>
-          
+      </div>
+
+      <div className="spinnerFailure">
           <div className="spinner-container">
             <div className="spinner-loader">Loading…</div>
           </div>
@@ -101,7 +102,6 @@ var LoginView = React.createClass({
             <p>Have you <span style={{color:'blue', 'text-decoration': 'underline'}} onClick={this.handleRegister}>Registered</span>?</p>
           </div>
         </div>
-      </div>
       </Dialog>
     );
   }
