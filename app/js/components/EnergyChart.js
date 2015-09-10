@@ -214,7 +214,7 @@ var drawAxisScale = function(options) {
   .attr('class', 'axisScale')
   // .attr('transform', 'rotate(-90) ' + utils.translate(-10, scale.height / 2))
   .attr('text-rendering', 'optimizeLegibility')
-  .attr('transform', utils.translate(3, scale.height / 2) + ' rotate(-90)')
+  .attr('transform', utils.translate(-1, scale.height / 2) + ' rotate(-90)')
   .text(options.unit);
 };
 

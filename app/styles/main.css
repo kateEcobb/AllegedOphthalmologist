@@ -42,13 +42,13 @@ body {
 .linePath {
   fill: none;
   stroke-width: 2;
-  stroke: steelblue;
+  stroke: #58C1BE;
 }
 
 .energyPath {
   fill: none;
   stroke-width: 2;
-  stroke: steelblue;
+  stroke: #58C1BE;
 }
 
 .linePoint {
@@ -62,7 +62,7 @@ body {
 
 .predictPoint {
   r: 3;
-  fill: black;
+  fill: #8080FF;
 }
 
 .focusXLine {
@@ -186,8 +186,11 @@ div.login {
 .form-status {
   position: relative;
   width: 100%;
-
 }
+
+/*.form-group, #loginTitle, #signupTitle { 
+  text-align: center;
+}*/
 
 .pge-update-failure {
   position: absolute;
