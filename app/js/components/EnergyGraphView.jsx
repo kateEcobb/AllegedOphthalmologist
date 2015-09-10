@@ -197,9 +197,9 @@ var EnergyGraphView = React.createClass({
     var tabs = this.props.tabs ? <GraphToolBar handleTabChange={this.handleTabChange} ref='graphToolBar' value={this.props.value} /> : "";
     return (
 
-      <Paper className="mainGraphView" style={{margin: '30px 0', minWidth:"900px"}}>
+      <Paper className="mainGraphView" style={{margin: '30px 0'}}>
         {tabs}
-        <div className='graphOuterContainer'>
+        <div className='graphOuterContainer' style={{width: this.props.width, height: this.props.height + this.props.margin}}>
           <div className ="graphContainer" ref="graphContainer"></div>
         </div>
       </Paper>

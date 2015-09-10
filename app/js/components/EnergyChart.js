@@ -84,7 +84,7 @@ var initGraph = function(el, props, state) {
     barWidth: parseFloat(props.barWidth) || 3,
     headerOffset: 10,
     footerOffset: 25,
-    axisOffset: 50, 
+    axisOffset: 40, 
     yMinRatio: 0.95,
     yMaxRatio: 1.02,
     orient: options.overlay ? 'right' : 'left',
