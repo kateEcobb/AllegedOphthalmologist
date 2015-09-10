@@ -51,11 +51,13 @@ var RegistrationView = React.createClass({
     $('.spinner-container').css('visibility', 'hidden');
     $('.btn-submit').prop('disabled', false);
   },
+
   componentDidUnmount: function(){
     Dispatcher.unregister(this.token);
   },
+
   redirectHome: function(){
-    this.transitionTo("graphs");
+    this.transitionTo("profile");
   },
   enableButton: function () {
     this.setState({

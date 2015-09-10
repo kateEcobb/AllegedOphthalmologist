@@ -247,7 +247,7 @@ div.login {
 
 @media(max-width:768px) {
   #SignUpFailure{ 
-    float: right;
+    float: left;
     margin-top: 0px;
   }
 }
