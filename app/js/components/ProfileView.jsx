@@ -49,18 +49,26 @@ var ProfileView = React.createClass({
     // this view is only accessible to a logged in user
     return {
       user: {
-        name: UserStore.getAccountAuth(),
-        address: UserStore.getServiceAddress(),
-        pgeLogin: UserStore.getPGEUsername()
+        name: null,
+        address: null,
+        pgeLogin: null
       },
       data: {
-        utilityData: DataStore.getData('Utility'),
-        wattTimeData: DataStore.getData('Watt'),
+        utilityData: null,
+        wattTimeData: null,
         pieChart: {colorRange: ['#A60F2B','#e6e600','#528C18'], width: 200, height: 200},
       },
       chartData: [{},{},{}],
       showPieChart: false
     };
+  },
+
+  componentWillMount: function(){
+    this.state.user.name = UserStore.getAccountAuth();
+    this.state.user.address = UserStore.getServiceAddress();
+    this.state.user.pgeLogin = UserStore.getPGEUsername();
+    this.state.data.utilityData = DataStore.getData('Utility');
+    this.state.data.wattTimeData = DataStore.getData('Watt');
   },
 
   componentDidMount: function(){
