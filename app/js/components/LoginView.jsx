@@ -76,8 +76,7 @@ var LoginView = React.createClass({
   },
 
   handleRegister: function(){
-    console.log('register');
-    ViewActions.loadModal();
+    // console.log('register');
     ViewActions.loadModal(register);
   }, 
 
