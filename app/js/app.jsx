@@ -113,10 +113,6 @@ var App = React.createClass({
       }
     });
     ModalStore.toggleModal();
-<<<<<<< HEAD
-=======
-    // console.log("Modal state: ",ModalStore.getModalState());
->>>>>>> fixes all console bugs and the double-login bug
   },
 
   componentWillUnmount: function (){
