@@ -41,12 +41,8 @@ var AboutUs = React.createClass({
   },
 
   loadData: function(){ 
-    this.setState({data: DataStore.getData()}, function(){ 
-      console.log("got new data from datastore")
-    });
-    this.setState({bulbData: BulbStore.getData()}, function(){ 
-      console.log('got new bulb info')
-    });
+    this.setState({data: DataStore.getData()});
+    this.setState({bulbData: BulbStore.getData()});
   },
 
   gridState: function(){ 
@@ -76,14 +72,12 @@ var AboutUs = React.createClass({
     this.token = Dispatcher.register(function (dispatch) {
       var action = dispatch.action;
       if (action.type === ActionTypes.WATT_LOADED) {
-        //console.log('login failure');
         context.makeGraphs();
       } 
     });
   }, 
 
   componentDidUpdate: function(){ 
-    // this.makeGraphs();
     window.addEventListener('resize', this.reSizeGraphs);
   },
 
