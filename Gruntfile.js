@@ -124,11 +124,7 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-nodemon');
   grunt.loadNpmTasks('grunt-webpack');
   grunt.loadNpmTasks('grunt-services');
-<<<<<<< HEAD
-=======
-  grunt.loadNpmTasks('grunt-clear');
   grunt.loadNpmTasks('grunt-jasmine-node-new');
->>>>>>> (tests) added server tests to grunt file
 
   grunt.registerTask('server-dev', function(target) {
     var nodemon = grunt.util.spawn({
