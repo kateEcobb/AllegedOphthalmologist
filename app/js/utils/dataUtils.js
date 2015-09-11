@@ -169,7 +169,7 @@ module.exports = {
       return a.time - b.time;
     });
 
-    var weekTime = 24 * 60 * 60 * 1000 * 7 * 2;
+    var weekTime = 24 * 60 * 60 * 1000 * 10;
     var weekDate = new Date(Date.now() - weekTime);
     var userCarbon = [];
 

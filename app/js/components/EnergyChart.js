@@ -43,32 +43,37 @@ var initGraph = function(el, props, state) {
 
     // Main Graph Types
     case GraphTypes.MAIN:
-      data = options.data = utils.parseWattData(state);
+      data = options.data = utils.parseWattData(state, false);
       options.unit = "lbs/Mwh";
+      options.range = 5;
       options.tasks = [drawLine, drawAxis, drawMiscData, drawAxisScale, drawCapturePad];
       break;
 
     case GraphTypes.USER_CARBON:
       data = options.data = utils.parseUserCarbonData(state);
       options.unit = 'lbs';
+      options.range = 10;
       options.tasks = [drawLine, drawAxis, drawAxisScale, drawCapturePad];
       break;
 
     case GraphTypes.USER_KWH:
       data = options.data = utils.parseUserKwhData(state);
       options.unit = 'Kwh';
+      options.range = 10;
       options.tasks = [drawLine, drawAxis, drawAxisScale, drawCapturePad];
       break;
 
     // Supplemental Graph Types
     case GraphTypes.USER_REQUIRE:
       data = options.data = utils.parseWattData(state);
+      options.range = 5;
       options.tasks = [drawAxis, drawAxisScale, drawDisablePad];
       break;
 
     case GraphTypes.DANGER_ZONE:
       data = options.data = utils.parseUserKwhData(state);
       options.data2 = utils.parseWattData(state, false);
+      options.range = 10;
       options.tasks = [drawDangerZone];
       break;
 
@@ -81,7 +86,7 @@ var initGraph = function(el, props, state) {
     height: parseInt(props.height, 10),
     width: parseInt(props.width, 10),
     margin: props.margin ? parseInt(props.margin, 10) : 10,
-    barWidth: parseFloat(props.barWidth) || 3,
+    barWidth: parseFloat(props.barWidth) || 2,
     headerOffset: 10,
     footerOffset: 25,
     axisOffset: 40, 
@@ -90,12 +95,16 @@ var initGraph = function(el, props, state) {
     orient: options.overlay ? 'right' : 'left',
   };
 
+  // Set up the default date range
+  var filterDate = new Date(data[data.length - 1].time - (24 * 60 * 60 * 1000) * options.range);
+  var filterIndex = utils.bisectDateIndex(data, filterDate);
+  scale.range = [data[filterIndex].time, data[data.length - 1].time];
+  scale.default = [data[filterIndex].time, data[data.length - 1].time];
+
   // Set up the yRange
   scale.yRange = d3.scale.linear().domain([d3.min(data, function(datum) {
-    // return datum.point * scale.yMinRatio * (scale.ratio ? datum.ratio : 1);
     return datum.point * scale.yMinRatio;
   }), d3.max(data, function(datum) {
-    // return datum.point * scale.yMaxRatio * (scale.ratio ? datum.ratio : 1);
     return datum.point * scale.yMaxRatio;
   })]).nice()
   .range([scale.height - scale.headerOffset - scale.footerOffset, 0]);
@@ -104,8 +113,10 @@ var initGraph = function(el, props, state) {
   scale.xRange = d3.time.scale().domain([ 
     // (options.overlay ? parsedState[options.overlay][0].time : data[0].time), 
     // (options.overlay ? parsedState[options.overlay][parsedState[options.overlay].length - 1].time : data[data.length - 1].time)
-    data[0].time,
-    data[data.length - 1].time
+    // data[0].time,
+    // data[data.length - 1].time
+    scale.range[0],
+    scale.range[1],
   ])
   .range([0, scale.width - scale.axisOffset - scale.axisOffset]);
 
@@ -116,6 +127,12 @@ var initGraph = function(el, props, state) {
                               .attr('height', scale.height + scale.margin + scale.margin)
                             .append('svg:g')
                               .attr('transform', utils.translate(scale.margin, scale.margin));
+
+  graph.append('svg:clipPath')
+  .attr('id', 'clip')
+  .append('svg:rect')
+  .attr('width', scale.width - scale.axisOffset - scale.axisOffset)
+  .attr('height', scale.height - scale.headerOffset - scale.footerOffset);
 
   return options;
 };
@@ -137,7 +154,7 @@ var drawAxis = function(options) {
 
   // Set up and draw the X Axis if this is not a overlay
   if (!options.overlay) {
-    var xAxis = d3.svg.axis().scale(scale.xRange);
+    var xAxis = options.scale.xAxis = d3.svg.axis().scale(scale.xRange);
     graph.append('svg:g')
     .attr('class', 'x axis')
     .attr('transform', utils.translate(scale.axisOffset, scale.height - scale.footerOffset))
@@ -152,7 +169,7 @@ var drawLine = function(options) {
   var data  = options.data;
 
   // Define the Line that the Path will take
-  var lineFunc = d3.svg.line()
+  var lineFunc = options.scale.line = d3.svg.line()
                   .x(function(datum) {
                     return scale.xRange( datum.time );
                   })
@@ -160,12 +177,13 @@ var drawLine = function(options) {
                     // return scale.yRange( datum.point * (scale.ratio ? datum.ratio : 1) );
                     return scale.yRange( datum.point );
                   })
-                  .interpolate('linear');
+                  .interpolate('monotone');
 
   // Draw the Path
   graph.append('svg:path')
   .attr('d', lineFunc(data))
   .attr('class', 'energyPath')
+  .attr('clip-path', 'url(#clip)')
   .attr('transform', utils.translate(scale.axisOffset, scale.headerOffset) );
 
   return;
@@ -227,14 +245,41 @@ var drawTimeBar = function(options) {
   var timeNow = new Date(Date.now());
   var currentX = scale.xRange(timeNow);
 
-  graph.append('svg:g')
+  var info = [{x: (currentX - scale.barWidth / 2), id: '1234'}];
+
+  // DATA
+  var timeBar = graph.selectAll('.currentTimeBar')
+                .data(info, function(datum) {return datum.id;});
+
+  // UPDATE
+
+  // ENTER
+  timeBar.enter().append('svg:rect')
+  .attr('class', 'currentTimeBar')
+  .attr('clip-path', 'url(#clip)')
+  .attr('height', scale.height - scale.headerOffset - scale.footerOffset)
+  .attr('width', scale.barWidth);
+
+  // UPDATE + ENTER
+  timeBar
   .attr('transform', utils.translate(scale.axisOffset, scale.headerOffset))
-    .append('svg:rect')
-    .attr('class', 'currentTimeBar')
-    .attr('height', scale.height - scale.headerOffset - scale.footerOffset)
-    .attr('width', scale.barWidth)
-    .attr('x', currentX - scale.barWidth / 2)
-    .attr('y', 0);
+  .transition().duration(750)
+  .attr('y', 0)
+  .attr('x', function(datum) {
+    return datum.x;
+  });
+
+  // EXIT
+  timeBar.exit().remove();
+
+  // graph.append('svg:g')
+  // .attr('transform', utils.translate(scale.axisOffset, scale.headerOffset))
+  //   .append('svg:rect')
+  //   .attr('class', 'currentTimeBar')
+  //   .attr('height', scale.height - scale.headerOffset - scale.footerOffset)
+  //   .attr('width', scale.barWidth)
+  //   .attr('x', currentX - scale.barWidth / 2)
+  //   .attr('y', 0);
 };
 
 var drawPredictPoint = function(options) {
@@ -248,12 +293,43 @@ var drawPredictPoint = function(options) {
   if (predictIndex === -1) {
     throw new Error();
   }
-  
-  graph.append('svg:circle')
+
+  var time = scale.xRange(data[predictIndex].time);
+  var point = scale.yRange(data[predictIndex].point);
+  var info = [{time: time, point: point, id: "1234"}];
+
+  // DATA JOIN
+  var predictPoint = graph.selectAll('.predictPoint')
+                      .data(info, function(datum) {return datum.id;});
+
+  // UPDATE
+  predictPoint
+  .transition().duration(750);
+
+  // ENTER
+  predictPoint.enter().append('svg:circle')
   .attr('class', 'predictPoint')
+  .attr('clip-path', 'url(#clip)');
+
+  // UPDATE + ENTER
+  predictPoint
   .attr('transform', utils.translate(scale.axisOffset, scale.headerOffset))
-  .attr('cx', scale.xRange(data[predictIndex].time))
-  .attr('cy', scale.yRange(data[predictIndex].point));
+  .transition().duration(750)
+  .attr('cx', function(datum) {
+    return datum.time;
+  })
+  .attr('cy', function(datum) {
+    return datum.point;
+  });
+
+  // EXIT
+  predictPoint.exit().remove();
+
+  // graph.append('svg:circle')
+  // .attr('class', 'predictPoint')
+  // .attr('transform', utils.translate(scale.axisOffset, scale.headerOffset))
+  // .attr('cx', scale.xRange(data[predictIndex].time))
+  // .attr('cy', scale.yRange(data[predictIndex].point));
 };
 
 var drawDisablePad = function(options) {
@@ -417,7 +493,34 @@ var drawCapturePad = function(options) {
     .attr('text-anchor', textAnchor)
     .attr('dy', dy[1])
     .text( utils.formatFocusDate(nearestDatum.time) );
+  };
 
+  var click = function() {
+    // console.log(d3.mouse(this)[0]);v
+    var left;
+    var right;
+    var oneDay = 24 * 60 * 60 * 1000;
+
+    if (d3.mouse(this)[0] < (scale.width - scale.axisOffset - scale.axisOffset) / 2) {
+      left = new Date(scale.range[0].getTime() - oneDay);
+      right = new Date(scale.range[1].getTime() - oneDay);
+      scale.range = left >= data[0].time ? [left, right] : [data[0].time, scale.range[1]];
+    }
+    else {
+      left = new Date(scale.range[0].getTime() + oneDay);
+      right = new Date(scale.range[1].getTime() + oneDay);
+      scale.range = right < data[data.length - 1].time ? [left, right] : scale.default;
+    }
+
+    // Update the Line Path
+    options.scale.xRange.domain([scale.range[0], scale.range[1]]);
+    var update = graph.transition().duration(750);
+    update.select('.x.axis').call(scale.xAxis);
+    update.select('.energyPath').attr('d', scale.line(data));
+
+    // Update the TimeBar and predict Point
+    drawPredictPoint(options);
+    drawTimeBar(options);
   };
 
   // Draw the Surface
@@ -431,5 +534,6 @@ var drawCapturePad = function(options) {
     focus.style('display', null); })
   .on('mouseout', function() { 
     focus.style('display', 'none'); })
-  .on('mousemove', mouseMove);
+  .on('mousemove', mouseMove)
+  .on('click', click);
 };
