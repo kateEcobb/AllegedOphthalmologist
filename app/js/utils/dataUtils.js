@@ -139,13 +139,18 @@ module.exports = {
 
     for (var i = 0; i < state.data.Utility.length; i++) {
       var userTime = new Date(state.data.Utility[i].interval_start);
-      if (userTime >= weekDate) {
-        userKwh.push({
-          point: parseFloat(state.data.Utility[i].interval_kWh),
-          time: userTime,
-          id: userTime.getTime(),
-        });
-      }
+      // if (userTime >= weekDate) {
+      //   userKwh.push({
+      //     point: parseFloat(state.data.Utility[i].interval_kWh),
+      //     time: userTime,
+      //     id: userTime.getTime(),
+      //   });
+      // }
+      userKwh.push({
+        point: parseFloat(state.data.Utility[i].interval_kWh),
+        time: userTime,
+        id: userTime.getTime(),
+      });
     }
 
     userKwh = userKwh.sort(function(a, b) {
