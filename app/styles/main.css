@@ -270,21 +270,6 @@ div.login {
   }
 }
 
-.tick text{ 
-  fill: black;
-}
-
-#donutModal { 
-  z-index: 10;
-}
-
-.svg-content-responsive {
-    display: inline-block;
-    position: absolute;
-    top: 10px;
-    left: 0;
-}
-
 /*Profile View*/
 .profile-header {
   margin-left: 6em;
