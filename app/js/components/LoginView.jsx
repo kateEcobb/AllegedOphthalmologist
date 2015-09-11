@@ -41,7 +41,6 @@ var LoginView = React.createClass({
   componentDidMount: function(){
   UserStore.addChangeListener(this.successfulLogin);
     var context = this;
-    var result = null;
 
     this.token = Dispatcher.register(function (dispatch) {
       var action = dispatch.action;
@@ -61,20 +60,24 @@ var LoginView = React.createClass({
     $('.spinner-container').css('visibility', 'hidden');
     this.enableButton();
   },
+
   componentWillUnmount: function(){
     Dispatcher.unregister(this.token);
-    UserStore.removeChangeListener(this.successfulLogin)
+    UserStore.removeChangeListener(this.successfulLogin);
   },
+
   enableButton: function () {
     this.setState({
       canSubmit: true
     });
   },
+
   disableButton: function () {
     this.setState({
       canSubmit: false
     });
   },
+  
   submitForm: function(data){
     $('.spinner-container').css('visibility', 'visible');
     this.disableButton();
@@ -84,6 +87,8 @@ var LoginView = React.createClass({
 
   handleRegister: function(){
     // console.log('register');
+    console.log('I was clicked!')
+    ViewActions.loadModal();
     ViewActions.loadModal(register);
   }, 
 

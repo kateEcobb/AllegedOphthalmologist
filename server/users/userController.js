@@ -236,6 +236,7 @@ var signUp = function(req, res){
       UtilityAPI.getActiveUsers(function(accounts){ 
         var foundAccount = false;
         for(var i=0; i<accounts.length; i++){
+          console.log(accounts[i])
           var account = accounts[i];
           
           if(account.account_uid === user.uid){ 
@@ -282,7 +283,7 @@ var signUp = function(req, res){
         }
       });
 
-    }, 5000);
+    }, 6000);
     });
   });
 };
