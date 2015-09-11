@@ -16,7 +16,17 @@
   margin-bottom: 2em;
 }
 
+.energy-bar-graph .Green {
+  fill: green;
+}
 
+.energy-bar-graph .Yellow {
+  fill: yellow;
+}
+
+.energy-bar-graph .Red {
+  fill: red;
+}
 /* Energy Charts */
 .axis path,
 .axis line { 
@@ -260,5 +270,28 @@ div.login {
   }
 }
 
+.tick text{ 
+  fill: black;
+}
 
+#donutModal { 
+  z-index: 10;
+}
 
+.svg-content-responsive {
+    display: inline-block;
+    position: absolute;
+    top: 10px;
+    left: 0;
+}
+
+/*Profile View*/
+.profile-header {
+  margin-left: 6em;
+}
+.summary-container {
+  margin-top: 20px;
+}
+.week-summary-header {
+  text-align: center;
+}
