@@ -41,8 +41,12 @@ var AboutUs = React.createClass({
   },
 
   loadData: function(){ 
-    this.setState({data: DataStore.getData()});
-    this.setState({bulbData: BulbStore.getData()});
+    this.setState({data: DataStore.getData()}, function(){ 
+      console.log("got new data from datastore")
+    });
+    this.setState({bulbData: BulbStore.getData()}, function(){ 
+      console.log('got new bulb info')
+    });
   },
 
   gridState: function(){ 

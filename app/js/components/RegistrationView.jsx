@@ -42,6 +42,7 @@ var RegistrationView = React.createClass({
       } 
       else if (action.type === ActionTypes.USER_LOGIN) {
         // console.log('registration success');
+        ViewActions.loadModal();
         context.redirectHome();
       } 
     });

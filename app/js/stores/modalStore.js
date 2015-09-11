@@ -1,6 +1,6 @@
 var assign = require('react/lib/Object.assign');
 var EventEmitter = require('events').EventEmitter;
-var Dispatcher = require('../dispatcher/Dispatcher');
+var ModalDispatcher = require('../dispatcher/ModalDispatcher');
 var ActionTypes = require('../constants/Constants').ActionTypes;
 
 var CHANGE_EVENT = 'change';
@@ -31,11 +31,10 @@ var ModalStore = assign({}, EventEmitter.prototype, {
   }
 });
 
-ModalStore.dispatchToken = Dispatcher.register(function(dispatcher){
+ModalStore.dispatchToken = ModalDispatcher.register(function(dispatcher){
 
   var action = dispatcher.action;
   var actions = {
-    USER_LOGIN: 'dismiss dailog box when user login in',
     LOAD_MODAL: 'load dialog box if payload is provided',
     register: 'dismiss dialog box when user registers',
   };
