@@ -60,8 +60,6 @@
     "webpack-dev-server": "^1.10.1"
   },
   "devDependencies": {
-    "babel-core": "^4.4.5",
-    "babel-loader": "^4.0.0",
     "grunt-jasmine-node-new": "^0.3.2",
     "jasmine-core": "^2.2.0",
     "karma": "^0.13",
@@ -69,9 +67,10 @@
     "karma-cli": "^0.1.0",
     "karma-jasmine": "^0.3.5",
     "karma-mocha": "^0.2.0",
-    "karma-sourcemap-loader": "^0.3.5",
+    "karma-spec-reporter": "0.0.20",
     "karma-webpack": "^1.6.0",
     "rewire": "^2.3.1",
+    "rewire-webpack": "^1.0.0",
     "supertest": "^1.1.0",
     "webpack": "^1.5.3"
   }

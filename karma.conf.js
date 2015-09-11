@@ -1,40 +1,42 @@
-const RewireWebpackPlugin = require("rewire-webpack");
+var RewireWebpackPlugin = require("rewire-webpack");
 
-const webpackConfig = {
+var webpackConfig = {
   module: {
     loaders: [
-      {
-        test: /\.js$/,
-        exclude: /node_modules/,
-        loaders: ["babel-loader"]
-      }
+      { test: /\.jsx?$/, loader: 'jsx-loader'},
     ]
   },
-  plugins: [new RewireWebpackPlugin()]
+  resolve: { extentions: ['', '.js', '.jsx'] },
+  plugins: [
+    new RewireWebpackPlugin(),
+  ],
 };
+
 
 const karmaConfig = function (config) {
   config.set({
     basePath: "",
     frameworks: ["jasmine"],
-    reporters: ["progress"],
+    reporters: ["progress", 'spec'],
     port: 9876,
     colors: true,
-    logLevel: config.LOG_INFO,
     autoWatch: false,
     browsers: ["Chrome"],
     singleRun: true,
-    files: ["app/**/*.test.js"],
+
+    files: ["tests.webpack.js"],
     preprocessors: {
-      "app/**/*.test.js": ["webpack"]
-    },
+      "tests.webpack.js": ['webpack'],
+    },  
     webpack: webpackConfig,
     plugins: [
-      require("karma-webpack"),
       require("karma-jasmine"),
-      require("karma-chrome-launcher")
+      require("karma-spec-reporter"),
+      require("karma-webpack"),
+      require("karma-chrome-launcher"),
     ]
   });
 };
+
 
 module.exports = karmaConfig;
