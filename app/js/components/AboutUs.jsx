@@ -72,14 +72,12 @@ var AboutUs = React.createClass({
     this.token = Dispatcher.register(function (dispatch) {
       var action = dispatch.action;
       if (action.type === ActionTypes.WATT_LOADED) {
-        //console.log('login failure');
         context.makeGraphs();
       } 
     });
   }, 
 
   componentDidUpdate: function(){ 
-    // this.makeGraphs();
     window.addEventListener('resize', this.reSizeGraphs);
   },
 

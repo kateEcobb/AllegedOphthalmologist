@@ -20,12 +20,14 @@ var ActionTypes = require('./../constants/Constants').ActionTypes;
 
 // Stores
 var UserStore = require('./../stores/UserStore');
+var ModalStore = require('./../stores/modalStore');
 
 // register view
 var register = require('./RegistrationView.jsx');
 
 //Dispatcher
 var Dispatcher = require('./../dispatcher/Dispatcher');
+var ModalDispatcher = require('./../dispatcher/ModalDispatcher');
 
 var LoginView = React.createClass({
   // Use a bit of two way data binding because forms are a pain otherwise.
@@ -37,46 +39,53 @@ var LoginView = React.createClass({
     };
   },
   componentDidMount: function(){
+  UserStore.addChangeListener(this.successfulLogin);
     var context = this;
+
     this.token = Dispatcher.register(function (dispatch) {
       var action = dispatch.action;
       if (action.type === ActionTypes.USER_LOGIN_FAILURE) {
-        //console.log('login failure');
         context.failedLogin();
-      } 
-      if (action.type === ActionTypes.USER_LOGIN) {
-        //console.log('login failure');
-        context.transitionTo('profile');
-      } 
+      }
     });
   },
+
+  successfulLogin: function(){ 
+    ViewActions.loadModal();
+    this.transitionTo('profile');
+  },
+
   failedLogin: function(){
     $('.login-failure').css('visibility', 'visible');
     $('.spinner-container').css('visibility', 'hidden');
     this.enableButton();
   },
-  componentDidUnmount: function(){
+
+  componentWillUnmount: function(){
     Dispatcher.unregister(this.token);
+    UserStore.removeChangeListener(this.successfulLogin);
   },
+
   enableButton: function () {
     this.setState({
       canSubmit: true
     });
   },
+
   disableButton: function () {
     this.setState({
       canSubmit: false
     });
   },
+  
   submitForm: function(data){
     $('.spinner-container').css('visibility', 'visible');
     this.disableButton();
-    // console.log('Logging in with: ', data);
     ViewActions.loginUser(data);
   },
 
   handleRegister: function(){
-    // console.log('register');
+    ViewActions.loadModal();
     ViewActions.loadModal(register);
   }, 
 

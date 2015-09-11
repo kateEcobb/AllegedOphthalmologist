@@ -93,21 +93,12 @@ var App = React.createClass({
     this.token = Dispatcher.register(function (dispatch){
       var action = dispatch.action;
       if(action.type === ActionTypes.USER_LOGIN){
-        
-        if(context.state.triedTokenLogin){
-          ModalStore.toggleModal();
-        }
         context.showSnack('Logged In');
       }
-      if(action.type === ActionTypes.USER_LOGIN_FAILURE){
-        ModalStore.toggleModal();
-      } 
       if(action.type === ActionTypes.SHOW_SNACK){
         context.showSnack('Logged Out');
-        ModalStore.toggleModal();
       }
     });
-    ModalStore.toggleModal();
   },
 
   componentWillUnmount: function (){

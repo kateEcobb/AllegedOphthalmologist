@@ -33,48 +33,52 @@ var RegistrationView = React.createClass({
     };
   },
   componentDidMount: function(){
+    UserStore.addChangeListener(this.successfulLogin);
     var context = this;
+
     this.token = Dispatcher.register(function (dispatch) {
       var action = dispatch.action;
       if (action.type === ActionTypes.USER_LOGIN_FAILURE) {
-        // console.log('registration failure');
         context.failedRegistration();
-      } 
-      else if (action.type === ActionTypes.USER_LOGIN) {
-        // console.log('registration success');
-        context.redirectHome();
       } 
     });
   },
+
   failedRegistration: function(){
     $('.login-failure').css('visibility', 'visible');
     $('.spinner-container').css('visibility', 'hidden');
     $('.btn-submit').prop('disabled', false);
   },
 
-  componentDidUnmount: function(){
-    Dispatcher.unregister(this.token);
+  successfulLogin: function(){ 
+    ViewActions.loadModal();
+    this.transitionTo('profile');
   },
 
-  redirectHome: function(){
-    this.transitionTo("profile");
+  componentWillUnmount: function(){
+    Dispatcher.unregister(this.token);
+    UserStore.removeChangeListener(this.successfulLogin);
   },
+
   enableButton: function () {
     this.setState({
       canSubmit: true
     });
   },
+
   disableButton: function () {
     this.setState({
       canSubmit: false
     });
   },
+
   submitForm: function(data){
     // console.log(data);
     $('.spinner-container').css('visibility', 'visible');
     $('.btn-submit').prop('disabled', true);
     ViewActions.registerUser(data);
   },
+
   render: function() {
     return (
       <Dialog contentClassName={'signupDialog'} openImmediately={true} >

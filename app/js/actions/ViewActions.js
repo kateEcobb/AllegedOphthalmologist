@@ -1,4 +1,6 @@
 var Dispatcher = require('../dispatcher/Dispatcher');
+var ModalDispatcher = require('../dispatcher/ModalDispatcher');
+
 var ActionTypes = require('../constants/Constants').ActionTypes;
 var util = require('../utils/utils.js');
 
@@ -86,7 +88,7 @@ var ViewActions = {
     util.loginUser(user_data)
     .then(function(user){
       
-      //console.log("Got User: ", user);
+      console.log("Got User: ", user);
       Dispatcher.handleViewAction({
         type: ActionTypes.USER_LOGIN,
         payload: user
@@ -101,6 +103,7 @@ var ViewActions = {
       });
     });
   },
+
 
   logoutUser: function(){
     util.logoutUser()
@@ -147,7 +150,7 @@ var ViewActions = {
   },
 
   loadModal: function(modal){
-    Dispatcher.handleViewAction({
+    ModalDispatcher.handleViewAction({
       type: ActionTypes.LOAD_MODAL,
       payload: modal
     });

@@ -282,7 +282,7 @@ var signUp = function(req, res){
         }
       });
 
-    }, 5000);
+    }, 6000);
     });
   });
 };
