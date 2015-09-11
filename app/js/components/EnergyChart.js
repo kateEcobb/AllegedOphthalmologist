@@ -58,9 +58,10 @@ var initGraph = function(el, props, state) {
 
     case GraphTypes.USER_KWH:
       data = options.data = utils.parseUserKwhData(state);
+      options.data2 = utils.parseWattData(state, false);
       options.unit = 'Kwh';
-      options.range = 10;
-      options.tasks = [drawLine, drawAxis, drawAxisScale, drawCapturePad];
+      options.range = 5;
+      options.tasks = [drawDangerZone, drawLine, drawAxis, drawAxisScale, drawCapturePad];
       break;
 
     // Supplemental Graph Types
@@ -70,12 +71,12 @@ var initGraph = function(el, props, state) {
       options.tasks = [drawAxis, drawAxisScale, drawDisablePad];
       break;
 
-    case GraphTypes.DANGER_ZONE:
-      data = options.data = utils.parseUserKwhData(state);
-      options.data2 = utils.parseWattData(state, false);
-      options.range = 10;
-      options.tasks = [drawDangerZone];
-      break;
+    // case GraphTypes.DANGER_ZONE:
+    //   data = options.data = utils.parseUserKwhData(state);
+    //   options.data2 = utils.parseWattData(state, false);
+    //   options.range = 10;
+    //   options.tasks = [drawDangerZone];
+    //   break;
 
     default:
       break;
@@ -291,7 +292,8 @@ var drawPredictPoint = function(options) {
   var predictIndex = utils.findDAHRIndex(data);
   // Test for invalid index, if we have empty dataset
   if (predictIndex === -1) {
-    throw new Error();
+    // throw new Error();
+    return;
   }
 
   var time = scale.xRange(data[predictIndex].time);
@@ -359,9 +361,8 @@ var drawDangerZone = function(options) {
   var scale = options.scale;
   var data = options.data;
 
-  var zone = graph.append('svg:g')
-  .attr('transform', utils.translate(scale.axisOffset, scale.headerOffset))
-  .attr('class', 'dangerZone');
+  // var zone = graph.append('svg:g')
+  // .attr('class', 'dangerZone');
 
   var dangerArray = utils.findDangerZones(options.data2, [data[0].time, data[data.length - 1].time]);
   // console.log(options.data2);
@@ -379,23 +380,27 @@ var drawDangerZone = function(options) {
   // });
 
   // DATA JOIN
-  var zoneRects = zone.selectAll('rect')
+  var zoneRects = graph.selectAll('.dangerBlock')
                   .data(dangerArray, function(datum) { return datum[0].getTime() + datum[1].getTime(); });
   // UPDATE
 
   // ENTER
   zoneRects.enter().append('rect')
   .attr('class', 'dangerBlock')
-  .attr('x', function(datum) {
-    return scale.xRange(datum[0]);
-  })
+  .attr('transform', utils.translate(scale.axisOffset, scale.headerOffset))
+  .attr('clip-path', 'url(#clip)')
   .attr('y', 0)
+  .attr('height', scale.height - scale.headerOffset - scale.footerOffset)
   .attr('width', function(datum) {
     return scale.xRange(datum[1]) - scale.xRange(datum[0]);
-  })
-  .attr('height', scale.height - scale.headerOffset - scale.footerOffset);
+  });
 
   // UPDATE & ENTER
+  zoneRects
+  .transition().duration(750)
+  .attr('x', function(datum) {
+    return scale.xRange(datum[0]);
+  });
 
   // EXIT
   zoneRects.exit().remove();
@@ -521,6 +526,10 @@ var drawCapturePad = function(options) {
     // Update the TimeBar and predict Point
     drawPredictPoint(options);
     drawTimeBar(options);
+    console.log(options.graphType, GraphTypes.USER_KWH);
+    if (options.graphType === GraphTypes.USER_KWH) {
+      drawDangerZone(options);
+    }
   };
 
   // Draw the Surface

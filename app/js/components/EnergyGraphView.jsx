@@ -155,13 +155,13 @@ var EnergyGraphView = React.createClass({
 
     if (this.state.user.username) {
       if (this.state.data.Utility.length > 1) {
+        // EnergyChart.graph(el, {
+        //   height: this.props.height,
+        //   width: this.props.width,
+        //   margin: this.props.margin,
+        //   type: GraphTypes.DANGER_ZONE,
+        // }, this.state);
         EnergyChart.graph(el, {
-          height: this.props.height,
-          width: this.props.width,
-          margin: this.props.margin,
-          type: GraphTypes.DANGER_ZONE,
-        }, this.state);
-        EnergyChart.graph(el.children[0], {
           height: this.props.height,
           width: this.props.width,
           margin: this.props.margin,

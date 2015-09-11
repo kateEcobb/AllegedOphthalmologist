@@ -39,7 +39,7 @@ module.exports = {
     MAIN: null,
     USER_KWH: null,
     USER_CARBON: null,
-    DANGER_ZONE: null,
+    // DANGER_ZONE: null,
   }),
 
   Weekdays: {
