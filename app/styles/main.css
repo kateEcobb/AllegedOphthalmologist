@@ -111,20 +111,20 @@
 
 /*Energy Modals*/
 .source1 *:not(text), path.source1{ 
-  fill: #F6BB42;
-  stroke: #F6BB42;
+  fill: #94D9BB;
+  stroke: #94D9BB;
 }
 .source2 *:not(text), path.source2{ 
   fill: #FFDE55;
   stroke: #FFDE55;
 }
 .source3 *:not(text), path.source3{ 
-  fill: #94D9BB;
-  stroke: #94D9BB;
+  fill: #F6BB42;
+  stroke: #F6BB42;
 }
 .source4 *:not(text), path.source4{ 
-  fill: #58C1BE;
-  stroke: #58C1BE;
+  fill: #FC6E51;
+  stroke: #FC6E51;
 }
 
 #donutModal { 
