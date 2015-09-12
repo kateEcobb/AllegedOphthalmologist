@@ -71,13 +71,6 @@ var initGraph = function(el, props, state) {
       options.tasks = [drawAxis, drawAxisScale, drawDisablePad];
       break;
 
-    // case GraphTypes.DANGER_ZONE:
-    //   data = options.data = utils.parseUserKwhData(state);
-    //   options.data2 = utils.parseWattData(state, false);
-    //   options.range = 10;
-    //   options.tasks = [drawDangerZone];
-    //   break;
-
     default:
       break;
   }
@@ -96,11 +89,10 @@ var initGraph = function(el, props, state) {
     orient: options.overlay ? 'right' : 'left',
   };
 
-  // Set up the default date range
+  // Set up the initial date range
   var filterDate = new Date(data[data.length - 1].time - (24 * 60 * 60 * 1000) * options.range);
   var filterIndex = utils.bisectDateIndex(data, filterDate);
   scale.range = [data[filterIndex].time, data[data.length - 1].time];
-  scale.default = [data[filterIndex].time, data[data.length - 1].time];
 
   // Set up the yRange
   scale.yRange = d3.scale.linear().domain([d3.min(data, function(datum) {
@@ -278,7 +270,6 @@ var drawPredictPoint = function(options) {
 
   // Test for invalid index, if we have empty dataset
   if (predictIndex === -1) {
-    // throw new Error();
     return;
   }
 
@@ -426,38 +417,37 @@ var drawCapturePad = function(options) {
   .attr('dy', '-1rem')
   .text('<--- Click on Graph to scroll --->');
 
-  //  // Left Button
-  // var leftButton = surface.append('svg:g')
-  // .attr('class', 'graphButton')
+   // Left Button//////////////////////////
+  var leftButton = focus.append('svg:g')
+  .attr('class', 'graphButton left')
+  .attr('opacity', scale.range[0] > data[0].time ? 0.35 : 0);
 
-  // leftButton.append('circle')
-  // .attr('r', 30)
+  leftButton.append('svg:circle')
+  .attr('class', 'graphCircle')
+  .attr('cx', scale.axisOffset)
+  .attr('cy', halfHeight);
 
-  // leftButton.append('svg:circle')
-  // .attr('class', 'graphCircle left')
-  // .attr('cx', scale.axisOffset)
-  // .attr('cy', halfHeight);
+  leftButton.append('svg:path')
+  .attr('class', 'graphArrow')
+  .attr('transform', utils.translate(scale.axisOffset, halfHeight) + 
+    ' rotate(180) ' + 
+    utils.translate(-8, -8))
+  .attr('d', 'M0,0 L0,16 L20,8 z');
 
-  // leftButton.append('svg:path')
-  // .attr('class', 'graphArrow left')
-  // .attr('transform', utils.translate(scale.axisOffset, halfHeight) + 
-  //   ' rotate(180) ' + 
-  //   utils.translate(-8, -8))
-  // .attr('d', 'M0,0 L0,16 L20,8 z');
+  // Right Button///////////////////////////////
+  var rightButton = focus.append('svg:g')
+  .attr('class', 'graphButton right')
+  .attr('opacity', scale.range[1] < data[data.length - 1].time ? 0.35 : 0);
 
-  // // Right Button
-  // var rightButton = surface.append('svg:g')
-  // .attr('class', 'graphButton')
+  rightButton.append('svg:circle')
+  .attr('class', 'graphCircle')
+  .attr('cx', scale.width - 3 * scale.axisOffset)
+  .attr('cy', halfHeight);
 
-  // rightButton.append('svg:circle')
-  // .attr('class', 'graphCircle right')
-  // .attr('cx', scale.width - 3 * scale.axisOffset)
-  // .attr('cy', halfHeight);
-
-  // rightButton.append('svg:path')
-  // .attr('class', 'graphArrow right')
-  // .attr('transform', utils.translate(scale.width - 3 * scale.axisOffset - 8, halfHeight - 8))
-  // .attr('d', 'M0,0 L0,16 L20,8 z');
+  rightButton.append('svg:path')
+  .attr('class', 'graphArrow')
+  .attr('transform', utils.translate(scale.width - 3 * scale.axisOffset - 8, halfHeight - 8))
+  .attr('d', 'M0,0 L0,16 L20,8 z');
 
 
   //////////////////////////////////////////////////////////////////////////
@@ -479,7 +469,7 @@ var drawCapturePad = function(options) {
     var textAnchor = (x / (scale.width - scale.axisOffset - scale.axisOffset)) < 0.88 ? 'start' : 'end';
     var dy = (y / (scale.height - scale.headerOffset - scale.footerOffset)) < 0.1 ? ['4rem', '2rem'] : ['-3rem', '-1rem'];
 
-    // Update the position of all the focus elements
+    // Update the position of all the focus elements /////////////////////////////////////////////////////////
     focus.select('.focal')  
     .attr('transform', utils.translate(x, y));  
 
@@ -490,6 +480,7 @@ var drawCapturePad = function(options) {
     focus.select('.focusYLine')  
     .attr('transform', utils.translate(0, y));  
 
+    // We had to manually move both highlight and info in order to force this order of rendering
     focus.select('.focusData.highlight')
     .attr('transform', utils.translate(x, y))
     .attr('text-anchor', textAnchor)
@@ -526,16 +517,21 @@ var drawCapturePad = function(options) {
       left = new Date(scale.range[0].getTime() - oneDay);
       right = new Date(scale.range[1].getTime() - oneDay);
 
-      // If we keep going left but hit end before onDay
-      var residualOffset = scale.range[0] - data[0].time;
-      var residualRight = new Date(scale.range[1].getTime() - residualOffset);
+      // If we keep going left but hit end before oneDay
+      var rightOffset = scale.range[0] - data[0].time;
+      var residualRight = new Date(scale.range[1].getTime() - rightOffset);
 
       scale.range = left >= data[0].time ? [left, right] : [data[0].time, residualRight];
     }
     else {
       left = new Date(scale.range[0].getTime() + oneDay);
       right = new Date(scale.range[1].getTime() + oneDay);
-      scale.range = right < data[data.length - 1].time ? [left, right] : scale.default;
+
+      // If we keep going right but hit end before oneDay
+      var leftOffset = data[data.length - 1].time - scale.range[1];
+      var residualLeft = new Date(scale.range[0].getTime() + leftOffset);
+
+      scale.range = right < data[data.length - 1].time ? [left, right] : [residualLeft, data[data.length - 1].time];
     }
 
     // Update the time scale domain
@@ -552,6 +548,14 @@ var drawCapturePad = function(options) {
     if (options.graphType === GraphTypes.USER_KWH) {
       drawDangerZone(options);
     }
+
+    // Update the Buttons
+    focus.select('.graphButton.left')
+    .transition().duration(750)
+    .attr('opacity', scale.range[0] > data[0].time ? 0.35 : 0);
+    focus.select('.graphButton.right')
+    .transition().duration(750)
+    .attr('opacity', scale.range[1] < data[data.length - 1].time ? 0.35 : 0);
   };
 
   // Draw the Surface
