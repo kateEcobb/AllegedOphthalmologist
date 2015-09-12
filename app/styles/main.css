@@ -264,16 +264,10 @@ div.login {
   font-size: 2em;
 }
 
-@media(max-width:768px) {
-  #SignUpFailure{ 
-    float: left;
-    margin-top: 0px;
-  }
-}
-
 /*Profile View*/
-.profile-header {
-  margin-left: 6em;
+#profile-header {
+  margin: 80px 0px 5em 120px;
+  font-size: 3.25em;
 }
 .summary-container {
   margin-top: 20px;
@@ -307,3 +301,15 @@ div.login {
 .energy-bar-graph .Red {
   fill: #C0392B;
 }
+
+@media(max-width:768px) {
+  #SignUpFailure{ 
+    float: left;
+    margin-top: 0px;
+  }
+  #profile-header{ 
+    font-size: 2.25em;
+    margin: 80px 0px 5em 20px; 
+  }
+}
+
