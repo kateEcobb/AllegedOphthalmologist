@@ -40,8 +40,6 @@ var EnergyGraphView = React.createClass({
     value: React.PropTypes.string,
   },
 
-  clientWidth : null,
-
   // React Functions /////////////////////////////////
 
   getInitialState: function() {
