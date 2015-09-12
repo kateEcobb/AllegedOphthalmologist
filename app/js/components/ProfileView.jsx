@@ -98,7 +98,7 @@ var ProfileView = React.createClass({
         <div className='container'>
           <div className='row'>
             <div className='col-lg-12'>
-              <h1 className='section-heading'>Hello, {this.state.user.name.split(' ')[0]}</h1>
+              <h1 className='section-heading'>Hello, {this.state.user.name.split(' ')[0]}.</h1>
           </div>
           </div>
         </div>
@@ -109,11 +109,11 @@ var ProfileView = React.createClass({
               <div className='row'>
                 <div className='col-lg-12'>
 
-                  <h3>Last Week:</h3>
-                  <p className="week-range">{this.state.summaryData.weekStartString} to {this.state.summaryData.weekEndString}</p>
+                 <h2>Last Week:</h2>
+                 <p className="section-paragraph">{this.state.summaryData.weekStartString} to {this.state.summaryData.weekEndString}</p>
             
-                 <p>Total Energy Used:</p>
-                 <p>{this.state.summaryData.latestWeekKwhUsed} kWh.</p>
+                 <p>Total Energy Used: <span id='lastweekKWH'>{this.state.summaryData.latestWeekKwhUsed} KwH.</span></p>
+                 
             
 
                   <BarChart data={this.state.barChartData}/>
