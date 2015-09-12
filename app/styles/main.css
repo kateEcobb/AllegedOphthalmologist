@@ -88,19 +88,21 @@
   opacity: 0.35;
 }
 
-/*.graphCircle {
+.graphCircle {
   r: 2rem;
   fill: grey;
 }
 .graphArrow {
   fill: white;
+  opacity: 0.5;
 }
 .graphButton {
-  opacity: 1;
+  position: relative;
+  z-index: 10;
 }
 .graphButton:hover {
   opacity: 1;
-}*/
+}
 
 svg {
   display: block;
