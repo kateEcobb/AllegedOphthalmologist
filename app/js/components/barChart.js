@@ -3,12 +3,12 @@ var makeBarChart = function(data){
   
   //console.log("creating chart with ", data);
 
-  var width = 220,
-      barHeight = 40;
+  var width = 180,
+      barHeight = 60;
 
   var x = d3.scale.linear()
       .range([0, width]);
-  console.log("X ", x);
+  //console.log("X ", x);
 
   var chart = d3.select(".energy-bar-graph")
       .attr("width", width);
@@ -28,9 +28,10 @@ var makeBarChart = function(data){
       .attr("height", barHeight - 1);
 
   bar.append("text")
-      .attr("x", 3)
+      .attr("x", function(d){ return x(d.value) - 10})
       .attr("y", barHeight / 2)
       .attr("dy", ".35em")
+      .attr("text-anchor", "end")
       .text(function(d) { return d.value + ' kWh'; });
 }
 

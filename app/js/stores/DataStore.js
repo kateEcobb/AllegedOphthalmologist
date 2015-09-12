@@ -18,13 +18,10 @@ var summaryData = {
   latestWeekKwhUsed: 0,
   wattTimeMin: null,
   wattTimeMax: null,
-  greenThreshold: null,
-  yellowThreshold: 0,
+  redThreshold: 0,
   greenIntervalCount: 0,
-  yellowIntervalCount: 0,
   redIntervalCount: 0,
   greenIntervalKwh: 0,
-  yellowIntervalKwh: 0,
   redIntervalKwh: 0
 };
 
@@ -72,14 +69,11 @@ var DataStore = assign({}, EventEmitter.prototype, {
     summaryData.wattTimeMax = max;
   },
   getBin: function(carbon){
-    if(carbon <= summaryData.greenThreshold){
-      return 'green';
-    }
-    else if(carbon > summaryData.greenThreshold && carbon <= summaryData.yellowThreshold){
-      return 'yellow';
+    if(carbon >= summaryData.redThreshold){
+      return 'red';
     }
     else {
-      return 'red';
+      return 'green';
     }
   },
   getLatestWeekBounds: function(sortedUtilityData){
@@ -112,9 +106,6 @@ var DataStore = assign({}, EventEmitter.prototype, {
         if(currentBin === 'green'){
           greenTimes.push(currentBracket);
         }
-        else if(currentBin === 'yellow'){
-          yellowTimes.push(currentBracket);
-        }
         else{
           redTimes.push(currentBracket);
         }
@@ -127,75 +118,46 @@ var DataStore = assign({}, EventEmitter.prototype, {
 
     // Reset Data
     summaryData.redIntervalKwh = 0;
-    summaryData.yellowIntervalKwh = 0;
     summaryData.greenIntervalKwh = 0;
 
     summaryData.greenIntervalCount = 0;
-    summaryData.yellowIntervalCount = 0;
     summaryData.redIntervalCount = 0;
 
+    var count = 0;
     for(var i = 0; i < utlityApiData.length; i++){
       var intervalTime = new Date(utlityApiData[i].interval_start);
       var foundTime = false;
 
-      if(intervalTime > summaryData.weekStartDate){
-        if(!foundTime){
-          for(var j = 0; j < greenTimes.length; j++){
-            var greenStartTime = new Date(greenTimes[j][0]);
-            var greenEndTime = new Date(greenTimes[j][1]);
 
-            if(intervalTime > greenStartTime && intervalTime < greenEndTime){
-              summaryData.greenIntervalCount++;
-              summaryData.greenIntervalKwh += utlityApiData[i].interval_kWh;
-              foundTime = true;
-              break;
-            }
-          }
-        }
-        if(!foundTime){
-          for(var j = 0; j < redTimes.length; j++){
-            var redStartTime = new Date(redTimes[j][0]);
-            var redEndTime = new Date(redTimes[j][1]);
-            if(intervalTime > redStartTime && intervalTime < redEndTime){
-              summaryData.redIntervalCount++;
-              summaryData.redIntervalKwh += utlityApiData[i].interval_kWh;
-              foundTime = true;
-              break;
-            }
-          }
-        }
-        if(!foundTime) {
-          summaryData.yellowIntervalCount++;
-          summaryData.yellowIntervalKwh += utlityApiData[i].interval_kWh;
+      for(var j = 0; j < redTimes.length; j++){
+        var redStartTime = new Date(redTimes[j][0]);
+        var redEndTime = new Date(redTimes[j][1]);
+        if(intervalTime > redStartTime && intervalTime < redEndTime){
+          summaryData.redIntervalCount++;
+          summaryData.redIntervalKwh += utlityApiData[i].interval_kWh;
+          foundTime = true;
+          count++;
+          break;
         }
       }
       
-    }
-
-    // Round here to avoid ridiculous numbers because JavaScript
-    summaryData.redIntervalKwh = Math.round(summaryData.redIntervalKwh * 100) / 100;
-    summaryData.yellowIntervalKwh = Math.round(summaryData.yellowIntervalKwh * 100) / 100;
-    summaryData.greenIntervalKwh = Math.round(summaryData.greenIntervalKwh * 100) / 100;
-  },
-  calcEnergyUse: function(sortedUtilityData, start, end){
-    var start_datetime = new Date(start);
-    var end_datetime = new Date(end);
-
-    // interval_kWh
-    var totalKwh = 0;
-    for(var i = 0; i < sortedUtilityData.length; i++){
-      var interval_end_datetime = new Date(sortedUtilityData[i].interval_end);
-      if(interval_end_datetime >= start_datetime && interval_end_datetime  <= end_datetime){
-        totalKwh += sortedUtilityData[i].interval_kWh;
+      if(!foundTime) {
+        summaryData.greenIntervalCount++;
+        summaryData.greenIntervalKwh += utlityApiData[i].interval_kWh;
+        count++;
       }
     }
-    // console.log(totalKwh);
-    return totalKwh;
+      
+    // Round here to avoid ridiculous numbers because JavaScript
+    summaryData.redIntervalKwh = Math.round(summaryData.redIntervalKwh * 100) / 100;
+    summaryData.greenIntervalKwh = Math.round(summaryData.greenIntervalKwh * 100) / 100;
+    
+    // Compute total kWh used
+    summaryData.latestWeekKwhUsed = summaryData.redIntervalKwh + summaryData.greenIntervalKwh; 
   },
   processUtilityData: function(utilityData){
     sortedUtilityData = utilityData.sort(this.sortByTimestamp);
     var weekBounds = this.getLatestWeekBounds(sortedUtilityData);
-    summaryData.latestWeekKwhUsed = this.calcEnergyUse(sortedUtilityData, weekBounds[0], weekBounds[1]);
     
     this.computeBrackets();
     this.countUtilityApiPoints();
@@ -207,8 +169,7 @@ var DataStore = assign({}, EventEmitter.prototype, {
     data['Watt'] = data['Watt'].sort(this.sortByTimestamp);
     var oneThirdRange = ((summaryData.wattTimeMax - summaryData.wattTimeMin)/3);
     
-    summaryData.greenThreshold = summaryData.wattTimeMin + oneThirdRange;
-    summaryData.yellowThreshold = summaryData.greenThreshold  + oneThirdRange;
+    summaryData.redThreshold = (oneThirdRange * 2);
 
   },
   setData: function(newData, key){

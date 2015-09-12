@@ -5,28 +5,6 @@
   left: 1em;
 }
 
-/*User Profile*/
-.update-pge-form {
-  width:100%;
-  text-align: center;
-}
-
-.app-title {
-  text-align: center;
-  margin-bottom: 2em;
-}
-
-.energy-bar-graph .Green {
-  fill: green;
-}
-
-.energy-bar-graph .Yellow {
-  fill: yellow;
-}
-
-.energy-bar-graph .Red {
-  fill: red;
-}
 /* Energy Charts */
 .axis path,
 .axis line { 
@@ -279,4 +257,26 @@ div.login {
 }
 .week-summary-header {
   text-align: center;
+}
+
+.energy-bar-graph rect{
+  stroke: white;
+}
+
+.update-pge-form {
+  width:100%;
+  text-align: center;
+}
+
+.app-title {
+  text-align: center;
+  margin-bottom: 2em;
+}
+
+.energy-bar-graph .Green {
+  fill: #26A65B;
+}
+
+.energy-bar-graph .Red {
+  fill: #C0392B;
 }

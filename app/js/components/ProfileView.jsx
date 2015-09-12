@@ -75,10 +75,6 @@ var ProfileView = React.createClass({
         value: this.state.summaryData.greenIntervalKwh
       },
       {
-        color: "Yellow",
-        value: this.state.summaryData.yellowIntervalKwh
-      },
-      {
         color:"Red",
         value: this.state.summaryData.redIntervalKwh
       }]
