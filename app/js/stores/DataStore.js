@@ -169,7 +169,7 @@ var DataStore = assign({}, EventEmitter.prototype, {
     data['Watt'] = data['Watt'].sort(this.sortByTimestamp);
     var oneThirdRange = ((summaryData.wattTimeMax - summaryData.wattTimeMin)/3);
     
-    summaryData.redThreshold = (oneThirdRange * 2);
+    summaryData.redThreshold = summaryData.wattTimeMin + (oneThirdRange * 2);
 
   },
   setData: function(newData, key){
