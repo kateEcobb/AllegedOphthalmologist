@@ -92,7 +92,7 @@ var legend = function(className, color, data, names){
     .attr('transform', function(d, i){
       var height = RectSize + Spacing;
       var offset = color.domain().length / 2;
-      var horz = (elSpecs.width / 2) - 40;
+      var horz = (elSpecs.width / 2) - 55;
       var vert = (elSpecs.height / 2) + (i - offset) * height;
       return "translate(" + horz + "," + vert + ")";
     });
@@ -162,6 +162,9 @@ var processData = function(data){
   data.forEach(function(element){
     var type = element.fuel;
     type = type.substr(0,1).toUpperCase() + type.substr(1).toLowerCase();
+    if(type === "Renewable"){ 
+      type = "Other Renewables"
+    }
     var percentage = Math.round((element.gen_MW / totalMW)*100, 2);
     breakDown.push({type: type, percentage: percentage});
   });

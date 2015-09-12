@@ -73,8 +73,8 @@
 }
 
 .dangerBlock {
-  fill: red;
-  opacity: 0.18;
+  fill: #FC6E51;
+  opacity: 0.2;
 }
 
 .axisScale {
@@ -104,33 +104,27 @@
   opacity: 1;
 }
 
-svg {
-  display: block;
-  position: relative;
-  margin: auto;
-  vertical-align: top;
-  overflow: hidden;
-}
+
 .tick text{ 
   fill: black;
 }
 
 /*Energy Modals*/
 .source1 *:not(text), path.source1{ 
-  fill: #F6BB42;
-  stroke: #F6BB42;
+  fill: #94D9BB;
+  stroke: #94D9BB;
 }
 .source2 *:not(text), path.source2{ 
   fill: #FFDE55;
   stroke: #FFDE55;
 }
 .source3 *:not(text), path.source3{ 
-  fill: #94D9BB;
-  stroke: #94D9BB;
+  fill: #F6BB42;
+  stroke: #F6BB42;
 }
 .source4 *:not(text), path.source4{ 
-  fill: #58C1BE;
-  stroke: #58C1BE;
+  fill: #FC6E51;
+  stroke: #FC6E51;
 }
 
 #donutModal { 
@@ -264,16 +258,10 @@ div.login {
   font-size: 2em;
 }
 
-@media(max-width:768px) {
-  #SignUpFailure{ 
-    float: left;
-    margin-top: 0px;
-  }
-}
-
 /*Profile View*/
-.profile-header {
-  margin-left: 6em;
+#profile-header {
+  margin: 80px 0px 5em 120px;
+  font-size: 3.25em;
 }
 .summary-container {
   margin-top: 20px;
@@ -282,12 +270,32 @@ div.login {
   text-align: center;
 }
 
-.energy-bar-graph {
-  width: 600px;
+#weekStart { 
+  margin-top: 0px !important;
+  font-size: 19px !important;
+  margin-bottom: 0px !important;
+}
+
+#totalenergyused{ 
+  font-size: 15px;
+  margin-top: 0px;
+}
+
+#lastweekKWH { 
+  font-weight: 500;
 }
 
 .energy-bar-graph rect{
   stroke: white;
+}
+
+.energy-bar-graph{ 
+  width: 600px;
+  margin: 0px !important;
+  height: 100px;
+  position: absolute;
+  top: 10px;
+  right: -112px;
 }
 
 .update-pge-form {
@@ -301,9 +309,35 @@ div.login {
 }
 
 .energy-bar-graph .Green {
-  fill: #26A65B;
+  fill: #94D9BB;
 }
 
 .energy-bar-graph .Red {
-  fill: #C0392B;
+  fill: #FC6E51;
 }
+
+svg {
+  display: block;
+  position: relative;
+  margin: auto;
+  vertical-align: top;
+  overflow: hidden;
+}
+
+@media(max-width:768px) {
+  #SignUpFailure{ 
+    float: left;
+    margin-top: 0px;
+  }
+  #profile-header{ 
+    font-size: 2.25em;
+    margin: 80px 0px 5em 20px; 
+  }
+  .energy-bar-graph{ 
+    width: 600px;
+    margin: 0px !important;
+    height: 100px;
+    position: static;
+  }
+}
+

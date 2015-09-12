@@ -94,29 +94,35 @@ var ProfileView = React.createClass({
   render: function (){
     return(
       <div>
-        <h2 className="profile-header">Hello, {this.state.user.name.split(' ')[0]}</h2>
-    
-        <div className="container summary-container">  
-          <Paper zDepth={2}>
-            <div className="week-summary-header">
-              <h3>Last Week:</h3>
-              <p className="week-range">{this.state.summaryData.weekStartString} to {this.state.summaryData.weekEndString}</p>
-            </div>
+      <section id='cont5'>
+        <div className='container'>
+          <div className='row'>
+            <div className='col-lg-12'>
+              <h1 className='section-heading'>Hello, {this.state.user.name.split(' ')[0]}.</h1>
+          </div>
+          </div>
+        </div>
+      </section>
+
+          <section id='cont4'>
+            <div className='container'>
+              <div className='row'>
+                <div className='col-lg-12'>
+
+                 <h2>Last Week</h2>
+                 <p className="lead section-lead" id='weekStart'>{this.state.summaryData.weekStartString} to {this.state.summaryData.weekEndString}</p>
+                 <p className='lead section-lead' id='totalenergyused'>Total Energy Used: <span id='lastweekKWH'>{Math.round(this.state.summaryData.latestWeekKwhUsed)} kWh.</span></p>
+                
+                 <BarChart data={this.state.barChartData}/>
+                 
             
-            <div className="week-kwh">
-              <p>Total Energy Used:</p>
-              <p>{this.state.summaryData.latestWeekKwhUsed} kWh.</p>
-            </div>
-            <div>
-              <BarChart data={this.state.barChartData}/>
-            </div>
-            
-            <div className="user-graph">        
-              <GraphView height={300} width={900} margin={10} tabs={false} value={GraphTypes.USER_KWH} />
-            </div>
-          </Paper>
+
+                  <GraphView height={300} width={708} margin={10} tabs={false} value={GraphTypes.USER_KWH} />
+          </div>
         </div>
       </div>
+    </section>
+    </div>
 
     );
   }

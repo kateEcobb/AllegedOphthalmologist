@@ -72,6 +72,7 @@ barsContainer.append("line")
   .attr("y1", -gridChartOffset)
   .attr("y2", yScale.rangeExtent()[1] + gridChartOffset)
   .style("stroke", "#000");
+
 }
 
 module.exports = makeBarChart;

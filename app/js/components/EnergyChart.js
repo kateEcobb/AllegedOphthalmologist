@@ -415,7 +415,7 @@ var drawCapturePad = function(options) {
   // .attr('x', 0)
   .attr('y', scale.height - scale.headerOffset - scale.footerOffset)
   .attr('dy', '-1rem')
-  .text('<--- Click on Graph to scroll --->');
+  .text('Click to scroll');
 
    // Left Button//////////////////////////
   var leftButton = focus.append('svg:g')
