@@ -115,8 +115,6 @@ var ProfileView = React.createClass({
                 
                  <BarChart data={this.state.barChartData}/>
                  
-            
-
                   <GraphView height={300} width={708} margin={10} tabs={false} value={GraphTypes.USER_KWH} />
           </div>
         </div>
