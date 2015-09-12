@@ -103,6 +103,27 @@
   font-weight: bold;
   font-size: 1.1rem;
 }
+
+.scrollText {
+  font-weight: bold;
+  text-rendering: optimizeLegibility;
+  opacity: 0.35;
+}
+
+/*.graphCircle {
+  r: 2rem;
+  fill: grey;
+}
+.graphArrow {
+  fill: white;
+}
+.graphButton {
+  opacity: 1;
+}
+.graphButton:hover {
+  opacity: 1;
+}*/
+
 svg {
   display: block;
   position: relative;
