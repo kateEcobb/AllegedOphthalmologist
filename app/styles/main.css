@@ -104,13 +104,7 @@
   opacity: 1;
 }
 
-svg {
-  display: block;
-  position: relative;
-  margin: auto;
-  vertical-align: top;
-  overflow: hidden;
-}
+
 .tick text{ 
   fill: black;
 }
@@ -276,12 +270,22 @@ div.login {
   text-align: center;
 }
 
+
 .energy-bar-graph {
   width: 600px;
+
+#weekStart { 
+  margin-top: 0px !important;
+  font-size: 19px !important;
+
 }
 
 .energy-bar-graph rect{
   stroke: white;
+}
+
+.energy-bar-graph{ 
+  margin: 0px !important;
 }
 
 .update-pge-form {
@@ -300,6 +304,27 @@ div.login {
 
 .energy-bar-graph .Red {
   fill: #C0392B;
+}
+
+#redText{ 
+  position: absolute;
+  top: 133px;
+  left: 45px;
+}
+
+#greenText{ 
+  position: absolute;
+  top:103px;
+  right:100px;
+  left:232px;
+}
+
+svg {
+  display: block;
+  position: relative;
+  margin: auto;
+  vertical-align: top;
+  overflow: hidden;
 }
 
 @media(max-width:768px) {
