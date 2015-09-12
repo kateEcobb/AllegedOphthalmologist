@@ -1,13 +1,13 @@
 
 var makeBarChart = function(data){
   
-var valueLabelWidth = 40; // space reserved for value labels (right)
-var barHeight = 30; // height of one bar
+var valueLabelWidth = 70; // space reserved for value labels (right)
+var barHeight = 35; // height of one bar
 var barLabelWidth = 100; // space reserved for bar labels
 var barLabelPadding = 5; // padding between bar and bar labels (left)
 var gridLabelHeight = 18; // space reserved for gridline labels
 var gridChartOffset = 3; // space between start of grid and first bar
-var maxBarWidth = 325; // width of the bar with the max value
+var maxBarWidth = 300; // width of the bar with the max value
  
 // accessor functions 
 var barLabel = function(d) { return d['name']; };
@@ -53,6 +53,7 @@ var barsContainer = chart.append('g')
 barsContainer.selectAll("rect").data(data).enter().append("rect")
   .attr('y', y)
   .attr('height', yScale.rangeBand())
+  .attr('class', function(d){return d.color;})
   .attr('width', function(d) { return x(barValue(d)); })
   .attr('stroke', 'white')
   .attr('fill', 'steelblue');
