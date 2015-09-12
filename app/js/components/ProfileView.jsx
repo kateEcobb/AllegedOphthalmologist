@@ -71,10 +71,12 @@ var ProfileView = React.createClass({
     this.setState({'summaryData': DataStore.getSummaryData()});
     this.setState({'barChartData': [
       {
+        name: "Off Peak Use",
         color: "Green",
         value: this.state.summaryData.greenIntervalKwh
       },
       {
+        name: "Peak Use",
         color:"Red",
         value: this.state.summaryData.redIntervalKwh
       }]

@@ -14,11 +14,14 @@ var makeBarChart = require('./barChart');
 
 var BarChartView = React.createClass({
 
+  hasLoaded: false,
+
   componentWillReceiveProps: function(newProps){
     if(newProps.data.length && newProps.data.length === 2
-      && newProps.data[0].value){
+      && newProps.data[0].value && !this.hasLoaded){
       //console.log(newProps);
       makeBarChart(newProps.data);
+      this.hasLoaded = true;
     }
   },
 
