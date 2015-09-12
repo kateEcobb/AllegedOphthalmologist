@@ -12,14 +12,18 @@ var loadNewReadings = function() {
   console.log('Loading new meter readings');
   // Need to add 1 to the Month because Javascript indexes months
   // beginning at 0....because Javascript.
-  var now = new Date(Date.now() - 24 * 60 * 60 * 1000 * 30);
+  var start = new Date(Date.now() - 24 * 60 * 60 * 1000 * 30);
+  var start_day = ("0" + (start.getUTCDate())).slice(-2);
+  var start_month = ("0" + (start.getUTCMonth() + 1)).slice(-1);
+  var start_year = start.getUTCFullYear();
+
+  var now = new Date(Date.now());
   var year = now.getUTCFullYear();
-  var month = ("0" + (now.getUTCMonth() + 1)).slice(-2)
-  var start_day = ("0" + (now.getUTCDate())).slice(-2);
+  var month = ("0" + (now.getUTCMonth() + 1)).slice(-2);
   var end_day = ("0" + (now.getUTCDate())).slice(-2);
 
   // Put start and end dates in the format expected by UtilityAPI
-  var start_date = year + '-' + month + '-' + start_day;
+  var start_date = start_year + '-' + start_month + '-' + start_day;
   var end_date = year + '-' + month + '-' + end_day;
 
   UtilityAPI.getActiveUsers(function(accounts){
