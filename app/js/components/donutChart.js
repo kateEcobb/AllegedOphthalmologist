@@ -163,7 +163,7 @@ var processData = function(data){
     var type = element.fuel;
     type = type.substr(0,1).toUpperCase() + type.substr(1).toLowerCase();
     if(type === "Renewable"){ 
-      type = "Other Renewables"
+      type = "Other Renewables";
     }
     var percentage = Math.round((element.gen_MW / totalMW)*100, 2);
     breakDown.push({type: type, percentage: percentage});

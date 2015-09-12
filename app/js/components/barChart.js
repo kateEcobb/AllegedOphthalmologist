@@ -10,8 +10,8 @@ var gridChartOffset = 3; // space between start of grid and first bar
 var maxBarWidth = 300; // width of the bar with the max value
  
 // accessor functions 
-var barLabel = function(d) { return d['name']; };
-var barValue = function(d) { return parseFloat(d['value']); };
+var barLabel = function(d) { return d.name; };
+var barValue = function(d) { return parseFloat(d.value); };
  
 // scales
 var yScale = d3.scale.ordinal().domain(d3.range(0, data.length)).rangeBands([0, data.length * barHeight]);
@@ -72,7 +72,6 @@ barsContainer.append("line")
   .attr("y1", -gridChartOffset)
   .attr("y2", yScale.rangeExtent()[1] + gridChartOffset)
   .style("stroke", "#000");
-
-}
+};
 
 module.exports = makeBarChart;

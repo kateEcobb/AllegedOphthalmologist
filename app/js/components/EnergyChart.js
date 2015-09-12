@@ -412,7 +412,6 @@ var drawCapturePad = function(options) {
   .attr('class', 'scrollText')
   .attr('text-anchor', 'middle')
   .attr('x', (scale.width - scale.axisOffset - scale.axisOffset) / 2)
-  // .attr('x', 0)
   .attr('y', scale.height - scale.headerOffset - scale.footerOffset)
   .attr('dy', '-1rem')
   .text('Click to scroll');

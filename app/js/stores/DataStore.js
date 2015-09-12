@@ -53,7 +53,7 @@ var DataStore = assign({}, EventEmitter.prototype, {
     return 0;
   },
   getCarbonRange: function(){
-    var wattTimeData = data['Watt'];
+    var wattTimeData = data.Watt;
 
     var min = Number.POSITIVE_INFINITY;
     var max = Number.NEGATIVE_INFINITY;
@@ -95,14 +95,14 @@ var DataStore = assign({}, EventEmitter.prototype, {
   computeBrackets: function(){
     var currentBin = null;
     var currentBracket = null;
-    for(var i = 0; i < data['Watt'].length; i++){
+    for(var i = 0; i < data.Watt.length; i++){
       if(currentBin === null){
         currentBracket = [null, null];
-        currentBracket[0] = data['Watt'][i].timestamp;
-        currentBin = this.getBin(data['Watt'][i].carbon);
+        currentBracket[0] = data.Watt[i].timestamp;
+        currentBin = this.getBin(data.Watt[i].carbon);
       }
-      else if(this.getBin(data['Watt'][i].carbon) !== currentBin || i === data['Watt'].length-1){
-        currentBracket[1] = data['Watt'][i].timestamp;
+      else if(this.getBin(data.Watt[i].carbon) !== currentBin || i === data.Watt.length-1){
+        currentBracket[1] = data.Watt[i].timestamp;
         if(currentBin === 'green'){
           greenTimes.push(currentBracket);
         }
@@ -114,7 +114,7 @@ var DataStore = assign({}, EventEmitter.prototype, {
     }
   },
   countUtilityApiPoints: function(){
-    var utlityApiData = data['Utility'];
+    var utlityApiData = data.Utility;
 
     // Reset Data
     summaryData.redIntervalKwh = 0;
@@ -166,7 +166,7 @@ var DataStore = assign({}, EventEmitter.prototype, {
     this.getCarbonRange();
     // console.log(summaryData.wattTimeMin, summaryData.wattTimeMax);
 
-    data['Watt'] = data['Watt'].sort(this.sortByTimestamp);
+    data.Watt = data.Watt.sort(this.sortByTimestamp);
     var oneThirdRange = ((summaryData.wattTimeMax - summaryData.wattTimeMin)/3);
     
     summaryData.redThreshold = summaryData.wattTimeMin + (oneThirdRange * 2);
