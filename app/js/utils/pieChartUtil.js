@@ -92,9 +92,9 @@ module.exports = function(wattTimeData, utilityData){
         }
       }
       if(!foundTime){
-        for(var j = 0; j < yellowTimes.length; j++){
-          var yellowStartTime = new Date(yellowTimes[j][0]);
-          var yellowEndTime = new Date(yellowTimes[j][1]);
+        for(var k = 0; k < yellowTimes.length; k++){
+          var yellowStartTime = new Date(yellowTimes[k][0]);
+          var yellowEndTime = new Date(yellowTimes[k][1]);
           if(intervalTime > yellowStartTime && intervalTime < yellowEndTime){
             yellowCount++;
             yellowKwh += utlityApiData[i].interval_kWh;
