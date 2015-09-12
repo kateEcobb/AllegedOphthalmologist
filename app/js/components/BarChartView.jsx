@@ -15,7 +15,7 @@ var makeBarChart = require('./barChart');
 var BarChartView = React.createClass({
 
   componentWillReceiveProps: function(newProps){
-    if(newProps.data.length && newProps.data.length === 3
+    if(newProps.data.length && newProps.data.length === 2
       && newProps.data[0].value){
       //console.log(newProps);
       makeBarChart(newProps.data);
