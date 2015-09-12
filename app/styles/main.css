@@ -282,6 +282,10 @@ div.login {
   text-align: center;
 }
 
+.energy-bar-graph {
+  width: 600px;
+}
+
 .energy-bar-graph rect{
   stroke: white;
 }
