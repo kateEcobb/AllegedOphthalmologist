@@ -73,8 +73,8 @@
 }
 
 .dangerBlock {
-  fill: red;
-  opacity: 0.18;
+  fill: #FC6E51;
+  opacity: 0.2;
 }
 
 .axisScale {
@@ -270,14 +270,19 @@ div.login {
   text-align: center;
 }
 
-
-.energy-bar-graph {
-  width: 600px;
-
 #weekStart { 
   margin-top: 0px !important;
   font-size: 19px !important;
+  margin-bottom: 0px !important;
+}
 
+#totalenergyused{ 
+  font-size: 15px;
+  margin-top: 0px;
+}
+
+#lastweekKWH { 
+  font-weight: 500;
 }
 
 .energy-bar-graph rect{
@@ -285,7 +290,12 @@ div.login {
 }
 
 .energy-bar-graph{ 
+  width: 600px;
   margin: 0px !important;
+  height: 100px;
+  position: absolute;
+  top: 10px;
+  right: -112px;
 }
 
 .update-pge-form {
@@ -299,24 +309,11 @@ div.login {
 }
 
 .energy-bar-graph .Green {
-  fill: #26A65B;
+  fill: #94D9BB;
 }
 
 .energy-bar-graph .Red {
-  fill: #C0392B;
-}
-
-#redText{ 
-  position: absolute;
-  top: 133px;
-  left: 45px;
-}
-
-#greenText{ 
-  position: absolute;
-  top:103px;
-  right:100px;
-  left:232px;
+  fill: #FC6E51;
 }
 
 svg {
@@ -335,6 +332,12 @@ svg {
   #profile-header{ 
     font-size: 2.25em;
     margin: 80px 0px 5em 20px; 
+  }
+  .energy-bar-graph{ 
+    width: 600px;
+    margin: 0px !important;
+    height: 100px;
+    position: static;
   }
 }
 

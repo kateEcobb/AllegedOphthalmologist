@@ -111,13 +111,9 @@ var ProfileView = React.createClass({
 
                  <h2>Last Week</h2>
                  <p className="lead section-lead" id='weekStart'>{this.state.summaryData.weekStartString} to {this.state.summaryData.weekEndString}</p>
+                 <p className='lead section-lead' id='totalenergyused'>Total Energy Used: <span id='lastweekKWH'>{Math.round(this.state.summaryData.latestWeekKwhUsed)} kWh.</span></p>
                 
-                <div id='bar'>
                  <BarChart data={this.state.barChartData}/>
-                 <span id='greenText'>{this.state.summaryData.greenIntervalKwh} KwH</span>
-                 <span id='redText'>{this.state.summaryData.redIntervalKwh} KwH</span>
-                </div>
-                 <p>Total Energy Used: <span id='lastweekKWH'>{Math.round(this.state.summaryData.latestWeekKwhUsed)} kWh.</span></p>
                  
             
 
