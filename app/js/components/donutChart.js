@@ -18,6 +18,7 @@ d3Chart.create = function(el, data, className){
     innerR: (modalSpec.width/4 - 20)*0.75,
     color: d3.scale.ordinal().range(['#528C18', '#648C85', '#B3F2C9', '#A60F2B']),
     names: d3.scale.ordinal().range(['source1','source2','source3','source4']),
+    subTitle: d3.scale.ordinal().range(['breakdownSub', 'totalSub']),
     data: processData(data),
   };
   
@@ -144,12 +145,10 @@ var toolTip = function(className, data, specs){
 
 };
 
-d3Chart.title = function(className, title){
+d3Chart.subtitle = function(className, idName, title){
   d3.select('.' + className + 'div')
-    .insert('h4', ':first-child')
-    .style({
-      'display':'inline-block',
-    })
+    .append('span')
+    .attr('id', idName)
     .text(title);
 };
 
