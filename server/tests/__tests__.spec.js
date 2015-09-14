@@ -41,10 +41,6 @@ describe('Routes', function(){
         expect(res.statusCode).toEqual(200);
         done();
       })
-    // request(url+'/', function(error, response, body){
-    //   expect(typeof body).toEqual('string');
-    //   done();
-    // });
   });
 
   it('should not let multiple people with same name signup', function(done){
@@ -93,7 +89,7 @@ describe('Routes', function(){
   });
 
   it('should have GET route for users meterreadings', function(done){
-    console.log(token, 'meterreadings');
+    // console.log(token, 'meterreadings');
     // var body = {
     //   service_uid: 13984,
     // }

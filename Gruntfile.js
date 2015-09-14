@@ -116,6 +116,15 @@ module.exports = function(grunt) {
           delay: 1000
         },
       }
+    },
+
+    concurrent: {
+      target: {
+        tasks: ['nodemon', 'jasmine_node'],
+        options: {
+          logConcurrentOutput: true,
+        }
+      }
     }
 
   });
@@ -132,6 +141,7 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-services');
   grunt.loadNpmTasks('grunt-jasmine-node-new');
   grunt.loadNpmTasks('grunt-karma');
+  grunt.loadNpmTasks('grunt-concurrent');
 
   grunt.registerTask('server-dev', function(target) {
     var nodemon = grunt.util.spawn({
@@ -164,7 +174,7 @@ module.exports = function(grunt) {
     'jshint'
   ]);
 
-  grunt.registerTask('jasmineTests', ['jasmine_node']);
+  grunt.registerTask('jasmineTests', ['concurrent']);
 
   grunt.registerTask('karmaTests', ['karma']);
 
