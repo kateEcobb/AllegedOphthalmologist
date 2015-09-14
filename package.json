@@ -9,7 +9,7 @@
   "scripts": {
     "postinstall": "grunt build",
     "start": "node server/server.js",
-    "test": "./node_modules/karma/bin/karma start"
+    "test": "grunt karmaTests"
   },
   "repository": {
     "type": "git",
