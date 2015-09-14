@@ -163,12 +163,14 @@ var processData = function(data){
     type = type.substr(0,1).toUpperCase() + type.substr(1).toLowerCase();
     if(type === "Renewable"){ 
       type = "Other Renewables";
+    } else if (type === "Other"){ 
+      type = "Non-Renewables"
     }
     var percentage = Math.round((element.gen_MW / totalMW)*100, 2);
     breakDown.push({type: type, percentage: percentage});
   });
 
-  if(breakDown[0].type === 'Other'){
+  if(breakDown[0].type === 'Non-Renewables'){
     var temp = breakDown.shift();
     breakDown.push(temp);
   }
