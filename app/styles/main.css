@@ -1,6 +1,7 @@
 /*Nav Button*/
 .nav-btn {
-  position: absolute;
+  position: fixed;
+  z-index: 8;
   top: 1em;
   left: 1em;
 }
