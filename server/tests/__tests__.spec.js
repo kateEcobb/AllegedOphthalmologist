@@ -47,24 +47,6 @@ describe('Routes', function(){
     // });
   });
 
-  //almost working but still needs work
-  xit('should have signup route', function(done){
-    request.post({
-      header: {'content-type': 'application/x-www-form-urlencoded'},
-      url: url+'/signup',
-      json: {
-        username: "admin3@blah.com",
-        password: "tightHips",
-        utility_username: "testy",
-        utility_password: 'tightHips',
-        pgeFullName: 'John Doe'
-      }
-    }, function(error, response, body){
-      expect(response.statusCode).toEqual(200);
-      done();
-    });
-  });
-
   it('should not let multiple people with same name signup', function(done){
     var body = {
       username: "admin4@blah.com",

@@ -78,6 +78,12 @@ module.exports = function(grunt) {
       all: ['server/tests/']
     },
 
+    karma: {
+      unit: {
+        configFile: 'karma.conf.js',
+      },
+    },
+
     watch: {
       server: {
         files: ['server/**/*.js'],
@@ -125,6 +131,7 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-webpack');
   grunt.loadNpmTasks('grunt-services');
   grunt.loadNpmTasks('grunt-jasmine-node-new');
+  grunt.loadNpmTasks('grunt-karma');
 
   grunt.registerTask('server-dev', function(target) {
     var nodemon = grunt.util.spawn({
@@ -157,7 +164,9 @@ module.exports = function(grunt) {
     'jshint'
   ]);
 
-  grunt.registerTask('jasTest', ['jasmine_node']);
+  grunt.registerTask('jasmineTests', ['jasmine_node']);
+
+  grunt.registerTask('karmaTests', ['karma']);
 
   grunt.registerTask('upload', function(n) {
     if (grunt.option('prod')) {
