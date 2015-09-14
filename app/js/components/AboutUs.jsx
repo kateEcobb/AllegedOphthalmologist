@@ -97,7 +97,15 @@ var AboutUs = React.createClass({
 
   makeGraphs: function(){ 
     Donuts.create('.donuts', this.state.data.Watt[0].genmix.slice(1, 4), 'donut1');
+      Donuts.subtitle('donut1','breakdownSub', 'Renewable resources breakdown');
     Donuts.create('.donuts', this.state.data.Watt[0].genmix, 'donut2');
+      Donuts.subtitle('donut2','totalSub','Resources currently powering the grid');
+
+
+                      
+    // $('.donut1div').append('<span id='breakdownSub'>Current renewable mix.</span>');
+    // $('.donut2div').append('<span id='totalSub'>Current total resource mix.</span>');
+
   },
 
   handleRegister: function(){
@@ -132,7 +140,8 @@ var AboutUs = React.createClass({
             <div className="row">
                 <div className="col-lg-12">
 
-                      <div className={donuts} style={{'maxWidth':'600px', 'margin': 'auto','paddingLeft':'23px'}}></div>
+                      <div className={donuts} style={{'maxWidth':'600px', 'margin': 'auto','paddingLeft':'23px', 'position':'relative'}}>
+                      </div>
               
                       <p className='section-paragraph'> GridAware empowers consumers to use energy more intelligently and to reduce 
                       their carbon footprint by providing 

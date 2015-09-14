@@ -115,6 +115,23 @@ hr {
     font-size: 1.25em;
 }
 
+#breakdownSub, #totalSub { 
+  font-size: 12px;
+  font-style: italic;
+  display: block;
+  margin: auto; 
+  text-align: center;
+}
+
+
+#totalSub{ 
+  transform: translate(-13px,-18px);
+}
+
+#breakdownSub { 
+  transform: translate(-15px,-18px);
+}
+
 footer {
     margin: 50px 0;
 }

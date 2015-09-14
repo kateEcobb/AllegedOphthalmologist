@@ -112,10 +112,13 @@ var ProfileView = React.createClass({
                  <h2>Last Week</h2>
                  <p className="lead section-lead" id='weekStart'>{this.state.summaryData.weekStartString} to {this.state.summaryData.weekEndString}</p>
                  <p className='lead section-lead' id='totalenergyused'>Total Energy Used: <span id='lastweekKWH'>{Math.round(this.state.summaryData.latestWeekKwhUsed)} kWh.</span></p>
+                 <p className='lead section-lead' id='totalenergyused'>That's <span id='lastweekKWH'>{this.state.summaryData.caliDifference} kWh {this.state.summaryData.qualifier}</span> an average California household's weekly electricity use.</p>
                 
                  <BarChart data={this.state.barChartData}/>
                  
                   <GraphView height={300} width={708} margin={10} tabs={false} value={GraphTypes.USER_KWH} />
+                  <p className='lead section-lead' id='explain'>The red zones represent periods of time when California's grid was 
+                  dirtiest. Try to reduce your energy consumption during those times! </p>
           </div>
         </div>
       </div>

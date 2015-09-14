@@ -22,8 +22,11 @@ var summaryData = {
   greenIntervalCount: 0,
   redIntervalCount: 0,
   greenIntervalKwh: 0,
-  redIntervalKwh: 0
+  redIntervalKwh: 0, 
+  caliDifference: 0, 
+  qualifier: null
 };
+
 
 // Bins for time intervals for red/yellow/green grid times
 var yellowTimes = [];
@@ -161,6 +164,10 @@ var DataStore = assign({}, EventEmitter.prototype, {
     
     this.computeBrackets();
     this.countUtilityApiPoints();
+    
+    var difference = 139 - Math.round(summaryData.latestWeekKwhUsed);
+    summaryData.qualifier = (difference < 0) ? 'above' : 'below';
+    summaryData.caliDifference = Math.abs(difference);
   },
   processWattTimeData: function(){
     this.getCarbonRange();
