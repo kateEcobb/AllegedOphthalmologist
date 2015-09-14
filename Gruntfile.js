@@ -69,6 +69,21 @@ module.exports = function(grunt) {
     },
 
 
+    jasmine_node: {
+      options: {
+        forceExit: true,
+        extentions: 'js',
+        includeStackTrace: true,
+      },
+      all: ['server/tests/']
+    },
+
+    karma: {
+      unit: {
+        configFile: 'karma.conf.js',
+      },
+    },
+
     watch: {
       server: {
         files: ['server/**/*.js'],
@@ -101,6 +116,15 @@ module.exports = function(grunt) {
           delay: 1000
         },
       }
+    },
+
+    concurrent: {
+      target: {
+        tasks: ['nodemon', 'jasmine_node'],
+        options: {
+          logConcurrentOutput: true,
+        }
+      }
     }
 
   });
@@ -115,6 +139,9 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-nodemon');
   grunt.loadNpmTasks('grunt-webpack');
   grunt.loadNpmTasks('grunt-services');
+  grunt.loadNpmTasks('grunt-jasmine-node-new');
+  grunt.loadNpmTasks('grunt-karma');
+  grunt.loadNpmTasks('grunt-concurrent');
 
   grunt.registerTask('server-dev', function(target) {
     var nodemon = grunt.util.spawn({
@@ -146,6 +173,10 @@ module.exports = function(grunt) {
   grunt.registerTask('test', [
     'jshint'
   ]);
+
+  grunt.registerTask('jasmineTests', ['concurrent']);
+
+  grunt.registerTask('karmaTests', ['karma']);
 
   grunt.registerTask('upload', function(n) {
     if (grunt.option('prod')) {

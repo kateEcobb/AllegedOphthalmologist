@@ -30,20 +30,20 @@ module.exports = {
     }
   },
 
-  JD: { 
-    username: "admin3@blah.com",
-    password: "tightHips",
-    token: null,
-    utilityAPIData: { 
-      account_auth: "John Doe",
-      account_uid: "7965",
-      service_uid: "14591", 
-      PGE_username: "testy",
-      bill_count: 13, 
-      utility: "DEMO", 
-      utility_service_address: "123 Main St #100, Anytown, CA 94612"
-    }
-  },
+  // JD: { 
+  //   username: "admin3@blah.com",
+  //   password: "tightHips",
+  //   token: null,
+  //   utilityAPIData: { 
+  //     account_auth: "John Doe",
+  //     account_uid: "7965",
+  //     service_uid: "14591", 
+  //     PGE_username: "testy",
+  //     bill_count: 13, 
+  //     utility: "DEMO", 
+  //     utility_service_address: "123 Main St #100, Anytown, CA 94612"
+  //   }
+  // },
 
   John: { 
     username: "admin4@blah.com",

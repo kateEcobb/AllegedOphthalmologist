@@ -33,9 +33,9 @@ var init = function(){
     console.log("Brandon saved/updated in database.")
   })
   
-  saveUser(seeds.JD, function(result){ 
-    console.log("John Doe saved/updated in database.")
-  })
+  // saveUser(seeds.JD, function(result){ 
+  //   console.log("John Doe saved/updated in database.")
+  // })
   
   saveUser(seeds.John, function(result){ 
     console.log("John saved/updated in database.")
