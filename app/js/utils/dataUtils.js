@@ -174,21 +174,21 @@ module.exports = {
       return a.time - b.time;
     });
 
-    var weekTime = 24 * 60 * 60 * 1000 * 10;
-    var weekDate = new Date(Date.now() - weekTime);
+    // var weekTime = 24 * 60 * 60 * 1000 * 10;
+    // var weekDate = new Date(Date.now() - weekTime);
     var userCarbon = [];
 
     for (i = 0; i < state.data.Utility.length; i++) {
       var userTime = new Date(state.data.Utility[i].interval_start);
-      if (userTime >= weekDate) {
-        var userEmission = userCarbonEmission(watts, state.data.Utility[i]);
-        userCarbon.push({
-          point: userEmission[0], 
-          time: userTime,
-          id: userTime.getTime(),
-          TEST: userEmission,
-        });
-      }
+      // if (userTime >= weekDate) {
+      var userEmission = userCarbonEmission(watts, state.data.Utility[i]);
+      userCarbon.push({
+        point: userEmission[0], 
+        time: userTime,
+        id: userTime.getTime(),
+        TEST: userEmission,
+      });
+      // }
     }
 
     userCarbon = userCarbon.sort(function(a, b) {

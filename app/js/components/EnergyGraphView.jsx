@@ -128,14 +128,12 @@ var EnergyGraphView = React.createClass({
 
     this.loadData()
     .then(this.loadUser)
-    // .then(this.drawMainGraph)
     .then(function() {
       that.handleTabChange(that);
     })
     .catch(function(err) {
       console.log("ERROR: ", err);
     });
-    // $('.col-lg-12').
   },
 
   componentDidUpdate: function() {
