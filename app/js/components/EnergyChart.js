@@ -18,7 +18,7 @@ var GraphTypes = require('../constants/Constants.js').GraphTypes;
   Call graph function to utilize
 */
 var graph = function(el, props, state) {
-  // var parsedState = utils.parseState(state);
+
   var options = initGraph(el, props, state);
 
   // Run the Tasks needed to draw each function
@@ -38,7 +38,7 @@ var initGraph = function(el, props, state) {
   var data;
   options.graphType = props.type || GraphTypes.MAIN;
 
-  // DATA ===============================
+  // DATA ===============================================================================
   switch(options.graphType) {
 
     // Main Graph Types
@@ -75,7 +75,7 @@ var initGraph = function(el, props, state) {
       break;
   }
 
-  // SCALE ==============================
+  // SCALE ================================================================================
   var scale = options.scale = {
     height: parseInt(props.height, 10),
     width: parseInt(props.width, 10),
@@ -94,22 +94,39 @@ var initGraph = function(el, props, state) {
   var filterIndex = utils.bisectDateIndex(data, filterDate);
   scale.range = [data[filterIndex].time, data[data.length - 1].time];
 
-  // Set up the yRange
-  scale.yRange = d3.scale.linear().domain([d3.min(data, function(datum) {
+  // Calculate the absolute y range
+  scale.yMin = d3.min(data, function(datum) {
     return datum.point * scale.yMinRatio;
-  }), d3.max(data, function(datum) {
+  });
+  scale.yMax = d3.max(data, function(datum) {
     return datum.point * scale.yMaxRatio;
-  })]).nice()
+  });
+
+  // Set up the yRange
+  scale.yRange = d3.scale.linear()
+  .domain([scale.yMin, scale.yMax]).nice()
   .range([scale.height - scale.headerOffset - scale.footerOffset, 0]);
 
   // Set up the xRange - Time Scale
-  scale.xRange = d3.time.scale().domain([ 
-    scale.range[0],
-    scale.range[1],
-  ])
+  scale.xRange = d3.time.scale()
+  .domain([scale.range[0], scale.range[1]])
   .range([0, scale.width - scale.axisOffset - scale.axisOffset]);
 
-  // GRAPH ==============================
+  // Define the initial state of the axes
+  scale.yAxis = d3.svg.axis().scale(scale.yRange).orient(scale.orient);
+  scale.xAxis = d3.svg.axis().scale(scale.xRange);
+
+  // Define the Line Path Function
+  scale.line = d3.svg.line()
+                .x(function(datum) {
+                  return scale.xRange( datum.time );
+                })
+                .y(function(datum) {
+                  return scale.yRange( datum.point );
+                })
+                .interpolate('monotone');
+
+  // GRAPH ==============================================================================
   var graph = options.graph = d3.select(el).append('svg:svg')
                               .attr('class', 'energyGraph')
                               .attr('width', scale.width + scale.margin + scale.margin)
@@ -117,6 +134,7 @@ var initGraph = function(el, props, state) {
                             .append('svg:g')
                               .attr('transform', utils.translate(scale.margin, scale.margin));
 
+  // Draw the Clip Path for drawing the line
   graph.append('svg:clipPath')
   .attr('id', 'clip')
   .append('svg:rect')
@@ -133,22 +151,48 @@ var drawAxis = function(options) {
 
   var graph = options.graph;
   var scale = options.scale;
+  var data = options.data;
 
-  // Set up and draw the Y Axis
-  var yAxis = d3.svg.axis().scale(scale.yRange).orient(scale.orient);
-  graph.append('svg:g')
+  // Update the time scale domain
+  options.scale.xRange.domain([scale.range[0], scale.range[1]]);
+
+  // Update the point scale domain - we only want to recalculate the y scale if the local max/min is substantially 
+  // different from the global max/min
+  var localData = data.filter(function(datum) {
+    return datum.time >= scale.range[0] && datum.time <= scale.range[1];
+  });
+  var localMax = d3.max(localData, function(datum) { return datum.point * scale.yMaxRatio; });
+  var localMin = d3.min(localData, function(datum) { return datum.point * scale.yMinRatio; });
+  options.scale.yRange.domain([
+    (scale.yMin / localMin < 0.65) ? scale.yMin * 0.65 : scale.yMin, 
+    (localMax / scale.yMax < 0.65) ? scale.yMax * 0.65 : scale.yMax
+  ]).nice();
+
+  // Do it the D3 Way /////////////////////////////////////////////
+
+  // DATA JOIN
+  var graphYAxis = graph.selectAll('.y.axis')
+                    .data([{id:"yaxis"}], function(datum) {return datum.id;});
+  var graphXAxis = graph.selectAll('.x.axis')
+                    .data([{id:'xaxis'}], function(datum) {return datum.id;});
+
+  // UPDATE 
+
+  // ENTER
+  graphYAxis.enter().append('svg:g')
   .attr('class', 'y axis')
-  .attr('transform', utils.translate(scale.axisOffset, scale.headerOffset))
-  .call(yAxis);
+  .attr('transform', utils.translate(scale.axisOffset, scale.headerOffset));
+  graphXAxis.enter().append('svg:g')
+  .attr('class', 'x axis')
+  .attr('transform', utils.translate(scale.axisOffset, scale.height - scale.footerOffset));
 
-  // Set up and draw the X Axis if this is not a overlay
-  if (!options.overlay) {
-    var xAxis = options.scale.xAxis = d3.svg.axis().scale(scale.xRange);
-    graph.append('svg:g')
-    .attr('class', 'x axis')
-    .attr('transform', utils.translate(scale.axisOffset, scale.height - scale.footerOffset))
-    .call(xAxis);
-  }
+  // UPDATE + ENTER
+  graphYAxis.transition().duration(750).call(scale.yAxis);
+  graphXAxis.transition().duration(750).call(scale.xAxis);
+
+  // EXIT
+  graphYAxis.exit().remove();
+  graphXAxis.exit().remove();
 };
 
 var drawLine = function(options) {
@@ -157,26 +201,28 @@ var drawLine = function(options) {
   var scale = options.scale;
   var data  = options.data;
 
-  // Define the Line that the Path will take
-  var lineFunc = options.scale.line = d3.svg.line()
-                  .x(function(datum) {
-                    return scale.xRange( datum.time );
-                  })
-                  .y(function(datum) {
-                    return scale.yRange( datum.point );
-                  })
-                  .interpolate('monotone');
+  // DATA JOIN //
+  var linePath = graph.selectAll('.energyPath')
+                  .data([{id:'energyPath'}], function(datum) {return datum.id;});
 
-  // Draw the Path
-  graph.append('svg:path')
-  .attr('d', lineFunc(data))
+  // UPDATE //
+
+  // ENTER //
+  linePath.enter().append('svg:path')
   .attr('class', 'energyPath')
-  .attr('clip-path', 'url(#clip)')
-  .attr('transform', utils.translate(scale.axisOffset, scale.headerOffset) );
+  .attr('clip-path', 'url(#clip)');
 
-  return;
+  // UPDATE + ENTER //
+  linePath
+  .attr('transform', utils.translate(scale.axisOffset, scale.headerOffset))
+  .transition().duration(750)
+  .attr('d', scale.line(data));
+
+  // EXIT //
+  linePath.exit().remove();
 };
 
+// Somewhat DEPRECATED as nothing uses it
 var drawPoints = function(options) {
   var graph = options.graph;
   var scale = options.scale;
@@ -229,8 +275,7 @@ var drawTimeBar = function(options) {
   var scale = options.scale;
   var data = options.data;
 
-  var timeNow = new Date(Date.now());
-  var currentX = scale.xRange(timeNow);
+  var currentX = scale.xRange(new Date(Date.now()));
 
   var info = [{x: (currentX - scale.barWidth / 2), id: '1234'}];
 
@@ -258,6 +303,35 @@ var drawTimeBar = function(options) {
 
   // EXIT
   timeBar.exit().remove();
+
+  drawTimeBarTitle(options, timeBar, info[0].x);
+};
+
+var drawTimeBarTitle = function(options, timeBar, x) {
+
+  var graph = options.graph;
+  var scale = options.scale;
+
+  // DATA JOIN //
+  var title = graph.selectAll('.timeBarTitle')
+              .data([{id:'timeBarTitle'}], function(datum) {return datum.id;});
+
+  // ENTER //
+  title.enter().append('svg:text')
+  .attr('class', 'timeBarTitle')
+  .attr('text-rendering', 'optimizeLegibility')
+  .attr('clip-path', 'url(#clip)')
+  .attr('y', '1rem')
+  .text('Current Time');
+
+  // UPDATE + ENTER //
+  title
+  .attr('transform', utils.translate(scale.axisOffset, scale.headerOffset))
+  .transition().duration(750)
+  .attr('x', x - 2);
+
+  // EXIT //
+  title.exit().remove();
 };
 
 var drawPredictPoint = function(options) {
@@ -359,16 +433,16 @@ var drawDangerZone = function(options) {
   zoneRects.exit().remove();
 };
 
-var drawCapturePad = function(options) {
+var drawFocus = function(options) {
 
   var graph = options.graph;
   var scale = options.scale;
   var data = options.data;
 
   var halfHeight = (scale.height - scale.headerOffset - scale.footerOffset) / 2;
-  var height = scale.height - scale.headerOffset - scale.headerOffset;
-  var width = scale.width - scale.axisOffset - scale.axisOffset;
-  var buttonRadius = width / height * 2;
+  // var graphHeight = scale.height - scale.headerOffset - scale.footerOffset;
+  // var graphWidth = scale.width - scale.axisOffset - scale.axisOffset;
+  // var buttonRadius = graphWidth / graphHeight * 2; 
 
   // Draw the focus/////////////////////////////////////////////////////////
   var focus = graph.append('svg:g')
@@ -416,6 +490,7 @@ var drawCapturePad = function(options) {
   .attr('dy', '-1rem')
   .text('Click to scroll');
 
+  /* Might want to refactor these 'buttons' into a svg def for code reduce and reuse */
    // Left Button//////////////////////////
   var leftButton = focus.append('svg:g')
   .attr('class', 'graphButton left')
@@ -448,126 +523,176 @@ var drawCapturePad = function(options) {
   .attr('transform', utils.translate(scale.width - 3 * scale.axisOffset - 8, halfHeight - 8))
   .attr('d', 'M0,0 L0,16 L20,8 z');
 
+  return focus;
+};
 
-  //////////////////////////////////////////////////////////////////////////
-  // Surface Event Functions ///////////////////////////////////////////////
-  
-  var mouseMove = function() {
+var updateFocus = function(options, update, focus) {
 
-    // Get date associated with the mouse position
-    var mouseDate = scale.xRange.invert(d3.mouse(this)[0]);
+  /*
+  update = {
+    x: absolute x position on graph
+    y: absolute y position on graph
+    dy: y axis offset
+    nearestDatum: Date
+    textAnchor: String for text-anchor css
+  }
+  */
 
-    // Calculate get the index right before the mouse date and then find whether left or right is closer
-    var index = utils.bisectDateIndex(data, mouseDate);
-    var nearestDatum = (mouseDate - data[index].time > data[index + 1].time - mouseDate) ? data[index + 1] : data[index];
+  var graph = options.graph;
+  var scale = options.scale;
+  var data = options.data;
 
-    var x = scale.xRange(nearestDatum.time);
-    var y = scale.yRange(nearestDatum.point);
+  // Update the position of all the focus elements /////////////////////////////////////////////////////////
+  focus.select('.focal')  
+  .attr('transform', utils.translate(update.x, update.y));  
 
-    // Calculate dx and dy based on how far along the graph we are. This is for moving the tooltip around 
-    var textAnchor = (x / (scale.width - scale.axisOffset - scale.axisOffset)) < 0.88 ? 'start' : 'end';
-    var dy = (y / (scale.height - scale.headerOffset - scale.footerOffset)) < 0.1 ? ['4rem', '2rem'] : ['-3rem', '-1rem'];
+  focus.select('.focusXLine')
+  .attr('transform', utils.translate(update.x, update.y))
+  .attr('y2', scale.height - scale.headerOffset - scale.footerOffset - update.y);
 
-    // Update the position of all the focus elements /////////////////////////////////////////////////////////
-    focus.select('.focal')  
-    .attr('transform', utils.translate(x, y));  
+  focus.select('.focusYLine')  
+  .attr('transform', utils.translate(0, update.y));  
 
-    focus.select('.focusXLine')
-    .attr('transform', utils.translate(x, y))
-    .attr('y2', scale.height - scale.headerOffset - scale.footerOffset - y);
+  // We had to manually move both highlight and info in order to force this order of rendering
+  focus.select('.focusData.highlight')
+  .attr('transform', utils.translate(update.x, update.y))
+  .attr('text-anchor', update.textAnchor)
+  .attr('dy', update.dy[0])
+  .text( (Math.round((update.nearestDatum.point + 0.00001) * 100) / 100) + ' ' + options.unit);
 
-    focus.select('.focusYLine')  
-    .attr('transform', utils.translate(0, y));  
+  focus.select('.focusData.info')
+  .attr('transform', utils.translate(update.x, update.y))
+  .attr('text-anchor', update.textAnchor)
+  .attr('dy', update.dy[0])
+  .text( (Math.round((update.nearestDatum.point + 0.00001) * 100) / 100) + ' ' + options.unit);
 
-    // We had to manually move both highlight and info in order to force this order of rendering
-    focus.select('.focusData.highlight')
-    .attr('transform', utils.translate(x, y))
-    .attr('text-anchor', textAnchor)
-    .attr('dy', dy[0])
-    .text( (Math.round((nearestDatum.point + 0.00001) * 100) / 100) + ' ' + options.unit);
+  focus.select('.focusDate.highlight')
+  .attr('transform', utils.translate(update.x, update.y))
+  .attr('text-anchor', update.textAnchor)
+  .attr('dy', update.dy[1])
+  .text( utils.formatFocusDate(update.nearestDatum.time) );
 
-    focus.select('.focusData.info')
-    .attr('transform', utils.translate(x, y))
-    .attr('text-anchor', textAnchor)
-    .attr('dy', dy[0])
-    .text( (Math.round((nearestDatum.point + 0.00001) * 100) / 100) + ' ' + options.unit);
+  focus.select('.focusDate.info')
+  .attr('transform', utils.translate(update.x, update.y))
+  .attr('text-anchor', update.textAnchor)
+  .attr('dy', update.dy[1])
+  .text( utils.formatFocusDate(update.nearestDatum.time) );
+};
 
-    focus.select('.focusDate.highlight')
-    .attr('transform', utils.translate(x, y))
-    .attr('text-anchor', textAnchor)
-    .attr('dy', dy[1])
-    .text( utils.formatFocusDate(nearestDatum.time) );
+var drawCapturePad = function(options) {
 
-    focus.select('.focusDate.info')
-    .attr('transform', utils.translate(x, y))
-    .attr('text-anchor', textAnchor)
-    .attr('dy', dy[1])
-    .text( utils.formatFocusDate(nearestDatum.time) );
-  };
+  var graph = options.graph;
+  var scale = options.scale;
+  var data = options.data;
 
-  var click = function() {
+  // // Draw the focus//////////////////////////////////////////
+  var focus = drawFocus(options);
 
-    // Calculate the new Domain
-    var left;
-    var right;
-    var oneDay = 24 * 60 * 60 * 1000;
-
-    if (d3.mouse(this)[0] < (scale.width - scale.axisOffset - scale.axisOffset) / 2) {
-      left = new Date(scale.range[0].getTime() - oneDay);
-      right = new Date(scale.range[1].getTime() - oneDay);
-
-      // If we keep going left but hit end before oneDay
-      var rightOffset = scale.range[0] - data[0].time;
-      var residualRight = new Date(scale.range[1].getTime() - rightOffset);
-
-      scale.range = left >= data[0].time ? [left, right] : [data[0].time, residualRight];
-    }
-    else {
-      left = new Date(scale.range[0].getTime() + oneDay);
-      right = new Date(scale.range[1].getTime() + oneDay);
-
-      // If we keep going right but hit end before oneDay
-      var leftOffset = data[data.length - 1].time - scale.range[1];
-      var residualLeft = new Date(scale.range[0].getTime() + leftOffset);
-
-      scale.range = right < data[data.length - 1].time ? [left, right] : [residualLeft, data[data.length - 1].time];
-    }
-
-    // Update the time scale domain
-    options.scale.xRange.domain([scale.range[0], scale.range[1]]);
-
-    // Update the Line Path
-    var update = graph.transition().duration(750);
-    update.select('.x.axis').call(scale.xAxis);
-    update.select('.energyPath').attr('d', scale.line(data));
-
-    // Update Various graph components
-    drawPredictPoint(options);
-    drawTimeBar(options);
-    if (options.graphType === GraphTypes.USER_KWH) {
-      drawDangerZone(options);
-    }
-
-    // Update the Buttons
-    focus.select('.graphButton.left')
-    .transition().duration(750)
-    .attr('opacity', scale.range[0] > data[0].time ? 0.35 : 0);
-    focus.select('.graphButton.right')
-    .transition().duration(750)
-    .attr('opacity', scale.range[1] < data[data.length - 1].time ? 0.35 : 0);
-  };
-
-  // Draw the Surface
+  // Draw the Surface////////////////////////////////////////////
   var surface = graph.append('svg:rect')
   .attr('transform', utils.translate(scale.axisOffset, scale.headerOffset))
   .attr('width', scale.width - scale.axisOffset - scale.axisOffset)
   .attr('height', scale.height - scale.headerOffset - scale.footerOffset)
   .style('fill', 'none')
+  // Event Listeners
   .style('pointer-events', 'all')
   .on('mouseover', function() { 
     focus.style('display', null); })
   .on('mouseout', function() { 
     focus.style('display', 'none'); })
-  .on('mousemove', mouseMove)
-  .on('click', click);
+  .on('mousemove', function() {
+    surfaceMove(options, d3.mouse(this), focus);
+  })
+  .on('click', function() {
+    surfaceClick(options, d3.mouse(this), focus);
+  });
+};
+
+// EVENT FUNCTIONS //////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////
+var surfaceMove = function(options, mouse, focus) {
+
+  var scale = options.scale;
+  var data = options.data;
+  var update = {};
+
+  // Get date associated with the mouse position
+  var mouseDate = scale.xRange.invert(mouse[0]);
+
+  // Calculate get the index right before the mouse date and then find whether left or right is closer
+  var index = utils.bisectDateIndex(data, mouseDate);
+  var nearestDatum = update.nearestDatum = (mouseDate - data[index].time > data[index + 1].time - mouseDate) ? data[index + 1] : data[index];
+
+  var x = update.x = scale.xRange(nearestDatum.time);
+  var y = update.y = scale.yRange(nearestDatum.point);
+
+  // Calculate dx and dy based on how far along the graph we are. This is for moving the tooltip around 
+  update.textAnchor = (x / (scale.width - scale.axisOffset - scale.axisOffset)) < 0.88 ? 'start' : 'end';
+  update.dy = (y / (scale.height - scale.headerOffset - scale.footerOffset)) < 0.1 ? ['4rem', '2rem'] : ['-3rem', '-1rem'];
+
+  /*
+  update = {
+    x: absolute x position on graph
+    y: absolute y position on graph
+    dy: y axis offset
+    nearestDatum: Date
+    textAnchor: String for text-anchor css
+  }
+  */
+
+  updateFocus(options, update, focus);
+};
+
+var surfaceClick = function(options, mouse, focus) {
+
+  var graph = options.graph;
+  var scale = options.scale;
+  var data = options.data;
+
+  // Calculate the new Domain
+  var left;
+  var right;
+  var oneDay = 24 * 60 * 60 * 1000;
+
+  if (mouse[0] < (scale.width - scale.axisOffset - scale.axisOffset) / 2) {
+    left = new Date(scale.range[0].getTime() - oneDay);
+    right = new Date(scale.range[1].getTime() - oneDay);
+
+    // If we keep going left but hit end before oneDay
+    var rightOffset = scale.range[0] - data[0].time;
+    var residualRight = new Date(scale.range[1].getTime() - rightOffset);
+
+    scale.range = left >= data[0].time ? [left, right] : [data[0].time, residualRight];
+  }
+  else {
+    left = new Date(scale.range[0].getTime() + oneDay);
+    right = new Date(scale.range[1].getTime() + oneDay);
+
+    // If we keep going right but hit end before oneDay
+    var leftOffset = data[data.length - 1].time - scale.range[1];
+    var residualLeft = new Date(scale.range[0].getTime() + leftOffset);
+
+    scale.range = right < data[data.length - 1].time ? [left, right] : [residualLeft, data[data.length - 1].time];
+  }
+
+  // Update the Axis
+  drawAxis(options);
+
+  // Update the Line Path
+  drawLine(options);
+
+  // Update Various graph components
+  drawPredictPoint(options);
+  drawTimeBar(options);
+  if (options.graphType === GraphTypes.USER_KWH) {
+    drawDangerZone(options);
+  }
+
+  // Update the Buttons
+  focus.select('.graphButton.left')
+  .transition().duration(750)
+  .attr('opacity', scale.range[0] > data[0].time ? 0.35 : 0);
+  focus.select('.graphButton.right')
+  .transition().duration(750)
+  .attr('opacity', scale.range[1] < data[data.length - 1].time ? 0.35 : 0);
 };

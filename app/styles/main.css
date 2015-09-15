@@ -45,6 +45,12 @@
   opacity: 0.5;
 }
 
+.timeBarTitle {
+  text-anchor: end;
+  fill: blue;
+  opacity: 0.65;
+}
+
 .predictPoint {
   r: 3;
   fill: #8080FF;
