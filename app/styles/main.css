@@ -1,3 +1,35 @@
+/*Images*/
+.circle-image{
+    width:200px;
+    height:200px;
+    border-radius:50%;
+    display:inline-block;
+    background-position-y:25%; 
+    background-size: cover;
+    margin: 19px;
+}
+
+#john{ 
+  background-image:url('./images/john.jpg');
+}
+
+#kate{ 
+  background-image:url('./images/kate.jpg');
+  background-position-x: -72px;
+  background-size: 180%;
+  background-position-y: -37px;
+}
+
+#drew{ 
+  background-image:url('./images/drew.jpg');
+}
+
+.photoContainer{ 
+  width: 714px;
+  margin: auto;
+  display: block;
+}
+
 /*Nav Button*/
 .nav-btn {
   position: fixed;
