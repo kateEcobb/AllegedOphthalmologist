@@ -86,6 +86,8 @@
 .dangerBlock {
   fill: #FC6E51;
   opacity: 0.2;
+  stroke: black;
+  stroke-width: 0.5;
 }
 
 .axisScale {

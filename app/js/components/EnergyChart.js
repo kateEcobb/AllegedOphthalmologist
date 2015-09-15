@@ -18,7 +18,17 @@ var GraphTypes = require('../constants/Constants.js').GraphTypes;
   Call graph function to utilize
 */
 var graph = function(el, props, state) {
-
+  /*
+  == Options Object ==================================================
+    graph:      - Pointer     - Reference to the graph node
+    scale:      - Object      - Contains the various lengths, ratios, ranges, etc that the graph needs to draw
+    data:       - Array       - Parsed dataset of objects to graph
+    graphType:  - String      - Type of graph to draw 
+    unit:       - String      - Unit measurement of the y axis of graph
+    range:      - Integer     - Number of days to show on graph at a time
+    tasks:      - Array       - LIst of draw functions to call for a given graph type
+  =====================================================================
+  */
   var options = initGraph(el, props, state);
 
   // Run the Tasks needed to draw each function
@@ -107,12 +117,12 @@ var initGraph = function(el, props, state) {
   .domain([scale.yMin, scale.yMax]).nice()
   .range([scale.height - scale.headerOffset - scale.footerOffset, 0]);
 
-  // Set up the xRange - Time Scale
+  // Set up the xRange --- Time Scale
   scale.xRange = d3.time.scale()
   .domain([scale.range[0], scale.range[1]])
   .range([0, scale.width - scale.axisOffset - scale.axisOffset]);
 
-  // Define the initial state of the axes
+  // Define the axes and the initial scale
   scale.yAxis = d3.svg.axis().scale(scale.yRange).orient(scale.orient);
   scale.xAxis = d3.svg.axis().scale(scale.xRange);
 
@@ -420,6 +430,12 @@ var drawDangerZone = function(options) {
   .attr('height', scale.height - scale.headerOffset - scale.footerOffset)
   .attr('width', function(datum) {
     return scale.xRange(datum[1]) - scale.xRange(datum[0]);
+  })
+  .attr('stroke-dasharray', function(datum) {
+    var width = scale.xRange(datum[1]) - scale.xRange(datum[0]);
+    var height = scale.height - scale.headerOffset - scale.footerOffset;
+    var dash = "0, " + width + ", " + height + ', ' + width + ', ' + height;
+    return dash;
   });
 
   // UPDATE & ENTER
