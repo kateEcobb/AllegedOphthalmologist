@@ -205,6 +205,21 @@ var AboutUs = React.createClass({
             </div>
         </div>
       </section>
+
+      <section id="photos">
+        <div className='container'>
+          <div className='row'>
+            <div className='col-lg-12'>
+            <div className='photoContainer'>
+              <a href={'http://www.github.com/johndrkurtcom'} className='circle-image' id='john'></a>
+              <a href={'http://www.github.com/kateecobb'} className='circle-image' id='kate'></a>
+              <a href={'http://www.github.com/andrewrweber'} className='circle-image' id='drew'></a>
+            </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
         </div>
       </div>
     );

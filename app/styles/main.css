@@ -1,3 +1,37 @@
+/*Images*/
+.circle-image{
+    width:160px;
+    height:160px;
+    border-radius:50%;
+    display:inline-block;
+    background-position-y:25%; 
+    background-size: cover;
+    margin: 19px;
+}
+
+#john{ 
+  background-image:url('./images/john.jpg');
+}
+
+#kate{ 
+  background-image:url('./images/kate.jpg');
+  background-position-x: -72px;
+  background-size: 180%;
+  background-position-y: -29px;
+}
+
+#drew{ 
+  background-image:url('./images/drew.jpg');
+}
+
+.photoContainer{ 
+    display: flex;
+    justify-content: space-between;
+    min-width: 596px;
+    max-width: 800px;
+    margin: auto;
+}
+
 /*Nav Button*/
 .nav-btn {
   position: fixed;
