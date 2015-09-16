@@ -1,7 +1,7 @@
 /*Images*/
 .circle-image{
-    width:200px;
-    height:200px;
+    width:160px;
+    height:160px;
     border-radius:50%;
     display:inline-block;
     background-position-y:25%; 
@@ -17,7 +17,7 @@
   background-image:url('./images/kate.jpg');
   background-position-x: -72px;
   background-size: 180%;
-  background-position-y: -37px;
+  background-position-y: -29px;
 }
 
 #drew{ 
@@ -25,9 +25,11 @@
 }
 
 .photoContainer{ 
-  width: 714px;
-  margin: auto;
-  display: block;
+    display: flex;
+    justify-content: space-between;
+    min-width: 596px;
+    max-width: 800px;
+    margin: auto;
 }
 
 /*Nav Button*/
