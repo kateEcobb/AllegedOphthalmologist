@@ -55,7 +55,7 @@ var userCarbonEmission = function(watts, datum) {
 
   }
   else {
-    userCarbonEmission = watts[wattIndex].carbon * power / 1000;
+    userCarbonEmission = [watts[wattIndex].carbon * power / 1000, watts[wattIndex], time, power];
   }
   return userCarbonEmission;
 };
@@ -88,7 +88,6 @@ module.exports = {
       if (wattTime >= wattDateFilter) {
         watts.push({
           point: state.data.Watt[i].carbon,
-          // time: new Date((new Date(state.data.Watt[i].timestamp)).getTime()),
           time: wattTime,
           id: wattTime.getTime(),
           market: state.data.Watt[i].market,
@@ -134,18 +133,9 @@ module.exports = {
 
   parseUserKwhData: function(state) {
     var userKwh = [];
-    var weekTime = 24 * 60 * 60 * 1000 * 10;
-    var weekDate = new Date(Date.now() - weekTime);
 
     for (var i = 0; i < state.data.Utility.length; i++) {
       var userTime = new Date(state.data.Utility[i].interval_start);
-      // if (userTime >= weekDate) {
-      //   userKwh.push({
-      //     point: parseFloat(state.data.Utility[i].interval_kWh),
-      //     time: userTime,
-      //     id: userTime.getTime(),
-      //   });
-      // }
       userKwh.push({
         point: parseFloat(state.data.Utility[i].interval_kWh),
         time: userTime,
@@ -162,6 +152,8 @@ module.exports = {
 
   parseUserCarbonData: function(state) {
 
+    // Parse the raw watt data for the data that we need and store it in a new array and 
+    // sort by time
     var watts = [];
     for (var i = 0; i < state.data.Watt.length; i++) {
       watts.push({
@@ -174,13 +166,10 @@ module.exports = {
       return a.time - b.time;
     });
 
-    // var weekTime = 24 * 60 * 60 * 1000 * 10;
-    // var weekDate = new Date(Date.now() - weekTime);
     var userCarbon = [];
 
     for (i = 0; i < state.data.Utility.length; i++) {
       var userTime = new Date(state.data.Utility[i].interval_start);
-      // if (userTime >= weekDate) {
       var userEmission = userCarbonEmission(watts, state.data.Utility[i]);
       userCarbon.push({
         point: userEmission[0], 
@@ -188,7 +177,6 @@ module.exports = {
         id: userTime.getTime(),
         TEST: userEmission,
       });
-      // }
     }
 
     userCarbon = userCarbon.sort(function(a, b) {
@@ -204,15 +192,16 @@ module.exports = {
     var dangerZonesResults = [];
     var zone = [];
     var inZone = false;
+    var CARBON_LINE = 1250;
 
     // Need to set up better filtering for the determining start and end points
     // For entire watt array find [start, end] times for danger blocks
     watts.forEach(function(datum, i) {
-      if (datum.point >= 1250 && !inZone) {
+      if (datum.point >= CARBON_LINE && !inZone) {
         zone.push(datum.time);
         inZone = !inZone;
       }
-      else if (datum.point <= 1250 && inZone) {
+      else if (datum.point <= CARBON_LINE && inZone) {
         zone.push(watts[i - 1].time);
         dangerZones.push(zone);
         zone = [];

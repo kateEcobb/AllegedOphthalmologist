@@ -1,14 +1,10 @@
 var React = require('react');
-var d3 = require('d3');
 
 var EnergyChart = require('./EnergyChart.js');
 var GraphTypes = require('../constants/Constants.js').GraphTypes;
 
 var mui = require('material-ui');
-var ThemeManager = new mui.Styles.ThemeManager();
-var Card = mui.Card;
 var Paper = mui.Paper;
-
 
 // Actions
 var ViewActions = require('./../actions/ViewActions');
@@ -24,7 +20,7 @@ var GraphToolBar = require('./graphToolBar.jsx');
 /*
   Exposed Properties
 
-  width   - Integer  - width of the graphContainer
+  width   - Integer  - width of the graphContainer, defaults to parent width on potential overflow
   height  - Integer  - height of the graphContainer
   margin  - Integer  - margin around the chartContainer
   tabs    - Boolean  - Choose whether or not to show the tabs bar
@@ -100,16 +96,28 @@ var EnergyGraphView = React.createClass({
     });
   },
 
+  setWidth: function() {
+    var parentWidth = $('.graphOuterContainer').innerWidth();
+    var width = parentWidth > this.props.width ? this.props.width : parentWidth;
+    this.setState({width: width});
+  },
+
   handleResize: function() {
-    this.setState({width: $('.graphOuterContainer').innerWidth()});
-    this.handleTabChange(this);
+    this.setWidth();
+    this.handleViewChange(this);
   },
 
   loadGraph: function(grapher) {
+
+    // Display the load spinner
     var spinnerNode = React.findDOMNode(this.refs.graphSpinner);
-    var spinner = d3.select(spinnerNode).style('display', null);
+    spinnerNode.style.display = null;
+
+    // Draw the grapher callback
     grapher();
-    spinner.style('display', 'none');
+
+    // Hide the load Spinner
+    spinnerNode.style.display = 'none';
   },
 
   componentDidMount: function() {
@@ -122,17 +130,16 @@ var EnergyGraphView = React.createClass({
     // Set other listeners
     window.addEventListener('resize', this.handleResize);
 
-    // I'm not comfortable with doing a random set state here, but I don't know where else to 
-    // safely ask for innerWidth(), strongly consider refactor
-    this.setState({width: $('.graphOuterContainer').innerWidth()});
+    // Set States
+    this.setWidth();
 
     this.loadData()
     .then(this.loadUser)
     .then(function() {
-      that.handleTabChange(that);
+      that.handleViewChange(that);
     })
     .catch(function(err) {
-      console.log("ERROR: ", err);
+      throw new Error(err);
     });
   },
 
@@ -151,12 +158,7 @@ var EnergyGraphView = React.createClass({
     var el = React.findDOMNode(this.refs.graphContainer);
     el.innerHTML = '';
 
-    EnergyChart.graph(el, {
-      height: this.props.height,
-      width: this.state.width - 2 * this.props.margin,
-      margin: this.props.margin,
-      type: GraphTypes.MAIN,
-    }, this.state);
+    this.callEnergyChart(el, GraphTypes.MAIN);
   },
 
   drawUserGraph: function() {
@@ -164,29 +166,28 @@ var EnergyGraphView = React.createClass({
     var el = React.findDOMNode(this.refs.graphContainer);
     el.innerHTML = '';
 
-    if (this.state.user.username) {
-      if (this.state.data.Utility.length > 1) {
-        EnergyChart.graph(el, {
-          height: this.props.height,
-          width: this.state.width - 2 * this.props.margin,
-          margin: this.props.margin,
-          type: GraphTypes.USER_KWH,
-        }, this.state);
-      }
+    if (this.state.user.username && this.state.data.Utility.length > 1) {
+      this.callEnergyChart(el, GraphTypes.USER_KWH);
     }
     else {
-      EnergyChart.graph(el, {
-        height: this.props.height,
-        width: this.state.width - 2 * this.props.margin,
-        margin: this.props.margin,
-        type: GraphTypes.USER_REQUIRE,
-      }, this.state);
+      this.callEnergyChart(el, GraphTypes.USER_REQUIRE);
     }
   },
 
-  handleTabChange: function(tab) {
+  callEnergyChart: function(el, type) {
 
-    switch(tab.props.value) {
+    EnergyChart.graph(el, {
+      height: this.props.height,
+      width: this.state.width - 2 * this.props.margin,
+      margin: this.props.margin,
+      type: type,
+    }, this.state);
+
+  },
+
+  handleViewChange: function(view) {
+
+    switch(view.props.value) {
 
       case GraphTypes.MAIN:
         this.loadGraph(this.drawMainGraph);
@@ -198,14 +199,14 @@ var EnergyGraphView = React.createClass({
 
       default:
         var el = React.findDOMNode(this.refs.graphContainer);
-        console.log("TAB ERROR");
         el.innerHTML = '';
+        throw new Error('EnergyGraphView - Tab/View Error - Tried to load an unknown Graph Type');
         break;
     }
   },
 
   render: function () {
-    var tabs = this.props.tabs ? <GraphToolBar handleTabChange={this.handleTabChange} ref='graphToolBar' value={this.props.value} /> : "";
+    var tabs = this.props.tabs ? <GraphToolBar handleTabChange={this.handleViewChange} ref='graphToolBar' value={this.props.value} /> : "";
     return (
 
       <Paper className="mainGraphView" style={{margin: '30px 0'}}>
