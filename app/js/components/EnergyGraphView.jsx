@@ -139,7 +139,6 @@ var EnergyGraphView = React.createClass({
       that.handleViewChange(that);
     })
     .catch(function(err) {
-      console.log("ERROR: ", err);
       throw new Error(err);
     });
   },
