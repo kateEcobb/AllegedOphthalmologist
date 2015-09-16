@@ -16,12 +16,12 @@ var webpackConfig = {
 const karmaConfig = function (config) {
   config.set({
     basePath: "",
-    frameworks: ["jasmine"],
+    frameworks: ["jasmine", 'phantomjs-shim'],
     reporters: ["progress", 'spec'],
     port: 9876,
     colors: true,
     autoWatch: false,
-    browsers: ["Chrome"],
+    browsers: ["PhantomJS"],
     singleRun: true,
 
     files: ["tests.webpack.js"],
@@ -34,6 +34,8 @@ const karmaConfig = function (config) {
       require("karma-spec-reporter"),
       require("karma-webpack"),
       require("karma-chrome-launcher"),
+      require("karma-phantomjs-launcher"),
+      require("karma-phantomjs-shim"),
     ]
   });
 };

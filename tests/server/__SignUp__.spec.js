@@ -1,6 +1,6 @@
 var rewire = require('rewire');
-var userController = rewire('../users/userController');
-var jasmine = require('jasmine');
+var userController = rewire('../../server/users/userController');
+// var jasmine = require('jasmine');
 
 var request = require('request');
 

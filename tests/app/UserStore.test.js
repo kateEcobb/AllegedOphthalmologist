@@ -1,6 +1,6 @@
 const rewire = require("rewire");
 
-var UserStore = rewire('../UserStore');
+var UserStore = rewire('../../app/js/stores/UserStore');
 
 
 describe("UserStore", function () {

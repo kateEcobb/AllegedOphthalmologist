@@ -1,6 +1,6 @@
 const rewire = require("rewire");
 
-var MenuItemStore = rewire('../MenuItemStore');
+var MenuItemStore = rewire('../../app/js/stores/MenuItemStore');
 
 
 describe("MenuItemStore", function () {

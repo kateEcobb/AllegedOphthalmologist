@@ -1,6 +1,6 @@
 const rewire = require("rewire");
 
-var BulbStore = rewire('../BulbStore');
+var BulbStore = rewire('../../app/js/stores/BulbStore');
 
 
 describe("BulbStore", function () {
