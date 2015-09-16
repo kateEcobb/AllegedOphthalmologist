@@ -6,14 +6,14 @@ var TestUtils = require('react/lib/ReactTestUtils');
 var rewire = require('rewire');
 
 // var AppView = rewire('../../app.jsx');
-var dialogWindow = rewire('../../components/dialogWindow.jsx')
-var NavMenu = rewire('../../components/NavMenu.jsx');
-var MainView = rewire('../../components/MainView.jsx');
-var LoginView = rewire('../../components/LoginView.jsx');
-var ProfileView = rewire('../../components/ProfileView.jsx');
-var RegistrationView = rewire('../../components/RegistrationView.jsx');
-var engergyBreakDown = rewire('../../components/energyBreakDownView.jsx');
-var AboutUs = rewire('../../components/AboutUs.jsx');
+var dialogWindow = rewire('../../app/js/components/dialogWindow.jsx')
+var NavMenu = rewire('../../app/js/components/NavMenu.jsx');
+var MainView = rewire('../../app/js/components/MainView.jsx');
+var LoginView = rewire('../../app/js/components/LoginView.jsx');
+var ProfileView = rewire('../../app/js/components/ProfileView.jsx');
+var RegistrationView = rewire('../../app/js/components/RegistrationView.jsx');
+var engergyBreakDown = rewire('../../app/js/components/energyBreakDownView.jsx');
+var AboutUs = rewire('../../app/js/components/AboutUs.jsx');
 
 
 

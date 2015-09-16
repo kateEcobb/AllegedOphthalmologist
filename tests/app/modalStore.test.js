@@ -1,6 +1,6 @@
 const rewire = require("rewire");
 
-var ModalStore = rewire('../modalStore');
+var ModalStore = rewire('../../app/js/stores/modalStore');
 
 
 describe("ModalStore", function () {

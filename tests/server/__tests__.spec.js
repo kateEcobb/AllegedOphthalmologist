@@ -1,6 +1,6 @@
 "user strict";
 var request = require('request');
-var userController = require('../users/userController');
+var userController = require('../../server/users/userController');
 var supertest = require('supertest');
 
 describe('Routes', function(){

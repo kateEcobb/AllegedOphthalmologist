@@ -75,7 +75,7 @@ module.exports = function(grunt) {
         extentions: 'js',
         includeStackTrace: true,
       },
-      all: ['server/tests/']
+      all: ['./tests/']
     },
 
     karma: {
@@ -83,6 +83,15 @@ module.exports = function(grunt) {
         configFile: 'karma.conf.js',
       },
     },
+
+    // mochaTest: {
+    //   test: {
+    //     options: {
+    //       reporter: 'spec',
+    //     },
+    //     src: ['./tests/**/*.test.js'],
+    //   }
+    // },
 
     watch: {
       server: {
@@ -113,14 +122,29 @@ module.exports = function(grunt) {
         options: {
           ignore: ['node_modules'],
           watch: ['server'],
-          delay: 1000
+          delay: 1000,
+          callback: function(nodemon) {
+            nodemon.on('config:update', function() {
+
+              setTimeout(function() {
+                var jasmine = grunt.util.spawn({
+                  cmd: 'grunt',
+                  grunt: true,
+                  args: 'jasmine_node',
+                });
+
+                jasmine.stdout.pipe(process.stdout);
+                jasmine.stderr.pipe(process.stderr);
+              }, 1000);
+            });
+          }
         },
       }
     },
 
     concurrent: {
       target: {
-        tasks: ['nodemon', 'jasmine_node'],
+        tasks: ['startMongo', 'nodemon', 'jasmine_node'],
         options: {
           logConcurrentOutput: true,
         }
@@ -142,6 +166,7 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-jasmine-node-new');
   grunt.loadNpmTasks('grunt-karma');
   grunt.loadNpmTasks('grunt-concurrent');
+  // grunt.loadNpmTasks('grunt-mocha-test');
 
   grunt.registerTask('server-dev', function(target) {
     var nodemon = grunt.util.spawn({
@@ -156,6 +181,28 @@ module.exports = function(grunt) {
 
     grunt.task.run(['startMongo']);
     grunt.task.run(['watch']);
+    
+    // var jasmine = grunt.util.spawn({
+    //   cmd: 'grunt',
+    //   grunt: true,
+    //   args: 'jasmine_node',
+    // });
+
+    // jasmine.stdout.pipe(process.stdout);
+    // jasmine.stderr.pipe(process.stderr);
+  });
+
+  grunt.registerTask('jasmineSpawn', function(target) {
+
+    var nodemon = grunt.util.spawn({
+      cmd: 'grunt',
+      grunt: true,
+      args: 'nodemon',
+      opts: {maxBuffer: 500*1024},
+    });
+    grunt.task.run(['startMongo']);
+
+    grunt.task.run(['jasmine_node']);
   });
 
   // Helper Tasks ////////////////////////////////////////
@@ -171,7 +218,7 @@ module.exports = function(grunt) {
   });
 
   grunt.registerTask('test', [
-    'jshint'
+    'jshint',
   ]);
 
   grunt.registerTask('jasmineTests', ['concurrent']);
@@ -191,6 +238,7 @@ module.exports = function(grunt) {
   // Grunt Tasks ////////////////////////////////////////
   grunt.registerTask('deploy', [
     'test',
+    'karmaTests',
     'clean',
     'upload'
   ]);

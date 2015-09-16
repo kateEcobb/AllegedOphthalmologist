@@ -6,8 +6,8 @@ var shallowRenderer = TestUtils.shallowRenderer;
 
 var rewire = require('rewire');
 
-var LoginView = rewire('../../components/LoginView.jsx');
-var FormInput = rewire('../../components/FormInput.jsx');
+var LoginView = rewire('../../app/js/components/LoginView.jsx');
+var FormInput = rewire('../../app/js/components/FormInput.jsx');
 
 
 describe('Login', function(){
