@@ -116,7 +116,7 @@ var ProfileView = React.createClass({
                 
                  <BarChart data={this.state.barChartData}/>
                  
-                  <GraphView height={300} width={708} margin={10} tabs={false} value={GraphTypes.USER_KWH} />
+                  <GraphView height={300} margin={10} tabs={false} value={GraphTypes.USER_KWH} />
                   <p className='lead section-lead' id='explain'>The red zones represent periods of time when California's grid was 
                   dirtiest. Try to reduce your energy consumption during those times! </p>
           </div>
