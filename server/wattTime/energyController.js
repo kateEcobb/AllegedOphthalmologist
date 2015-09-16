@@ -159,6 +159,8 @@ loadTestData();
 module.exports = { 
   get24HourBehind: get24HourBehind, 
   get24HourAhead: get24HourAhead, 
-  getTestData: getTestData
+  getTestData: getTestData,
+  WattBehindUpdater: WattBehindUpdater,
+  DAHRupdater: DAHRupdater
 };
 

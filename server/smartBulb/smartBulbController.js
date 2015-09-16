@@ -3,6 +3,8 @@ var moment = require('moment');
 var WattEnergy = require('./../wattTime/energyModel').WattTotal;
 var wattTimeToken = require('./../config/tokenConfig.js').wattTimeAPIToken;
 
+var energyController = require('./../wattTime/energyController');
+
 // This value gets updated every hour with the findMaxCarbonThisWeek function below
 // That function runs once every hour
 var weeklyMaxCarbon = 1353;
@@ -64,39 +66,33 @@ function getNearestHour() {
   return formattedDate;
 }
 
-var getCarbonReading = function(wattimeArray, datestring, cb){
+var getCarbonReading = function(wattimeArray, dateNow, cb){
+  var smallestTimeDiff = Number.POSITIVE_INFINITY;
+  var carbonReading = 0;
   for(var i = 0; i < wattimeArray.length; i++){
-    if(wattimeArray[i].timestamp === datestring){
-      cb(wattimeArray[i].carbon);
-      break;
+    var elementDatetime = new Date(wattimeArray[i].timestamp);
+    if(Math.abs(elementDatetime - dateNow) < smallestTimeDiff){
+      smallestTimeDiff = Math.abs(elementDatetime - dateNow);
+      //console.log(smallestTimeDiff);
+      carbonReading = wattimeArray[i].carbon;
+      //console.log("Matched: ", elementDatetime.toISOString(), dateNow.toISOString());
     }
   }
+  cb(carbonReading);
 }
 
-var makeWattTimeRequest = function(){
-  var base_url = 'https://api.watttime.org/api/v1/datapoints/?ba=CAISO&market=DAHR'
-  var formattedDate = getNearestHour();
-  var url = base_url + '&start_at=' + formattedDate.replace(/:/g, '%3A');
+var findNearestWattTimeReading = function(){
 
-  var options = { 
-     url: url,
-     headers: { 
-       'Authorization' : wattTimeToken
-     }
-   };
-
-  request(options, function (error, response, body) {
-    if (!error && response.statusCode == 200) {
-      getCarbonReading(JSON.parse(body).results, formattedDate, 
-        function(carbon){
-          setColorCode(carbon);
+  var dateNow = new Date(Date.now()); 
+  energyController.WattBehindUpdater(function(dayBehindData){
+      energyController.DAHRupdater(function(dayAheadData){
+        var combinedReadings = dayBehindData.concat(dayAheadData);
+        getCarbonReading(combinedReadings, dateNow, 
+          function(carbon){
+            setColorCode(carbon);
         });
-    }
-    else {
-      console.log(JSON.parse(body));
-      console.log("Error getting data from WattTime");
-    }
-  })
+    });
+  });
 };
 
 var setColorCode = function(carbon){
@@ -109,14 +105,13 @@ var setColorCode = function(carbon){
   console.log('colorValue now is ',colorValue)
 };
 
-// Check for new bulb color every hour
-setInterval(makeWattTimeRequest, 3600000);
+// Check for new bulb color every ten minutes
+setInterval(findNearestWattTimeReading, 600000);
 
 // Check for new max carbon value every 3 hours
 setInterval(findMaxCarbonThisWeek, 10800000)
 
-// findMaxCarbonThisWeek()
-setTimeout(makeWattTimeRequest, 15000);
+setTimeout(findNearestWattTimeReading, 15000);
 //Update max carbon on server restart.
 setTimeout(findMaxCarbonThisWeek, 15000);
 
