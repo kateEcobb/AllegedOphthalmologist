@@ -206,16 +206,48 @@ var AboutUs = React.createClass({
         </div>
       </section>
 
+      <section id="bolt">
+      <div className='container'>
+        <div className='row'>
+          <div className='col-lg-12'>
+            <span className='glyphicon glyphicon-flash'></span>
+          </div>
+        </div>
+      </div>
+    </section>
+
       <section id="photos">
         <div className='container'>
-          <div className='row'>
-            <div className='col-lg-12'>
-            <div className='photoContainer'>
-              <a href={'http://www.github.com/johndrkurtcom'} className='circle-image' id='john'></a>
-              <a href={'http://www.github.com/kateecobb'} className='circle-image' id='kate'></a>
-              <a href={'http://www.github.com/andrewrweber'} className='circle-image' id='drew'></a>
-            </div>
-            </div>
+           <h2>Meet the Team</h2>
+           <div className="row text-center" id='photoRow'>
+            <div className="col-md-3">
+               <img src="images/john.jpg" className="img-circle img-responsive img-center"/>
+              <h4 className="lead section-lead creator-name">John Andersen</h4>
+               <p className="creator-title">Project Owner/Front-End Engineer</p>
+               <a href="https://github.com/johndrkurtcom"><img className='githubIcon' src="images/GitHub-Mark-32px.png" alt=""/></a>
+             </div>
+
+             <div className="col-md-3">
+               <img src="images/kate.jpg" className="img-circle img-responsive img-center"/>
+              <h4 className="lead section-lead creator-name">Kate Cobb</h4>
+               <p className="creator-title">Scrum Master/Full-Stack Developer</p>
+               <a href="https://github.com/kateecobb"><img className='githubIcon' src="images/GitHub-Mark-32px.png" alt=""/></a>
+             </div>
+
+             <div className="col-md-3">
+               <img src="images/drew.jpg" className="img-circle img-responsive img-center"/>
+              <h4 className="lead section-lead creator-name">Andrew Weber</h4>
+               <p className="creator-title">Lead Hardware Engineer/Full-Stack Developer</p>
+               <a href="https://github.com/andrewrweber"><img className='githubIcon' src="images/GitHub-Mark-32px.png" alt=""/></a>
+             </div>
+
+             <div className="col-md-3">
+               <img src="images/xing.jpg" className="img-circle img-responsive img-center"/>
+              <h4 className="lead section-lead creator-name">Xing Tong</h4>
+               <p className="creator-title">Front-End Developer</p>
+               <a href="https://github.com/halcyonnx"><img className='githubIcon' src="images/GitHub-Mark-32px.png" alt=""/></a>
+             </div>
+           
           </div>
         </div>
       </section>
