@@ -60,7 +60,6 @@
     "webpack-dev-server": "^1.10.1"
   },
   "devDependencies": {
-    "grunt-concurrent": "^2.0.3",
     "grunt-jasmine-node-new": "^0.3.2",
     "grunt-karma": "^0.12.1",
     "jasmine-core": "^2.2.0",
