@@ -45,7 +45,8 @@ module.exports = function(grunt) {
       },
       images: {
         files: [
-          {expand: true, flatten: true, src: './app/assets/*.jpg', dest: './build/images'}
+          {expand: true, flatten: true, src: './app/assets/*.jpg', dest: './build/images'}, 
+          {expand: true, flatten: true, src: './app/assets/*.png', dest: './build/images'}
         ]
       }
     },
