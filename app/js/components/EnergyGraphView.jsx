@@ -201,7 +201,6 @@ var EnergyGraphView = React.createClass({
         var el = React.findDOMNode(this.refs.graphContainer);
         el.innerHTML = '';
         throw new Error('EnergyGraphView - Tab/View Error - Tried to load an unknown Graph Type');
-        break;
     }
   },
 
